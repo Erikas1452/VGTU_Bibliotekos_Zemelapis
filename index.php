@@ -4,10 +4,10 @@
         <meta charset="utf-8">
         <title>VGTU Library Map</title>
         <?php
-            include 'php/DataGetter.php';
-            include 'php/Display.php';
-            include 'php/EventHandler.php';
-            include 'php/Map.php';
+            include 'DataGetter.php';
+            include 'Display.php';
+            include 'EventHandler.php';
+            include 'Map.php';
         ?>
         <!-- (ADD LATER)References to styles -->
         <!-- <link href ="canvas.css" rel="stylesheet"> -->
@@ -37,7 +37,7 @@
         </div>
         <div>
             <?php
-
+            $fakedata = array(97,223,157,236,'Matematika',193,303,259,319,93,295,132,340);
             ?>
         </div>
     </body>
