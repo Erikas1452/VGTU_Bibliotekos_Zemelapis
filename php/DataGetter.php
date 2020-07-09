@@ -1,7 +1,7 @@
 <?php
 class DataGetter
 {
-    var $themes = array();
+    private $themes = array();
 
     public function getThemes ()
     {

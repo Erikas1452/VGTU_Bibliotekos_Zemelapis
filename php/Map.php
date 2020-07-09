@@ -1,13 +1,24 @@
 <?php
 class Map
 {
-    public static function drawMap($image)
+    public function drawMap($image,$coordinates)
     {
+
+        $size = count($coordinates);
         $img = imagecreatefromjpeg($image);
         $blue = imagecolorallocate($img,0,0,255);
-        imagefilledrectangle($img,97,223,157,236, $blue);
+        for($i = 0; $i < $size; $i+=4)
+        {
+            $this->placeMarker($img, $coordinates[$i],$coordinates[$i+1],$coordinates[$i+2],$coordinates[$i+3], $blue);
+        }
         header('Content-type: image/jpeg');
         imagejpeg($img);
+        imagedestroy($img);
+    }
+
+    private function placeMarker($img,$x1,$y1,$x2,$y2,$color)
+    {
+        imagefilledrectangle($img,$x1,$y1,$x2,$y2,$color);
     }
 }
 ?>

@@ -7,7 +7,6 @@ class EventHandler extends Display
         {
             echo '<br><br>';
             $this->displayImage("images/LT1.jpg",1000,600);
-            //Map::drawMap("LT1.jpg");
         }
     }
 }
