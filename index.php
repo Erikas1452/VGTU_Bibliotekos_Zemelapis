@@ -31,13 +31,12 @@
             <form method="post">
                 <?php
                     $handler->displayButton("Ieškoti","Search");
-                    $handler ->buttonPressed("Search");
+                    $handler ->buttonPressed("Search","images/LT1.jpg"); // <-- Needs a way to find out which map print-out
                 ?>
             </form>
         </div>
         <div>
             <?php
-            $fakedata = array(97,223,157,236,'Matematika',193,303,259,319,93,295,132,340);
             ?>
         </div>
     </body>

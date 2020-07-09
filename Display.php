@@ -26,10 +26,5 @@ class Display
         echo '<canvas id="'.$id.'"'.'width="'.$width. '" height="'.$height.'" 
         style="border:1px solid #c3c3c3;"> </canvas>';
     }
-
-    public function drawRectangle($x,$y,$width,$height)
-    {
-
-    }
 }
 ?>
