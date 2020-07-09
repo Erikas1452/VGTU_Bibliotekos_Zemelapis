@@ -1,5 +1,4 @@
 <?php
-
 class EventHandler extends Display
 {
     public function buttonPressed($Button)
@@ -7,7 +6,8 @@ class EventHandler extends Display
         if(isset($_POST[$Button]))
         {
             echo '<br><br>';
-            $this->displayImage("LT1.jpg",1000,600);
+            $this->displayImage("images/LT1.jpg",1000,600);
+            //Map::drawMap("LT1.jpg");
         }
     }
 }

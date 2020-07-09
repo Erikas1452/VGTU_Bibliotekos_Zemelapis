@@ -21,6 +21,12 @@ class Display
         echo'<img src="'.$path.'"'.' width="'.$width.'" '. 'height="'.$height.'">';
     }
 
+    public function displayCanvas($id,$width,$height)
+    {
+        echo '<canvas id="'.$id.'"'.'width="'.$width. '" height="'.$height.'" 
+        style="border:1px solid #c3c3c3;"> </canvas>';
+    }
+
     public function drawRectangle($x,$y,$width,$height)
     {
 
