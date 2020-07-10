@@ -3,11 +3,11 @@ class DataGetter
 {
     private $themes;
     private $selected_val;
-    private $shelfs;
+    private $shelves;
 
-    public function printShelfs()
+    public function printShelves()
     {
-        foreach($this->shelfs as $shelf)
+        foreach($this->shelves as $shelf)
         {
             echo '<br>';
             foreach($shelf as $item)
@@ -17,14 +17,14 @@ class DataGetter
         }
     }
 
-    public function getShelfs()
+    public function getShelves()
     {
         $shelf = array(97,223,157,236,"Matematika","Diskrecioji");
-        $this->shelfs[0]=$shelf;
+        $this->shelves[0]=$shelf;
         $shelf=array(193,303,259,319,"Istorija");
-        $this->shelfs[1]=$shelf;
+        $this->shelves[1]=$shelf;
         $shelf=array(93,295,132,340,"Mechanika","Transporto Logistika");
-        $this->shelfs[2]=$shelf;
+        $this->shelves[2]=$shelf;
     }
 
     public function getValueFromSelection($button,$valuetoget)
@@ -47,9 +47,14 @@ class DataGetter
         return $this->themes;
     }
 
-    public function returtSelectedValue()
+    public function returnSelectedValue()
     {
         return $this->selected_val;
+    }
+
+    public function returnShelves()
+    {
+        return $this->shelves;
     }
 }
 ?>

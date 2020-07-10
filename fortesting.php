@@ -23,22 +23,26 @@
             <!-- Dropdown -->
             <form method="post">
                 <label for="DropDown1">Knygų tematika:</label> <br>
-                <?php
-                $getter = new DataGetter();
+                <?php ;
+                $data = new DataGetter();
                 $handler = new EventHandler();
-                $getter->getThemes();
-                $themes = $getter->returnThemes();
+                $data->getThemes();
+                $themes = $data->returnThemes();
                 $handler->displaySelection($themes,"DropDown1");
                 $handler->displayButton("Pasirinkti","Search");
                 ?>
             </form>
             <?php
-            $getter->getValueFromSelection("Search","DropDown1");
-            $seach_for = $getter->returtSelectedValue();
-            echo $seach_for;
-            $getter->getShelfs();
-            $getter->printShelfs();
+            $data->getValueFromSelection("Search","DropDown1");
+            $search_for = $data->returnSelectedValue();
+            echo $search_for;
+            $data->getShelves();
+            $shelves_to_mark = $data->returnShelves();
+            $first_floor = new Map("images/LT1.jpg");
+            $first_floor->fillMapByTheme($shelves_to_mark,$search_for);
+            $first_floor->saveMap("images/LT1_marked.jpg");
+            $handler->displayImage("images/LT1_marked.jpg",800,600);
             ?>
-    </div>
+        </div>
     </body>
 </html>
