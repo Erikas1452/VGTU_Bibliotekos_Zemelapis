@@ -6,9 +6,14 @@ class Display
         echo '<select name="'.$name.'"';
         foreach ($selections as $item)
         {
-            echo '<option value="' . $item . '">' . $item . '</option>';
+            echo '<option value="'.$item.'">'.$item.'</option>';
         }
         echo '</select>';
+    }
+
+    public function test($selections)
+    {
+    for ($i = 0; $i < count($selections); $i++) echo $selections[$i].'  '.$i;
     }
 
     public function displayButton($text, $name)
