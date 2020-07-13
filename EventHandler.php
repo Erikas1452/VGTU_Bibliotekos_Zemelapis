@@ -7,7 +7,7 @@ class EventHandler extends Display
         if(isset($_POST[$button]))
         {
             echo '<br><br>';
-            $this->displayImage($image,1000,600);
+            $this->displayImage($image,693,542);
         }
     }
 }

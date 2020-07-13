@@ -3,7 +3,21 @@ include 'DataGetter.php';
 include 'Display.php';
 include 'EventHandler.php';
 include 'Map.php';
+
+$data = new DataGetter();
+$handler = new EventHandler();
+
+$data->getThemes();
+$data->getShelves();
+
+$themes = $data->returnThemes();
+$shelves_to_mark = $data->returnShelves();
+
+$first_floor = new Map("images/VGTUB_1a.png");
+$second_floor = new Map("images/VGTUB_2a.png");
+
 ?>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -16,45 +30,49 @@ include 'Map.php';
     <body>
 
         <div>
-            <h2>VGTU BIBLIOTEKOS ZEMELAPIS</h2>
+            <h2>ATVIROJO FONDO ŽEMĖLAPIS</h2>
         </div>
 
         <div>
-            <form method="post">
-            <label for="DropDown1">Knygų tematika:</label> <br>
-            <?php
-                $data = new DataGetter();
-                $handler = new EventHandler();
-                $data->getThemes();
-                $themes = $data->returnThemes();
-                $handler->displaySelection($themes,"DropDown1");
-                $handler->displayButton("Pasirinkti","Search");
-            ?>
+            <form method="POST">
+            <label for="DropDown1">Tema:</label> <br>
+                <input list="DropDown1" name="DropDown1" />
+                <datalist id="DropDown1">
+                    <?php
+                    foreach ($themes as $item)
+                    {
+                        echo '<option value="'.$item[0].'">'.$item[0].'</option>';
+                    }
+                    ?>
+                </datalist>
+                <?php $handler->displayButton("Ieškoti","Search"); ?>
             </form>
+            <br>
+
             <?php
+            echo "aukštas ";
+            $handler->displayButton("Biblioteka","Biblioteka");
+            echo "  ";
+            $handler->displayButton("Auditorija","Auditorija");
+            echo "  ";
+            $handler->displayButton("Lentyna","Lentyna");
+            echo "  ";
+
             $data->getValueFromSelection("Search","DropDown1");
             $search_for = $data->returnSelectedValue();
+            echo '    Test :  Selected: '.$search_for; //Testing if the selected value is extracted correctly
 
-            $data->getShelves();
-            $shelves_to_mark = $data->returnShelves();
+            echo $themes[0][1];
 
-            $first_floor = new Map("images/LT1.jpg");
+            //Filling all maps with markers
             $first_floor->fillMapByTheme($shelves_to_mark,$search_for);
-            $first_floor->saveMap("images/LT1_marked.jpg");
+            $second_floor->fillMapByTheme($shelves_to_mark,$search_for);
 
-            $handler->onButtonDisplayImage("Search","images/LT1_marked.jpg"); // <-- Needs a way to find out which map print-out
+            //Displaying map
+            $second_floor->saveMap('images/VGTUB_2a'.'_'.$search_for.'.png');
+            $handler->onButtonDisplayImage("Search",$second_floor->returnPath()); // <-- Needs a way to find out which map print-out
+            $handler->displayTable($themes);
             ?>
         </div>
-
-        <div>
-
-        </div>
-
-        <div>
-            <?php
-
-            ?>
-        </div>
-
     </body>
 </html>

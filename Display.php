@@ -1,19 +1,33 @@
 <?php
 class Display
 {
-    public function displaySelection($selections, $name)
+    //Fills the list but does not gives the value back on selection
+    public function displayList($selections, $name)
     {
-        echo '<select name="'.$name.'"';
+        echo '<input list="'.$name.'" placeholder="">';
+        echo '<datalist id="'.$name.'">';
         foreach ($selections as $item)
         {
             echo '<option value="'.$item.'">'.$item.'</option>';
         }
-        echo '</select>';
+        echo '</datalist>';
     }
 
-    public function test($selections)
+    public function displayTable($themes)
     {
-    for ($i = 0; $i < count($selections); $i++) echo $selections[$i].'  '.$i;
+        echo '<table>';
+            echo'<tr>';
+                echo'<th>Vieta lentynoje</th>';
+                echo'<th>Tema</th>';
+                echo'</tr>';
+                foreach ($themes as $theme)
+                {
+                    echo'<tr>';
+                    echo'<td>'.$theme[1].'</td>';
+                    echo'<td>'.$theme[0].'</td>';
+                    echo'</tr>';
+                }
+        echo '</table>';
     }
 
     public function displayButton($text, $name)
@@ -22,6 +36,11 @@ class Display
     }
 
     public function displayImage($path,$width,$height)
+    {
+        echo'<img src="'.$path.'"'.' width="'.$width.'" '. 'height="'.$height.'">';
+    }
+
+    public function displayImageRotated($path,$width,$height)
     {
         echo'<img src="'.$path.'"'.' width="'.$width.'" '. 'height="'.$height.'">';
     }

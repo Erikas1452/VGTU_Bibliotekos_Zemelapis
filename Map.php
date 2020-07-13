@@ -6,14 +6,17 @@ class Map
     private $gray;
     private $white;
     private $black;
+    private $map_path;
 
     function __construct($image)
     {
-        $this->img=imagecreatefromjpeg($image);
-        $this->blue = imagecolorallocate($this->img,0,0,255);
-        $this->gray = imagecolorallocate($this->img,211,211,211);;
-        $this->white = imagecolorallocate($this->img,255,255,255);;
-        $this->black = imagecolorallocate($this->img,0,0,0);;
+        $this->img=imagecreatefrompng($image);
+        $this->blue = imagecolorallocate($this->img,38,155,240);
+        $this->gray = imagecolorallocate($this->img,211,211,211);
+        $this->white = imagecolorallocate($this->img,255,255,255);
+        $this->black = imagecolorallocate($this->img,0,0,0);
+        //imagealphablending( $this->img, false );
+        imagesavealpha( $this->img, true );
     }
 
     public function fillMap($shelves)
@@ -54,15 +57,28 @@ class Map
 
     public function displayMap()
     {
-        header('Content-type: image/jpeg');
-        imageJPEG($this->img);
+        header('Content-type: image/png');
+        imagepng($this->img);
         imagedestroy($this->img);
     }
 
     public function saveMap($file)
     {
         ob_start();
+        $this -> map_path = $file;
         imagepng($this->img,$file);
     }
+
+    public function returnPath()
+    {
+        return $this->map_path;
+    }
+
+    public function returnMap()
+    {
+        return imagepng($this->img);
+    }
+
+
 }
 ?>
