@@ -1,0 +1,37 @@
+[data-tab-content]
+{
+    display:none
+}
+
+.active[data-tab-content]
+{
+    display: block;
+}
+
+body{
+    padding: 0;
+    margin: 0;
+}
+
+.tabs{
+    display: flex;
+    list-style-type: none;
+    justify-content: left;
+    margin: 0;
+    padding: 0;
+}
+
+.tab{
+    background-color: lightgrey;
+    cursor: pointer;
+    padding:10px;
+}
+
+.tab.active{
+    background-color: darkgrey;
+    border-bottom: 3px solid cyan;
+}
+
+.tab:hover{
+    border-bottom: grey;
+}
