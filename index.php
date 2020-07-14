@@ -35,6 +35,7 @@ $second_floor = new Map("images/VGTUB_2a.png");
         </div>
 
         <div>
+            <!-- Selection menu -->
             <form method="POST">
             <label for="DropDown1">Tema:</label> <br>
                 <input list="DropDown1" name="DropDown1" />
@@ -54,16 +55,18 @@ $second_floor = new Map("images/VGTUB_2a.png");
                 ?>
             </form>
             <br>
+            <!-- Tabs for library auditorium and shelf -->
             <ul class="tabs">
-                <li data-tab-target="#biblioteka" class="active tab">Biblioteka</li>
-                <li data-tab-target="#auditorija" class="tab">Auditorija</li>
-                <li data-tab-target="#lentyna" class="tab">Lentyna</li>
+                <li data-tab-target="#library" class="active tab">Biblioteka</li>
+                <li data-tab-target="#auditorium" class="tab">Auditorija</li>
+                <li data-tab-target="#shelf" class="tab">Lentyna</li>
             </ul>
-
-            <dvi class="tab-content">
-                <div id="biblioteka" data-tab-content class = 'active'>
+            <div class="tab-content">
+                <!-- Library Tab -->
+                <div id="library" data-tab-content class = 'active'>
                     <?php
-
+                    $maps = array ("Map1","Map2","Map3");
+                    $handler->displayTabs($maps);
                     //Filling all maps with markers
                     $first_floor->fillMapByTheme($shelves_to_mark,$search_for);
                     $second_floor->fillMapByTheme($shelves_to_mark,$search_for);
@@ -74,13 +77,15 @@ $second_floor = new Map("images/VGTUB_2a.png");
                     $handler->displayTable($themes);
                     ?>
                 </div>
-                <div id="auditorija" data-tab-content>
-                    <h3>Auditorijos zemelapis</h3>
+                <!-- Auditorium Tab -->
+                <div id="auditorium" data-tab-content>
+                    <h3>Auditorijos žemėlapis</h3>
                 </div>
-                <div id="lentyna" data-tab-content>
+                <!-- Shelf Tab -->
+                <div id="shelf" data-tab-content>
                     <h3>Lentyna</h3>
                 </div>
-            </dvi>
+            </div>
         </div>
     </body>
 </html>

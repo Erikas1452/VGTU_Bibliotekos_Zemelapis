@@ -30,6 +30,22 @@ class Display
         echo '</table>';
     }
 
+    public function displayTabs($maps)
+    {
+        echo'<ul class="sub-tabs">';
+        $i = 0;
+        foreach ($maps as $map)
+        {
+            if ($i == 0)
+            {
+                echo'<li data-sub-tab-target="#'.$map.'"'.' class="active sub-tab ">'.$map.'</li>';
+                $i++;
+            }
+            else echo '<li data-sub-tab-target="#'.$map.'"'.' class="sub-tab ">'.$map.'</li>';
+        }
+        echo'</ul>';
+    }
+
     public function displayButton($text, $name)
     {
         echo '<input type="submit"'.'name="'.$name.'" value="'.$text.'"/>';
@@ -38,17 +54,6 @@ class Display
     public function displayImage($path,$width,$height)
     {
         echo'<img src="'.$path.'"'.' width="'.$width.'" '. 'height="'.$height.'">';
-    }
-
-    public function displayImageRotated($path,$width,$height)
-    {
-        echo'<img src="'.$path.'"'.' width="'.$width.'" '. 'height="'.$height.'">';
-    }
-
-    public function displayCanvas($id,$width,$height)
-    {
-        echo '<canvas id="'.$id.'"'.'width="'.$width. '" height="'.$height.'" 
-        style="border:1px solid #c3c3c3;"> </canvas>';
     }
 }
 ?>

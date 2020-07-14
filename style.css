@@ -22,13 +22,12 @@ body{
 }
 
 .tab{
-    background-color: lightgrey;
+    
     cursor: pointer;
     padding:10px;
 }
 
 .tab.active{
-    background-color: darkgrey;
     border-bottom: 3px solid cyan;
 }
 
