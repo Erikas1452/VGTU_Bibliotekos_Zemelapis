@@ -36,8 +36,10 @@ $second_floor = new Map("images/VGTUB_2a.png");
 
 <div>
     <form method="POST">
+
         <label for="DropDown1">Tema:</label> <br>
         <input list="DropDown1" name="DropDown1" />
+
         <datalist id="DropDown1">
             <?php
             foreach ($themes as $item)
@@ -46,40 +48,45 @@ $second_floor = new Map("images/VGTUB_2a.png");
             }
             ?>
         </datalist>
+
         <?php
         $handler->displayButton("Ieškoti","Search");
         $data->getValueFromSelection("Search","DropDown1");
         $search_for = $data->returnSelectedValue();
         echo '    Test :  Selected: '.$search_for; //Testing if the selected value is extracted correctly
         ?>
-    </form>
-    <br>
-    <div class="tab">
-        <button class="tablinks" onclick="openTab(event, 'Biblioteka')">Biblioteka</button>
-        <button class="tablinks" onclick="openTab(event, 'Auditorija')">Auditorija</button>
-        <button class="tablinks" onclick="openTab(event, 'Lentyna')">Lentyna</button>
-    </div>
-    <div class="tab-content">
-        <div id="Biblioteka" class="tabcontent">
-            <?php
-            $maps = array ("Map1","Map2","Map3");
-            $handler->displayTabs($maps);
-            //Filling all maps with markers
-            $first_floor->fillMapByTheme($shelves_to_mark,$search_for);
-            $second_floor->fillMapByTheme($shelves_to_mark,$search_for);
 
-            //Displaying map
-            $second_floor->saveMap('images/VGTUB_2a'.'_'.$search_for.'.png');
-            $handler->onButtonDisplayImage("Search",$second_floor->returnPath()); // <-- Needs a way to find out which map print-out
-            $handler->displayTable($themes);
-            ?>
+    </form>
+
+    <br>
+
+    <div class="tabButtons">
+        <button onclick="showContent(0)">Biblioteka</button>
+        <button onclick="showContent(1)">Auditorija</button>
+        <button onclick="showContent(2)">Lentyna</button>
+    </div>
+    <!-- button 1 -->
+    <div class="tabContent">
+        <div class="subTabButtons">
+            <button>MAP1</button>
+            <button>MAP2</button>
         </div>
-        <div id="Auditorija" class="tabcontent">
-            <h3>Auditorijos zemelapis</h3>
+        <!-- sub-button 1 -->
+        <div class="subTabContent">
+
         </div>
-        <div id="Lentyna" class="tabcontent">
-            <h3>Lentyna</h3>
+        <!-- sub-button 2 -->
+        <div class="subTabContent">
+
         </div>
+    </div>
+    <!-- button 2 -->
+    <div class="tabContent">
+        Auditorija
+    </div>
+    <!-- button 3 -->
+    <div class="tabContent">
+        Lentyna
     </div>
 </div>
 </body>

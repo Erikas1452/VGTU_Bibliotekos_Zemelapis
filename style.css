@@ -34,3 +34,30 @@ body{
 .tab:hover{
     border-bottom: grey;
 }
+
+.tabButtons button
+{
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background-color: darkgrey;
+}
+
+.tabContent.subTabButtons button
+{
+    background-color: orange;
+    display: none;
+}
+
+.tabButtons button:hover
+{
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background-color: grey;
+}
+
+.tabContent
+{
+    display:none;
+}

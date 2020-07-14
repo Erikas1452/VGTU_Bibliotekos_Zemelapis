@@ -18,16 +18,19 @@ tabs.forEach(tab => {
     })
 })
 
-sub_tabs.forEach(tab => {
-    sub_tab.addEventListener('click', () => {
-        const sub_target = document.querySelector(tab.dataset.tabTarget)
-        sub_tabContents.forEach(tabContent => {
-            sub_tabContent.classList.remove('active')
-        })
-        tabs.forEach(tab => {
-            sub_tab.classList.remove('active')
-        })
-        sub_target.classList.add('active');
-        sub_tab.classList.add('active');
-    })
-})
+const mainTabButtons=document.querySelectorAll(".tabButtons button");
+const mainTabContents=document.querySelectorAll(".tabContent");
+
+function showContent(contentIndex)
+{
+    mainTabButtons.forEach(function(node){
+        node.style.backgroundColor="";
+        node.style.color="";
+    });
+    mainTabButtons[contentIndex].style.backgroundColor="red";
+    mainTabButtons[contentIndex].style.color="white";
+    mainTabContents.forEach(function(node){
+        node.style.display="none";
+    });
+    mainTabContents[contentIndex].style.display="block";
+}
