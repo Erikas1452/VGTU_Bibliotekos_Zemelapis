@@ -1,20 +1,69 @@
 <?php
 class DataGetter
 {
-    var $themes = array();
+    private $themes;
+    private $selected_val;
+    private $shelves;
+
+    public function printShelves()
+    {
+        foreach($this->shelves as $shelf)
+        {
+            echo '<br>';
+            foreach($shelf as $item)
+            {
+                echo $item.' ';
+            }
+        }
+    }
+
+    public function getShelves()
+    {
+        //101 y-ai
+        //51 x-ai
+        $shelf = array(87,1590,151,1691,"Matematika","Diskrecioji");
+        $this->shelves[0]=$shelf;
+        $shelf=array(87,1742,151,1843,"Istorija");
+        $this->shelves[1]=$shelf;
+        $shelf=array(202,1590,266,1691,"Mechanika","Transporto Logistika");
+        $this->shelves[2]=$shelf;
+    }
+
+    public function getValueFromSelection($button,$value_to_get)
+    {
+        if (isset($_POST[$button]))
+        {
+            $this->selected_val = $_POST[$value_to_get];
+        }
+    }
 
     public function getThemes ()
     {
-        $array = array("Matematika","Diskrecioji","Transporto Logistika","Istorija","Mechanika");
-        for($i = 0; $i < count($array); $i++)
-        {
-            $this->themes[$i] = $array[$i];
-        }
+        $theme1 = array("Matematika", "001");
+        $theme2 = array ("Diskrecioji", "002");
+        $theme3 = array("Transporto Logistika", "003");
+        $theme4 = array("Istorija", "004");
+        $theme5 = array("Mechanika", "005");
+        $this->themes[0] = $theme1;
+        $this->themes[1] = $theme2;
+        $this->themes[2] = $theme3;
+        $this->themes[3] = $theme4;
+        $this->themes[4] = $theme5;
     }
 
     public function returnThemes()
     {
         return $this->themes;
+    }
+
+    public function returnSelectedValue()
+    {
+        return $this->selected_val;
+    }
+
+    public function returnShelves()
+    {
+        return $this->shelves;
     }
 }
 ?>
