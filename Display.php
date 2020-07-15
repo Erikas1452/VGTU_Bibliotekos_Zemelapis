@@ -30,20 +30,29 @@ class Display
         echo '</table>';
     }
 
-    public function displayTabs($maps)
+    public function displayTabs($tabs,&$index)
     {
-        echo'<ul class="sub-tabs">';
-        $i = 0;
-        foreach ($maps as $map)
+        echo'<div class="subTabButtons">';
+        foreach($tabs as $tab)
         {
-            if ($i == 0)
-            {
-                echo'<li data-sub-tab-target="#'.$map.'"'.' class="active sub-tab ">'.$map.'</li>';
-                $i++;
-            }
-            else echo '<li data-sub-tab-target="#'.$map.'"'.' class="sub-tab ">'.$map.'</li>';
+            echo'<button onclick="showSubContent('.$index.')">'.$tab.'</button>';
+            $index++;
+
         }
-        echo'</ul>';
+        echo'</div>';
+    }
+
+    public function fillContent($tabs)
+    {
+        //button content
+        $i=1;
+        foreach($tabs as $tab)
+        {
+            echo'<div class="subTabContent">';
+            echo'MAP '.$i;
+            echo'</div>';
+            $i++;
+        }
     }
 
     public function displayButton($text, $name)

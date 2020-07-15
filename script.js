@@ -1,23 +1,3 @@
-const tabs = document.querySelectorAll('[data-tab-target]')
-const tabContents = document.querySelectorAll('[data-tab-content]')
-
-const sub_tabs = document.querySelectorAll('[data-tab-target]')
-const sub_tabContents = document.querySelectorAll('[data-tab-content]')
-
-tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-        const target = document.querySelector(tab.dataset.tabTarget)
-        tabContents.forEach(tabContent => {
-            tabContent.classList.remove('active')
-        })
-        tabs.forEach(tab => {
-            tab.classList.remove('active')
-        })
-        target.classList.add('active');
-        tab.classList.add('active');
-    })
-})
-
 const mainTabButtons=document.querySelectorAll(".tabButtons button");
 const mainTabContents=document.querySelectorAll(".tabContent");
 

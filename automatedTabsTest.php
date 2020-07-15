@@ -13,9 +13,13 @@ $data->getShelves();
 $themes = $data->returnThemes();
 $shelves_to_mark = $data->returnShelves();
 
-$first_floor = new Map("images/VGTUB_1a.png");
-$second_floor = new Map("images/VGTUB_2a.png");
 
+$first_floor = Map::withName("images/VGTUB_1a.png", "1 Aukštas");
+$second_floor = Map::withName("images/VGTUB_2a.png", "2 Aukštas");
+
+$floors = array($first_floor,$second_floor);
+
+$subContentCount = 0;
 ?>
 
 <!DOCTYPE html>
@@ -53,7 +57,14 @@ $second_floor = new Map("images/VGTUB_2a.png");
         $handler->displayButton("Ieškoti","Search");
         $data->getValueFromSelection("Search","DropDown1");
         $search_for = $data->returnSelectedValue();
+
+
         echo '    Test :  Selected: '.$search_for; //Testing if the selected value is extracted correctly
+        $floors[0]->fillMapByTheme($shelves_to_mark,$search_for);
+        $floors[0]->saveMap('images/VGTUB_2a'.'_'.$search_for.'.png');
+
+        $floors[1]->fillMapByTheme($shelves_to_mark,$search_for);
+        $floors[1]->saveMap('images/VGTUB_1a'.'_'.$search_for.'.png');
         ?>
 
     </form>
@@ -67,39 +78,27 @@ $second_floor = new Map("images/VGTUB_2a.png");
     </div>
     <!-- button 1 -->
     <div class="tabContent">
-        <div class="subTabButtons">
-            <button onclick="showSubContent(0)">MAP1</button>
-            <button onclick="showSubContent(1)">MAP2</button>
-        </div>
-        <!-- sub-button 1 -->
-        <div class="subTabContent">
-            <?php
-            //Filling all maps with markers
-            $second_floor->fillMapByTheme($shelves_to_mark,$search_for);
-
-            //Displaying map
-            $second_floor->saveMap('images/VGTUB_2a'.'_'.$search_for.'.png');
-            $handler->onButtonDisplayImage("Search",$second_floor->returnPath()); // <-- Needs a way to find out which map print-out
-            $handler->displayTable($themes);
-            ?>
-        </div>
-        <!-- sub-button 2 -->
-        <div class="subTabContent">
-            <?php
-            $first_floor->fillMapByTheme($shelves_to_mark,$search_for);
-
-            $first_floor->saveMap('images/VGTUB_1a'.'_'.$search_for.'.png');
-            $handler->onButtonDisplayImage("Search",$first_floor->returnPath()); // <-- Needs a way to find out which map print-out
-            $handler->displayTable($themes);
-            ?>
-        </div>
+        <?php
+        $count = 0;
+        $maps = array();
+        foreach($floors as $floor)
+        {
+           if($floor->returnStatus())
+           {
+               $maps[$count] = $floor->returnName();
+               $count++;
+           }
+        }
+        $handler->displayTabs($maps,$subContentCount);
+        $handler->fillContent($maps);
+        ?>
     </div>
     <!-- button 2 -->
     <div class="tabContent">
         <div class="subTabButtons">
-            <button onclick="showSubContent(2)">Auditorija1</button>
-            <button onclick="showSubContent(3)">Auditorija2</button>
-            <button onclick="showSubContent(4)">Auditorija3</button>
+            <button onclick="showSubContent(2)">101 Auditorija</button>
+            <button onclick="showSubContent(3)">102 Audiotrija</button>
+            <button onclick="showSubContent(4)">103 Auditorija</button>
         </div>
         <div class="subTabContent">
             Auditorija1
@@ -114,8 +113,8 @@ $second_floor = new Map("images/VGTUB_2a.png");
     <!-- button 3 -->
     <div class="tabContent">
         <div class="subTabButtons">
-            <button onclick="showSubContent(5)">Lentyna1</button>
-            <button onclick="showSubContent(6)">Lentyna2</button>
+            <button onclick="showSubContent(5)">1 Lentyna</button>
+            <button onclick="showSubContent(6)">2 Lentyna</button>
         </div>
         <div class="subTabContent">
             Lentyna1
