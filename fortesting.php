@@ -68,25 +68,61 @@ $second_floor = new Map("images/VGTUB_2a.png");
     <!-- button 1 -->
     <div class="tabContent">
         <div class="subTabButtons">
-            <button>MAP1</button>
-            <button>MAP2</button>
+            <button onclick="showSubContent(0)">MAP1</button>
+            <button onclick="showSubContent(1)">MAP2</button>
         </div>
         <!-- sub-button 1 -->
         <div class="subTabContent">
+            <?php
+            //Filling all maps with markers
+            $second_floor->fillMapByTheme($shelves_to_mark,$search_for);
 
+            //Displaying map
+            $second_floor->saveMap('images/VGTUB_2a'.'_'.$search_for.'.png');
+            $handler->onButtonDisplayImage("Search",$second_floor->returnPath()); // <-- Needs a way to find out which map print-out
+            $handler->displayTable($themes);
+            ?>
         </div>
         <!-- sub-button 2 -->
         <div class="subTabContent">
+            <?php
+            $first_floor->fillMapByTheme($shelves_to_mark,$search_for);
 
+            $first_floor->saveMap('images/VGTUB_1a'.'_'.$search_for.'.png');
+            $handler->onButtonDisplayImage("Search",$first_floor->returnPath()); // <-- Needs a way to find out which map print-out
+            $handler->displayTable($themes);
+            ?>
         </div>
     </div>
     <!-- button 2 -->
     <div class="tabContent">
-        Auditorija
+        <div class="subTabButtons">
+            <button onclick="showSubContent(2)">Auditorija1</button>
+            <button onclick="showSubContent(3)">Auditorija2</button>
+            <button onclick="showSubContent(4)">Auditorija3</button>
+        </div>
+        <div class="subTabContent">
+            Auditorija1
+        </div>
+        <div class="subTabContent">
+            Auditorija2
+        </div>
+        <div class="subTabContent">
+            Auditorija3
+        </div>
     </div>
     <!-- button 3 -->
     <div class="tabContent">
-        Lentyna
+        <div class="subTabButtons">
+        <button onclick="showSubContent(5)">Lentyna1</button>
+        <button onclick="showSubContent(6)">Lentyna2</button>
+        </div>
+        <div class="subTabContent">
+            Lentyna1
+        </div>
+        <div class="subTabContent">
+            Lentyna2
+        </div>
     </div>
 </div>
 </body>

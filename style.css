@@ -43,21 +43,37 @@ body{
     background-color: darkgrey;
 }
 
-.tabContent.subTabButtons button
-{
-    background-color: orange;
-    display: none;
-}
-
 .tabButtons button:hover
 {
     cursor: pointer;
     border: none;
     outline: none;
-    background-color: grey;
+    background-color: darkgray;
 }
 
 .tabContent
+{
+    display:none;
+}
+
+.tabContent .subTabButtons button
+{
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background-color: darkgray;
+}
+
+.tabContent .subTabButtons button:hover
+{
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background-color: darkgray;
+}
+
+
+.tabContent .subTabContent
 {
     display:none;
 }
