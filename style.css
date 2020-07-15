@@ -3,7 +3,7 @@
     cursor: pointer;
     border: none;
     outline: none;
-    background-color: darkgrey;
+    background-color: transparent;
 }
 
 .tabButtons button:hover
@@ -11,7 +11,9 @@
     cursor: pointer;
     border: none;
     outline: none;
-    background-color: darkgray;
+    background-color: transparent;
+    color: #269BF0;
+    border-bottom: 3px solid #269BF0;
 }
 
 .tabContent
@@ -24,7 +26,7 @@
     cursor: pointer;
     border: none;
     outline: none;
-    background-color: darkgray;
+    background-color: transparent;
 }
 
 .tabContent .subTabButtons button:hover
@@ -32,7 +34,7 @@
     cursor: pointer;
     border: none;
     outline: none;
-    background-color: darkgray;
+    background-color: transparent;
 }
 
 

@@ -8,7 +8,7 @@ function showContent(contentIndex)
         node.style.color="";
 
     });
-    mainTabButtons[contentIndex].style.borderBottom="3px solid cyan";
+    mainTabButtons[contentIndex].style.borderBottom="3px solid #269BF0";
     mainTabContents.forEach(function(node){
         node.style.display="none";
     });
@@ -24,8 +24,8 @@ function showSubContent(subContentIndex)
         node.style.backgroundColor="";
         node.style.color="";
     });
-    subTabButtons[subContentIndex].style.backgroundColor="blue";
-    subTabButtons[subContentIndex].style.color="white";
+    subTabButtons[subContentIndex].style.backgroundColor="transparent";
+    subTabButtons[subContentIndex].style.color="#269BF0";
     subTabContents.forEach(function(node) {
         node.style.display ="none";
     });
