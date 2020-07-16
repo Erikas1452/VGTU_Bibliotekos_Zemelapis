@@ -1,13 +1,19 @@
 <?php
+
+include 'ShelvesBlock.php';
+include 'Shelf.php';
+
 class DataGetter
 {
     private $themes;
     private $selected_val;
-    private $shelves;
+    private $shelves_block;
+
+    private $shelves_blocks;
 
     public function printShelves()
     {
-        foreach($this->shelves as $shelf)
+        foreach($this->shelves_block as $shelf)
         {
             echo '<br>';
             foreach($shelf as $item)
@@ -22,11 +28,11 @@ class DataGetter
         //101 y-ai
         //51 x-ai
         $shelf = array(87,1590,151,1691,"Matematika","Diskrecioji");
-        $this->shelves[0]=$shelf;
+        $this->shelves_block[0]=$shelf;
         $shelf=array(87,1742,151,1843,"Istorija");
-        $this->shelves[1]=$shelf;
+        $this->shelves_block[1]=$shelf;
         $shelf=array(202,1590,266,1691,"Mechanika","Transporto Logistika");
-        $this->shelves[2]=$shelf;
+        $this->shelves_block[2]=$shelf;
     }
 
     public function getValueFromSelection($button,$value_to_get)
@@ -61,9 +67,9 @@ class DataGetter
         return $this->selected_val;
     }
 
-    public function returnShelves()
+    public function returnShelvesBlocks()
     {
-        return $this->shelves;
+        return $this->shelves_block;
     }
 }
 ?>

@@ -11,7 +11,7 @@ $data->getThemes();
 $data->getShelves();
 
 $themes = $data->returnThemes();
-$shelves_to_mark = $data->returnShelves();
+$shelves_to_mark = $data->returnShelvesBlocks();
 
 $first_floor = new Map("images/VGTUB_1a.png");
 $second_floor = new Map("images/VGTUB_2a.png");
