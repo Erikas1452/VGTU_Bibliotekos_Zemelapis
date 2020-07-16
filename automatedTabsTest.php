@@ -20,7 +20,9 @@ $second_floor = Map::withName("images/VGTUB_2a.png", "2 Aukštas");
 
 $floors = array($first_floor,$second_floor);
 //Auditoriums
-$auditoriums = array();
+$auditorium101 = Map::withName("images/VGTU_2a_101.png","101 Auditorija");
+
+$auditoriums = array($auditorium101);
 
 //Sub tabs count
 $subContentCount = 0;
@@ -64,11 +66,16 @@ $subContentCount = 0;
 
 
         echo '    Test :  Selected: '.$search_for; //Testing if the selected value is extracted correctly
-        $floors[0]->fillMapByTheme($shelves_to_mark,$search_for);
-        $floors[0]->saveMap('images/VGTUB_2a'.'_'.$search_for.'.png');
+        $first_floor->fillMapByTheme($shelves_to_mark,$search_for);
+        $first_floor->saveMap('images/VGTUB_2a'.'_'.$search_for.'.png');
 
-        $floors[1]->fillMapByTheme($shelves_to_mark,$search_for);
-        $floors[1]->saveMap('images/VGTUB_1a'.'_'.$search_for.'.png');
+        $second_floor->fillMapByTheme($shelves_to_mark,$search_for);
+        $second_floor->saveMap('images/VGTUB_1a'.'_'.$search_for.'.png');
+
+        $auditorium101->fillMapByTheme($shelves_to_mark,$search_for);
+        $auditorium101->saveMap('images/VGTU_2a_101'.'_'.$search_for.'.png');
+
+
         ?>
 
     </form>
@@ -84,37 +91,39 @@ $subContentCount = 0;
     <div class="tabContent">
         <?php
         $mapsToPrint = array();
+        $mapNames = array();
         $count = 0;
-        $maps = array();
         foreach($floors as $floor)
         {
            if($floor->returnStatus())
            {
                $mapsToPrint[$count] = $floor;
-               $maps[$count] = $floor->returnName();
+               $mapNames[$count] = $floor->returnName();
                $count++;
            }
         }
-        $handler->displayTabs($maps,$subContentCount);
+        $handler->displayTabs($mapNames,$subContentCount);
         $handler->fillContentWithMaps($mapsToPrint,$handler);
         ?>
     </div>
     <!-- button 2 -->
     <div class="tabContent">
-        <div class="subTabButtons">
-            <button onclick="showSubContent(2)">101 Auditorija</button>
-            <button onclick="showSubContent(3)">102 Audiotrija</button>
-            <button onclick="showSubContent(4)">103 Auditorija</button>
-        </div>
-        <div class="subTabContent">
-            Auditorija1
-        </div>
-        <div class="subTabContent">
-            Auditorija2
-        </div>
-        <div class="subTabContent">
-            Auditorija3
-        </div>
+        <?php
+        $count = 0;
+        $auditoriumsToPrint = array();
+        $auditoriumNames = array();
+        foreach ($auditoriums as $auditorium)
+        {
+            if($auditorium->returnStatus())
+            {
+                $auditoriumsToPrint[$count] = $auditorium;
+                $auditoriumNames[$count] = $auditorium->returnName();
+                $count++;
+            }
+            $handler->displayTabs($auditoriumNames,$subContentCount);
+            $handler->fillContentWithMaps($auditoriumsToPrint,$handler);
+        }
+        ?>
     </div>
     <!-- button 3 -->
     <div class="tabContent">
