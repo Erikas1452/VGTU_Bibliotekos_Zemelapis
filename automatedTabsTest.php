@@ -127,16 +127,16 @@ $subContentCount = 0;
     </div>
     <!-- button 3 -->
     <div class="tabContent">
-        <div class="subTabButtons">
-            <button onclick="showSubContent(5)">1 Lentyna</button>
-            <button onclick="showSubContent(6)">2 Lentyna</button>
-        </div>
-        <div class="subTabContent">
-            Lentyna1
-        </div>
-        <div class="subTabContent">
-            Lentyna2
-        </div>
+        <?php
+        $count = 0;
+        $shelvesToPrint = array();
+        $shelvesNames = array("1 Lentyna","2 Lentyna");
+        foreach ($auditoriums as $auditorium)
+        {
+            $handler->displayTabs($shelvesNames,$subContentCount);
+            $handler->fillContentWithMaps($shelvesToPrint,$handler);
+        }
+        ?>
     </div>
 </div>
 </body>
