@@ -8,11 +8,14 @@ class ShelvesBlock
     private $y1;
     private $y2;
     private $themes_count;
+    private $floor;
 
-    function __construct($x1, $y1, $x2, $y2, $themes, $shelves)
+    function __construct($x1, $y1, $x2, $y2, $floor, $shelves)
     {
         $this->shelves=array();
         $this->themes=array();
+
+        $this->floor = $floor;
 
         $this->themes_count = 0;
 

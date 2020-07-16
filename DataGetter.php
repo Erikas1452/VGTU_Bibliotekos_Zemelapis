@@ -11,6 +11,21 @@ class DataGetter
 
     private $shelves_blocks;
 
+    public function __construct()
+    {
+        $this->shelves_blocks = array();
+    }
+
+    public function getShelvesBlocks()
+    {
+        $shelves[0] = new Shelf(64,453, 120,432, "201 Auditorija", array("Matematika","Diskrecioji"));
+        $shelves[1] = new Shelf(122,453,179,432, "201 Auditorija", array("Istorija"));
+        $this->shelves_blocks[0]=new ShelvesBlock(87,1590,151,1691,"2 Aukstas",$shelves);
+        $shelves = array();
+        $shelves[0] = new Shelf(64,555,120,535,"202 Auditorija",array("Mechanika","Transporto Logistika"));
+        $this->shelves_blocks[1]=new ShelvesBlock(87,1742,151,1843,"2 Aukstas",$shelves);
+    }
+
     public function printShelves()
     {
         foreach($this->shelves_block as $shelf)
@@ -70,6 +85,11 @@ class DataGetter
     public function returnShelvesBlocks()
     {
         return $this->shelves_block;
+    }
+
+    public function returnBlocks()
+    {
+        return $this->shelves_blocks;
     }
 }
 ?>
