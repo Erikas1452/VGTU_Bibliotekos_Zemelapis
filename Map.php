@@ -55,6 +55,23 @@ class Map
         }
     }
 
+    public function fillFloorMapByTheme($shelves, $theme)
+    {
+        foreach ($shelves as $shelf) {
+            $coordinates = $shelf->returnCoordinates();
+            $themes = $shelf->returnThemes();
+            for ($i = 0; $i < count($themes); $i++) {
+                if ($themes[$i] == $theme) {
+                    $this->found=true;
+                    $this->placeMarker($this->img, $coordinates[0], $coordinates[1], $coordinates[2], $coordinates[3], $this->blue);
+                    break;
+                } else {
+                    $this->placeMarker($this->img, $coordinates[0], $coordinates[1], $coordinates[2], $coordinates[3], $this->gray);
+                }
+            }
+        }
+    }
+
     private function placeMarker($img, $x1, $y1, $x2, $y2, $color)
     {
         imagefilledrectangle($img, $x1, $y1, $x2, $y2, $color);

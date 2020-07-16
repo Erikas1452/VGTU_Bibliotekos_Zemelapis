@@ -45,6 +45,11 @@ class ShelvesBlock
         return array($this->x1,$this->y1,$this->x2,$this->y2);
     }
 
+    public function returnShelves()
+    {
+        return $this->shelves;
+    }
+
     public function returnThemes()
     {
         return $this->themes;

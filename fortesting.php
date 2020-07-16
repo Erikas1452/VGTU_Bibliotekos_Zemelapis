@@ -34,15 +34,17 @@ $block_themes = $second_floor_blocks[1]->returnThemes();
 foreach($coordinates as $coordinate) echo $coordinate.' ';
 foreach($block_themes as $theme) echo $theme.' ';
 
+
+
 //Floors
 $first_floor = Map::withName("images/VGTUB_1a.png", "1 Aukštas");
 $second_floor = Map::withName("images/VGTUB_2a.png", "2 Aukštas");
 
 $floors = array($first_floor,$second_floor);
 //Auditoriums
-$auditorium101 = Map::withName("images/VGTU_2a_101.png","101 Auditorija");
+$auditorium201 = Map::withName("images/VGTU_2a_101.png","201 Auditorija");
 
-$auditoriums = array($auditorium101);
+$auditoriums = array($auditorium201);
 
 //Sub tabs count
 $subContentCount = 0;
@@ -86,14 +88,15 @@ $subContentCount = 0;
 
 
         echo '    Test :  Selected: '.$search_for; //Testing if the selected value is extracted correctly
-        $first_floor->fillMapByTheme($shelves_blocks_to_mark,$search_for);
-        $first_floor->saveMap('images/VGTUB_2a'.'_'.$search_for.'.png');
+        $second_floor->fillFloorMapByTheme($second_floor_blocks,$search_for);
+        $second_floor->saveMap('images/VGTUB_2a'.'_'.$search_for.'.png');
 
-        $second_floor->fillMapByTheme($shelves_blocks_to_mark,$search_for);
-        $second_floor->saveMap('images/VGTUB_1a'.'_'.$search_for.'.png');
-
-        $auditorium101->fillMapByTheme($shelves_blocks_to_mark,$search_for);
-        $auditorium101->saveMap('images/VGTU_2a_101'.'_'.$search_for.'.png');
+        foreach($second_floor_blocks as $block)
+        {
+            $shelves = $block->returnShelves();
+            $auditorium201->fillFloorMapByTheme($shelves,$search_for);
+        }
+        $auditorium201->saveMap('images/VGTU_2a_101'.'_'.$search_for.'.png');
 
 
         ?>
