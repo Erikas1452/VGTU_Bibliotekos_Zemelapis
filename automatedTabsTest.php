@@ -7,18 +7,22 @@ include 'Map.php';
 $data = new DataGetter();
 $handler = new EventHandler();
 
+//Data
 $data->getThemes();
 $data->getShelves();
 
 $themes = $data->returnThemes();
 $shelves_to_mark = $data->returnShelves();
 
-
+//Floors
 $first_floor = Map::withName("images/VGTUB_1a.png", "1 Aukštas");
 $second_floor = Map::withName("images/VGTUB_2a.png", "2 Aukštas");
 
 $floors = array($first_floor,$second_floor);
+//Auditoriums
+$auditoriums = array();
 
+//Sub tabs count
 $subContentCount = 0;
 ?>
 
@@ -79,18 +83,20 @@ $subContentCount = 0;
     <!-- button 1 -->
     <div class="tabContent">
         <?php
+        $mapsToPrint = array();
         $count = 0;
         $maps = array();
         foreach($floors as $floor)
         {
            if($floor->returnStatus())
            {
+               $mapsToPrint[$count] = $floor;
                $maps[$count] = $floor->returnName();
                $count++;
            }
         }
         $handler->displayTabs($maps,$subContentCount);
-        $handler->fillContent($maps);
+        $handler->fillContentWithMaps($mapsToPrint,$handler);
         ?>
     </div>
     <!-- button 2 -->

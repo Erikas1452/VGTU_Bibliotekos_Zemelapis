@@ -21,6 +21,11 @@
     display:none;
 }
 
+.tabContent .subTabContent
+{
+    display:none;
+}
+
 .tabContent .subTabButtons button
 {
     cursor: pointer;
@@ -34,11 +39,8 @@
     cursor: pointer;
     border: none;
     outline: none;
+    color: #269BF0;
     background-color: transparent;
+    border-bottom: 3px solid #269BF0;
 }
 
-
-.tabContent .subTabContent
-{
-    display:none;
-}

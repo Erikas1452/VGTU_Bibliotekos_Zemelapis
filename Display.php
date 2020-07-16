@@ -55,6 +55,17 @@ class Display
         }
     }
 
+    public function fillContentWithMaps($maps,$handler)
+    {
+        //button content
+        for($i = 0; $i < sizeof($maps); $i++)
+        {
+            echo'<div class="subTabContent">';
+            $handler->onButtonDisplayImage("Search",$maps[$i]->returnPath()); // <-- Needs a way to find out which map print-out
+            echo'</div>';
+        }
+    }
+
     public function displayButton($text, $name)
     {
         echo '<input type="submit"'.'name="'.$name.'" value="'.$text.'"/>';
