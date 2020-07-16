@@ -1,33 +1,39 @@
-const tabs = document.querySelectorAll('[data-tab-target]')
-const tabContents = document.querySelectorAll('[data-tab-content]')
+const mainTabButtons=document.querySelectorAll(".tabButtons button");
+const mainTabContents=document.querySelectorAll(".tabContent");
 
-const sub_tabs = document.querySelectorAll('[data-tab-target]')
-const sub_tabContents = document.querySelectorAll('[data-tab-content]')
+function showContent(contentIndex)
+{
+    mainTabButtons.forEach(function(node){
+        node.style.borderBottom="";
+        node.style.color="";
 
-tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-        const target = document.querySelector(tab.dataset.tabTarget)
-        tabContents.forEach(tabContent => {
-            tabContent.classList.remove('active')
-        })
-        tabs.forEach(tab => {
-            tab.classList.remove('active')
-        })
-        target.classList.add('active');
-        tab.classList.add('active');
-    })
-})
+    });
+    mainTabButtons[contentIndex].style.borderBottom="3px solid #269BF0";
+    mainTabButtons[contentIndex].style.color="#269BF0";
+    mainTabContents.forEach(function(node){
+        node.style.display="none";
+    });
+    mainTabContents[contentIndex].style.display="block";
+}
 
-sub_tabs.forEach(tab => {
-    sub_tab.addEventListener('click', () => {
-        const sub_target = document.querySelector(tab.dataset.tabTarget)
-        sub_tabContents.forEach(tabContent => {
-            sub_tabContent.classList.remove('active')
-        })
-        tabs.forEach(tab => {
-            sub_tab.classList.remove('active')
-        })
-        sub_target.classList.add('active');
-        sub_tab.classList.add('active');
-    })
-})
+const subTabButtons=document.querySelectorAll(".tabContent .subTabButtons button");
+const subTabContents=document.querySelectorAll(".tabContent .subTabContent");
+
+function showSubContent(subContentIndex)
+{
+    subTabButtons.forEach(function(node){
+        node.style.backgroundColor="";
+        node.style.color="";
+        node.style.borderBottom="";
+    });
+    subTabButtons[subContentIndex].style.backgroundColor="transparent";
+    subTabButtons[subContentIndex].style.color="#269BF0";
+    subTabButtons[subContentIndex].style.borderBottom="3px solid #269BF0";
+    subTabContents.forEach(function(node) {
+        node.style.display ="none";
+    });
+    subTabContents[subContentIndex].style.display="block";
+}
+
+showContent(0);
+showSubContent(0);
