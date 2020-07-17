@@ -2,6 +2,7 @@
 class Display
 {
     //Fills the list but does not gives the value back on selection
+    /*
     public function displayList($selections, $name)
     {
         echo '<input list="'.$name.'" placeholder="">';
@@ -12,6 +13,7 @@ class Display
         }
         echo '</datalist>';
     }
+    */
 
     public function displayTable($themes)
     {
@@ -40,19 +42,6 @@ class Display
 
         }
         echo'</div>';
-    }
-
-    public function fillContent($tabs)
-    {
-        //button content
-        $i=1;
-        foreach($tabs as $tab)
-        {
-            echo'<div class="subTabContent">';
-            echo'MAP '.$i;
-            echo'</div>';
-            $i++;
-        }
     }
 
     public function fillContentWithMaps($maps,$handler)

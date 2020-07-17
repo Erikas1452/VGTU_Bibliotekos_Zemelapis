@@ -31,32 +31,6 @@ class Map
         return $instance;
     }
 
-    public function fillMap($shelves)
-    {
-        foreach ($shelves as $shelf) {
-            $theme_amount = count($shelf) - 4;
-            for ($i = 0; $i < $theme_amount; $i++) {
-                $this->placeMarker($this->img, $shelf[0], $shelf[1], $shelf[2], $shelf[3], $this->gray);
-            }
-        }
-    }
-
-    public function fillMapByTheme($shelves, $theme)
-    {
-        foreach ($shelves as $shelf) {
-            $theme_amount = count($shelf) - 4;
-            for ($i = 0; $i < $theme_amount; $i++) {
-                if ($shelf[$i + 4] == $theme) {
-                    $this->found=true;
-                    $this->placeMarker($this->img, $shelf[0], $shelf[1], $shelf[2], $shelf[3], $this->blue);
-                    break;
-                } else {
-                    $this->placeMarker($this->img, $shelf[0], $shelf[1], $shelf[2], $shelf[3], $this->gray);
-                }
-            }
-        }
-    }
-
     public function fillFloorMapByTheme($shelves, $theme)
     {
         foreach ($shelves as $shelf) {
@@ -65,10 +39,10 @@ class Map
             for ($i = 0; $i < count($themes); $i++) {
                 if ($themes[$i] == $theme) {
                     $this->found=true;
-                    $this->placeMarker($this->img, $coordinates[0], $coordinates[1], $coordinates[2], $coordinates[3], $this->blue);
+                    imagefilledrectangle($this->img, $coordinates[0], $coordinates[1], $coordinates[2], $coordinates[3], $this->blue);
                     break;
                 } else {
-                    $this->placeMarker($this->img, $coordinates[0], $coordinates[1], $coordinates[2], $coordinates[3], $this->gray);
+                    imagefilledrectangle($this->img, $coordinates[0], $coordinates[1], $coordinates[2], $coordinates[3], $this->gray);
                 }
             }
         }
@@ -102,11 +76,6 @@ class Map
         }
         header('Content-type: image/png');
         imagepng($img,"test/Lentyna1.png");
-    }
-
-    private function placeMarker($img, $x1, $y1, $x2, $y2, $color)
-    {
-        imagefilledrectangle($img, $x1, $y1, $x2, $y2, $color);
     }
 
     public function displayMap()

@@ -9,7 +9,6 @@ $handler = new EventHandler();
 
 //Data
 $data->getThemes();
-$data->getShelves();
 $data->getShelvesBlocks();
 
 $themes = $data->returnThemes();
