@@ -18,12 +18,12 @@ class DataGetter
 
     public function getShelvesBlocks()
     {
-        $shelves[0] = new Shelf(64,453, 120,432, "201 Auditorija", array("Matematika","Diskrecioji"));
-        $shelves[1] = new Shelf(122,453,179,432, "201 Auditorija", array("Istorija"));
-        $this->shelves_blocks[0]=new ShelvesBlock(87,1590,151,1691,"2 Aukstas",$shelves);
+        $shelves[0] = new Shelf(64,432, 120,453, "201 Auditorija", array("Matematika","Diskrecioji"));
+        $shelves[1] = new Shelf(122,432,179,453, "201 Auditorija", array("Istorija"));
+        $this->shelves_blocks[0]=new ShelvesBlock(87,1691,151,1590,"2 Aukstas",$shelves);
         $shelves = array();
-        $shelves[0] = new Shelf(64,555,120,535,"202 Auditorija",array("Mechanika","Transporto Logistika"));
-        $this->shelves_blocks[1]=new ShelvesBlock(87,1742,151,1843,"2 Aukstas",$shelves);
+        $shelves[0] = new Shelf(64,535,120,555,"202 Auditorija",array("Mechanika","Transporto Logistika"));
+        $this->shelves_blocks[1]=new ShelvesBlock(87,1843,151,1742,"2 Aukstas",$shelves);
     }
 
     public function printShelves()
