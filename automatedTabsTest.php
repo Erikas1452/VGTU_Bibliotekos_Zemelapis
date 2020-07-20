@@ -12,7 +12,7 @@ $data->getThemes();
 $data->getShelves();
 
 $themes = $data->returnThemes();
-$shelves_to_mark = $data->returnShelves();
+$shelves_blocks_to_mark = $data->returnShelvesBlocks();
 
 //Floors
 $first_floor = Map::withName("images/VGTUB_1a.png", "1 Aukštas");
@@ -66,13 +66,13 @@ $subContentCount = 0;
 
 
         echo '    Test :  Selected: '.$search_for; //Testing if the selected value is extracted correctly
-        $first_floor->fillMapByTheme($shelves_to_mark,$search_for);
+        $first_floor->fillMapByTheme($shelves_blocks_to_mark,$search_for);
         $first_floor->saveMap('images/VGTUB_2a'.'_'.$search_for.'.png');
 
-        $second_floor->fillMapByTheme($shelves_to_mark,$search_for);
+        $second_floor->fillMapByTheme($shelves_blocks_to_mark,$search_for);
         $second_floor->saveMap('images/VGTUB_1a'.'_'.$search_for.'.png');
 
-        $auditorium101->fillMapByTheme($shelves_to_mark,$search_for);
+        $auditorium101->fillMapByTheme($shelves_blocks_to_mark,$search_for);
         $auditorium101->saveMap('images/VGTU_2a_101'.'_'.$search_for.'.png');
 
 
