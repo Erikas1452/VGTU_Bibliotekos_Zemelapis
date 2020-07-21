@@ -1,13 +1,14 @@
 <?php
-include 'DataGetter.php';
-include 'Display.php';
-include 'EventHandler.php';
-include 'Map.php';
+include 'php/DataGetter.php';
+include 'php/Display.php';
+include 'php/EventHandler.php';
+include 'php/Map.php';
 
 $data = new DataGetter();
 $handler = new EventHandler();
 
 //Data
+$data->connect();
 $data->getThemes();
 $data->getShelvesBlocks();
 

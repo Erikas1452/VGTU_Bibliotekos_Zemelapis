@@ -1,7 +1,7 @@
 <?php
-include 'Map.php';
-include 'DataGetter.php';
-include 'Display.php';
+include 'php/Map.php';
+include 'php/DataGetter.php';
+include 'php/Display.php';
 
 $shelves[0] = new Shelf(64,432, 120,453, "201 Auditorija", array("Matematika","Diskrecioji"));
 $shelves[1] = new Shelf(122,432,179,453, "201 Auditorija", array("Istorija"));
