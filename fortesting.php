@@ -95,6 +95,9 @@ $shelfIndex = 2;
         $secondFloor->fillFloorMapByTheme($secondFloorBlocks,$searchFor);
         $secondFloor->saveMap('images/VGTUB_2a'.'_'.$searchFor.'.png');
 
+        $firstFloor->fillFloorMapByTheme($secondFloorBlocks,$searchFor);
+        $firstFloor->saveMap('images/VGTUB_1a'.'_'.$searchFor.'.png');
+
         foreach($secondFloorBlocks as $block)
         {
             $shelves = $block->returnShelves();

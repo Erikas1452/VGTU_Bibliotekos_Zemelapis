@@ -12,6 +12,9 @@ class Map
     private $name;
     private $found;
 
+    private $originalWidth;
+    private $originalLength;
+
     function __construct($image)
     {
         $this->found=false;
@@ -20,6 +23,12 @@ class Map
         $this->gray = imagecolorallocate($this->img, 211, 211, 211);
         $this->white = imagecolorallocate($this->img, 255, 255, 255);
         $this->black = imagecolorallocate($this->img, 0, 0, 0);
+
+        $temp = getimagesize($image);
+
+        $this->originalWidth = $temp[0];
+        $this->originalLength = $temp[1];
+
         imagealphablending($this->img, false);
         imagesavealpha($this->img, true);
     }
@@ -116,5 +125,14 @@ class Map
         return $this->found;
     }
 
+    public function returnWidth()
+    {
+        return $this->originalWidth;
+    }
+
+    public function returnLength()
+    {
+        return $this->originalLength;
+    }
 }
 ?>
