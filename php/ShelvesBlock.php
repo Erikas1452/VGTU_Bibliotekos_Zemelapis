@@ -7,7 +7,7 @@ class ShelvesBlock
     private $x2;
     private $y1;
     private $y2;
-    private $themes_count;
+    private $themesCount;
     private $floor;
 
     function __construct($x1, $y1, $x2, $y2, $floor, $shelves)
@@ -17,7 +17,7 @@ class ShelvesBlock
 
         $this->floor = $floor;
 
-        $this->themes_count = 0;
+        $this->themesCount = 0;
 
         $this->x1 = $x1;
         $this->x2 = $x2;
@@ -28,13 +28,13 @@ class ShelvesBlock
 
         foreach($this->shelves as $shelf)
         {
-            $all_themes = $shelf->returnThemes();
-            foreach ($all_themes as $one_theme)
+            $allThemes = $shelf->returnThemes();
+            foreach ($allThemes as $oneTheme)
             {
-                if(!in_array($one_theme,$this->themes))
+                if(!in_array($oneTheme,$this->themes))
                 {
-                    $this->themes[$this->themes_count] = $one_theme;
-                    $this->themes_count++;
+                    $this->themes[$this->themesCount] = $oneTheme;
+                    $this->themesCount++;
                 }
             }
         }

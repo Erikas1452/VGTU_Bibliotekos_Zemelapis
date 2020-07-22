@@ -4,6 +4,8 @@ include 'php/Display.php';
 include 'php/EventHandler.php';
 include 'php/Map.php';
 
+session_start();
+
 $data = new DataGetter();
 $handler = new EventHandler();
 
@@ -13,33 +15,37 @@ $data->getThemes();
 $data->getShelvesBlocks();
 
 $themes = $data->returnThemes();
-$shelves_blocks_to_mark = $data->returnShelvesBlocks();
 
+//TESTING
+$secondFloorBlocks = $data->returnBlocks();
 
-//TestDATA
-$second_floor_blocks = $data->returnBlocks();
+//1ST block
+$coordinates = $secondFloorBlocks[0]->returnCoordinates();
+$blockThemes = $secondFloorBlocks[0]->returnThemes();
 
-    //1ST block
-    $coordinates = $second_floor_blocks[0]->returnCoordinates();
-    $block_themes = $second_floor_blocks[0]->returnThemes();
+echo'<br>';
 
-    //2ND block
-    $coordinates = $second_floor_blocks[1]->returnCoordinates();
-    $block_themes = $second_floor_blocks[1]->returnThemes();
+//2ND block
+$coordinates = $secondFloorBlocks[1]->returnCoordinates();
+$blockThemes = $secondFloorBlocks[1]->returnThemes();
 
+//Floors
+$firstFloor = Map::withName("images/VGTUB_1a.png", "1 Aukštas");
+$secondFloor = Map::withName("images/VGTUB_2a.png", "2 Aukštas");
 
-    //Floors
-    $first_floor = Map::withName("images/VGTUB_1a.png", "1 Aukštas");
-    $second_floor = Map::withName("images/VGTUB_2a.png", "2 Aukštas");
+$floors = array($firstFloor,$secondFloor);
+//Auditoriums
+$auditorium201 = Map::withName("images/VGTU_2a_101.png","201 Auditorija");
 
-    $floors = array($first_floor,$second_floor);
-    //Auditoriums
-    $auditorium201 = Map::withName("images/VGTU_2a_101.png","201 Auditorija");
-
-    $auditoriums = array($auditorium201);
+$auditoriums = array($auditorium201);
 
 //Sub tabs count
 $subContentCount = 0;
+
+$libraryIndex = 0;
+$roomIndex = 1;
+$shelfIndex = 2;
+
 ?>
 
 <!DOCTYPE html>
@@ -76,19 +82,19 @@ $subContentCount = 0;
         <?php
         $handler->displayButton("Ieškoti","Search");
         $data->getValueFromSelection("Search","DropDown1");
-        $search_for = $data->returnSelectedValue();
+        $searchFor = $data->returnSelectedValue();
 
-        $second_floor->fillFloorMapByTheme($second_floor_blocks,$search_for);
-        $second_floor->saveMap('images/VGTUB_2a'.'_'.$search_for.'.png');
 
-        foreach($second_floor_blocks as $block)
+        echo '    Test :  Selected: '.$searchFor; //Testing if the selected value is extracted correctly
+        $secondFloor->fillFloorMapByTheme($secondFloorBlocks,$searchFor);
+        $secondFloor->saveMap('images/VGTUB_2a'.'_'.$searchFor.'.png');
+
+        foreach($secondFloorBlocks as $block)
         {
             $shelves = $block->returnShelves();
-            $auditorium201->fillFloorMapByTheme($shelves,$search_for);
+            $auditorium201->fillFloorMapByTheme($shelves,$searchFor);
         }
-        $auditorium201->saveMap('images/VGTU_2a_101'.'_'.$search_for.'.png');
-
-
+        $auditorium201->saveMap('images/VGTU_2a_101'.'_'.$searchFor.'.png');
         ?>
 
     </form>
@@ -96,13 +102,14 @@ $subContentCount = 0;
     <br>
 
     <div class="tabButtons">
-        <button onclick="showContent(0)">Biblioteka</button>
-        <button onclick="showContent(1)">Auditorija</button>
-        <button onclick="showContent(2)">Lentyna</button>
+        <button onclick="showContent(0); showSubContent(<?php echo $libraryIndex ?>)">Biblioteka</button>
+        <button onclick="showContent(1); showSubContent(<?php echo $roomIndex ?>)">Auditorija</button>
+        <button onclick="showContent(2); showSubContent(<?php echo $shelfIndex ?>)">Lentyna</button>
     </div>
     <!-- button 1 -->
     <div class="tabContent">
         <?php
+        $libraryIndex = $subContentCount;
         $mapsToPrint = array();
         $mapNames = array();
         $count = 0;
@@ -122,6 +129,7 @@ $subContentCount = 0;
     <!-- button 2 -->
     <div class="tabContent">
         <?php
+        $room_index = $subContentCount + 1;
         $count = 0;
         $auditoriumsToPrint = array();
         $auditoriumNames = array();
@@ -141,6 +149,7 @@ $subContentCount = 0;
     <!-- button 3 -->
     <div class="tabContent">
         <?php
+        $shelfIndex = $subContentCount + 1;
         $count = 0;
         $shelvesToPrint = array();
         $shelvesNames = array("1 Lentyna","2 Lentyna");
