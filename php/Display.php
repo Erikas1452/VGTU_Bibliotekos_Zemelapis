@@ -50,7 +50,7 @@ class Display
         for($i = 0; $i < sizeof($maps); $i++)
         {
             echo'<div class="subTabContent">';
-            $handler->onButtonDisplayImage("Search",$maps[$i]->returnPath()); // <-- Needs a way to find out which map print-out
+            $handler->onButtonDisplayImage("Search",$maps[$i]->returnBase64()); // <-- Needs a way to find out which map print-out
             echo'</div>';
         }
     }
@@ -60,9 +60,9 @@ class Display
         echo '<input type="submit"'.'name="'.$name.'" value="'.$text.'"/>';
     }
 
-    public function displayImage($path,$width,$height)
+    public function displayImage($source,$width,$height)
     {
-        echo'<img src="'.$path.'"'.' width="'.$width.'" '. 'height="'.$height.'">';
+        echo'<img src="'.$source.'"'.' width="'.$width.'" '. 'height="'.$height.'">';
     }
 }
 ?>

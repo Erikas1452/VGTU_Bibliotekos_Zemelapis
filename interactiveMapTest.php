@@ -51,21 +51,30 @@ echo '<br>';
 echo 'Width '.$secondFloor->returnWidth();
 echo '<br>';
 echo 'Length '.$secondFloor->returnLength();
-$imgage = imagecreatefromgd($secondFloor->returnMap());
-echo 'Extracting image: <br>';
-echo '<img src="images/VGTUB_2a.png" width="400" height="300">';
 
+$image = $secondFloor->returnMap();
 
+ob_start();
+    imagepng($image);
+    $contents = ob_get_contents();
+    ob_end_clean();
+
+    $dataUri = "data:image/png;base64," . base64_encode($contents);
+
+$path = "images/VGTUB_2a.png";
 //TESTING END //TESTING END //TESTING END //TESTING END
 
+$secondFloor->generateBase64Uri();
+
 ?>
+
+<img src="<?php echo $secondFloor->returnBase64()?>" alt ="failed" />
 
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
     <title>VGTU Library Map</title>
-    <!-- (ADD LATER)References to styles -->
     <link href ="style.css" rel="stylesheet">
     <script src="script.js" defer></script>
 </head>
@@ -113,7 +122,7 @@ echo '<img src="images/VGTUB_2a.png" width="400" height="300">';
         <div class="subTabButtons">
             <button onclick="showSubContent(0)">1 Aukstas</button>
             <br>
-            <img src="images/VGTUB_2a.png" width="10%" height="10%" alt="1StFloor" usemap="#1stFloor">
+            <img src="images/VGTUB_2a.png" width="600" height="550" alt="1StFloor" usemap="#1stFloor">
 
             <map name="1stFloor">
                 <area shape="rect" coords="10,10,250,250" alt="Shelf" href="hi.html">

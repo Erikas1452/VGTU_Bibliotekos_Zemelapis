@@ -2,12 +2,12 @@
 
 class EventHandler extends Display
 {
-    public function onButtonDisplayImage($button,$image)
+    public function onButtonDisplayImage($button,$source)
     {
         if(isset($_POST[$button]))
         {
             echo '<br><br>';
-            $this->displayImage($image,693,542);
+            $this->displayImage($source,693,542);
         }
     }
 }

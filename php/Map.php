@@ -15,6 +15,8 @@ class Map
     private $originalWidth;
     private $originalLength;
 
+    private $base64Uri;
+
     function __construct($image)
     {
         $this->found=false;
@@ -91,6 +93,15 @@ class Map
         imagepng($img,"test/Lentyna1.png");
     }
 
+    public function generateBase64Uri()
+    {
+        ob_start();
+        imagepng($this->img);
+        $contents = ob_get_contents();
+        ob_end_clean();
+        $this->base64Uri = "data:image/png;base64," . base64_encode($contents);
+    }
+
     public function displayMap()
     {
         header('Content-type: image/png');
@@ -112,7 +123,12 @@ class Map
 
     public function returnMap()
     {
-        return imagepng($this->img);
+        return $this->img;
+    }
+
+    public function returnBase64()
+    {
+        return $this->base64Uri;
     }
 
     public function returnName()

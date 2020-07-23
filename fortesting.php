@@ -93,17 +93,17 @@ $shelfIndex = 2;
 
         echo '    Test :  Selected: '.$searchFor; //Testing if the selected value is extracted correctly
         $secondFloor->fillFloorMapByTheme($secondFloorBlocks,$searchFor);
-        $secondFloor->saveMap('images/VGTUB_2a'.'_'.$searchFor.'.png');
+        $secondFloor->generateBase64Uri();
 
         $firstFloor->fillFloorMapByTheme($secondFloorBlocks,$searchFor);
-        $firstFloor->saveMap('images/VGTUB_1a'.'_'.$searchFor.'.png');
+        $firstFloor->generateBase64Uri();
 
         foreach($secondFloorBlocks as $block)
         {
             $shelves = $block->returnShelves();
             $auditorium201->fillFloorMapByTheme($shelves,$searchFor);
         }
-        $auditorium201->saveMap('images/VGTU_2a_101'.'_'.$searchFor.'.png');
+        $auditorium201->generateBase64Uri();
         ?>
 
     </form>
