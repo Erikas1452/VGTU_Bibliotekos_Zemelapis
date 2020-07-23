@@ -62,7 +62,7 @@ class Display
 
     public function displayImage($source,$width,$height)
     {
-        echo'<img src="'.$source.'"'.' width="'.$width.'" '. 'height="'.$height.'">';
+        echo'<img src="'.$source.'"'.' width="'.$width.'" '. 'height="'.$height.' alt="Failed to load image">';
     }
 }
 ?>

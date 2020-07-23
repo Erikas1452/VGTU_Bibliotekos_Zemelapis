@@ -4,8 +4,6 @@ include 'php/Display.php';
 include 'php/EventHandler.php';
 include 'php/Map.php';
 
-session_start();
-
 $data = new DataGetter();
 $handler = new EventHandler();
 

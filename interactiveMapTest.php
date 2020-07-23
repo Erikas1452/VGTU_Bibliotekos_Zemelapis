@@ -68,8 +68,6 @@ $secondFloor->generateBase64Uri();
 
 ?>
 
-<img src="<?php echo $secondFloor->returnBase64()?>" alt ="failed" />
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -122,9 +120,9 @@ $secondFloor->generateBase64Uri();
         <div class="subTabButtons">
             <button onclick="showSubContent(0)">1 Aukstas</button>
             <br>
-            <img src="images/VGTUB_2a.png" width="600" height="550" alt="1StFloor" usemap="#1stFloor">
+            <img src="<?php echo $secondFloor->returnBase64()?>" width="600" height="550" alt="Failed to load image" usemap="#2ndFloor">
 
-            <map name="1stFloor">
+            <map name="2ndFloor">
                 <area shape="rect" coords="10,10,250,250" alt="Shelf" href="hi.html">
             </map>
         </div>
