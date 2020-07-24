@@ -69,6 +69,11 @@ class Map
         }
     }
 
+    public function changeStatus($boolean)
+    {
+        $this->found = $boolean;
+    }
+
     public function generateBase64Uri()
     {
         ob_start();

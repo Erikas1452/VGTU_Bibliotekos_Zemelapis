@@ -50,7 +50,7 @@ class Display
         for($i = 0; $i < sizeof($maps); $i++)
         {
             echo'<div class="subTabContent">';
-            $handler->onButtonDisplayImage("Search",$maps[$i]->returnBase64()); // <-- Needs a way to find out which map print-out
+            $this->displayImage($maps[$i]->returnBase64(),450,300); // <-- Needs a way to find out which map print-out
             echo'</div>';
         }
     }
