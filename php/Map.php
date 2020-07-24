@@ -42,7 +42,17 @@ class Map
         return $instance;
     }
 
-    public function fillFloorMapByTheme($shelves, $theme)
+    public function fillSelectedShelf($shelves,$selected)
+    {
+        foreach ($shelves as $shelf)
+        {
+            $coordinates = $shelf->returnCoordinates();
+            if($coordinates == $selected->returnCoordinates()) imagefilledrectangle($this->img, $coordinates[0], $coordinates[1], $coordinates[2], $coordinates[3], $this->blue);
+            else imagefilledrectangle($this->img, $coordinates[0], $coordinates[1], $coordinates[2], $coordinates[3], $this->gray);
+        }
+    }
+
+    public function fillMapByTheme($shelves, $theme)
     {
         foreach ($shelves as $shelf) {
             $coordinates = $shelf->returnCoordinates();
@@ -57,40 +67,6 @@ class Map
                 }
             }
         }
-    }
-
-    public static function mapShelvesBlock($shelvesBlock,$theme)
-    {
-        $img = imagecreatetruecolor(400,200);
-
-        $blue = imagecolorallocate($img, 38, 155, 240);
-        $gray = imagecolorallocate($img, 211, 211, 211);
-        $background = imagecolorallocatealpha($img,255,255,255,0);
-
-        imagefill($img,0,0,$background);
-        imagealphablending($img, false);
-        imagesavealpha($img, true);
-
-        $offsetCoordinates = $shelvesBlock->returnShelves()[0]->returnCoordinates();
-
-        $shelves = $shelvesBlock->returnShelves();
-
-        foreach ($shelves as $shelf)
-        {
-            $coordinates = $shelf->returnCoordinates();
-            $newCoordinates = array($coordinates[0]-$offsetCoordinates[0],$coordinates[1]-$offsetCoordinates[1],$coordinates[2]-$offsetCoordinates[0],$coordinates[3]-$offsetCoordinates[1]);
-            $themes = $shelf->returnThemes();
-            for ($i = 0; $i < count($shelf->returnThemes()); $i++) {
-                if ($themes[$i] == $theme)
-                {
-                    imagefilledrectangle($img,$newCoordinates[0],$newCoordinates[1],$newCoordinates[2],$newCoordinates[3],$blue);
-                    break;
-                }
-                else  imagefilledrectangle($img,$newCoordinates[0],$newCoordinates[1],$newCoordinates[2],$newCoordinates[3],$gray);
-            }
-        }
-        header('Content-type: image/png');
-        imagepng($img,"test/Lentyna1.png");
     }
 
     public function generateBase64Uri()

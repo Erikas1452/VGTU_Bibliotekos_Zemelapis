@@ -56,7 +56,7 @@ class DataGetter
 
     public function getThemes()
     {
-        $querry = 'SELECT PAVAD_LT_BKT, UDK_BKT  FROM bibl_kng_temos';
+        $querry = 'SELECT PAVAD_LT_BKT, UDK_BKT  FROM bibl_kng_temos ORDER BY PAVAD_LT_BKT';
         $results=oci_parse($this->connection,$querry);
         oci_execute($results);
 

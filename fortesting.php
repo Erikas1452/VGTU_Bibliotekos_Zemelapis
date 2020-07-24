@@ -90,16 +90,16 @@ $shelfIndex = 2;
 
 
         echo '    Test :  Selected: '.$searchFor; //Testing if the selected value is extracted correctly
-        $secondFloor->fillFloorMapByTheme($secondFloorBlocks,$searchFor);
+        $secondFloor->fillMapByTheme($secondFloorBlocks,$searchFor);
         $secondFloor->generateBase64Uri();
 
-        $firstFloor->fillFloorMapByTheme($secondFloorBlocks,$searchFor);
+        $firstFloor->fillMapByTheme($secondFloorBlocks,$searchFor);
         $firstFloor->generateBase64Uri();
 
         foreach($secondFloorBlocks as $block)
         {
             $shelves = $block->returnShelves();
-            $auditorium201->fillFloorMapByTheme($shelves,$searchFor);
+            $auditorium201->fillMapByTheme($shelves,$searchFor);
         }
         $auditorium201->generateBase64Uri();
         ?>

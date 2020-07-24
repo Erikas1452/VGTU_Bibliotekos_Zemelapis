@@ -86,13 +86,13 @@ $shelfIndex = 2;
 
 
         echo '    Test :  Selected: '.$searchFor; //Testing if the selected value is extracted correctly
-        $secondFloor->fillFloorMapByTheme($secondFloorBlocks,$searchFor);
+        $secondFloor->fillMapByTheme($secondFloorBlocks,$searchFor);
         $secondFloor->saveMap('images/VGTUB_2a'.'_'.$searchFor.'.png');
 
         foreach($secondFloorBlocks as $block)
         {
             $shelves = $block->returnShelves();
-            $auditorium201->fillFloorMapByTheme($shelves,$searchFor);
+            $auditorium201->fillMapByTheme($shelves,$searchFor);
         }
         $auditorium201->saveMap('images/VGTU_2a_101'.'_'.$searchFor.'.png');
         ?>
