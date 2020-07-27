@@ -69,8 +69,9 @@ $roomIndex = sizeof($floors);
             ?>
         </datalist>
 
-        <?php
+        <?php $handler->displayButton("Ieškoti","Search") ?>
 
+        <?php
         if(!isset($_POST["Search"]))
         {
             echo "NULL";
@@ -84,11 +85,9 @@ $roomIndex = sizeof($floors);
                 $auditorium->changeStatus(true);
                 $auditorium->generateBase64Uri();
             }
-            $handler->displayButton("Ieškoti","Search"); //Displaying search button
         }
         else {
 
-            $handler->displayButton("Ieškoti","Search"); //Displaying search button
             $data->getValueFromSelection("Search", "DropDown1");
             $searchFor = $data->returnSelectedValue(); //returns selected value
 
@@ -113,33 +112,38 @@ $roomIndex = sizeof($floors);
     <br>
 
     <div class="tabButtons">
-        <button onclick="showContent(0); showSubContent(<?php echo $libraryIndex ?>)">Biblioteka</button>
-        <button onclick="showContent(1); showSubContent(<?php echo $roomIndex ?>)">Auditorija</button>
+    <?php
+    $index = 0;
+    foreach($floors as $floor) {
+        echo '<button onclick="showContent('.$index.')" onclick="showSubContent('.$roomIndex.')">'.$floor->returnName().'</button>';
+        $index++;
+    }
+    ?>
     </div>
     <!-- button 1 -->
     <div class="tabContent">
         <?php
-        $libraryIndex = $subContentCount;
-        $mapsToPrint = array();
-        $mapNames = array();
+        $roomIndex = $subContentCount + 1;
         $count = 0;
-        foreach($floors as $floor)
+        $auditoriumsToPrint = array();
+        $auditoriumNames = array();
+        foreach ($auditoriums as $auditorium)
         {
-            if($floor->returnStatus())
+            if($auditorium->returnStatus())
             {
-                $mapsToPrint[$count] = $floor;
-                $mapNames[$count] = $floor->returnName();
+                $auditoriumsToPrint[$count] = $auditorium;
+                $auditoriumNames[$count] = $auditorium->returnName();
                 $count++;
             }
         }
-        $handler->displayTabs($mapNames,$subContentCount);
-        $handler->fillContentWithMaps($mapsToPrint,$handler);
+        $handler->displayTabs($auditoriumNames,$subContentCount);
+        $handler->fillContentWithMaps($auditoriumsToPrint,$handler);
         ?>
     </div>
     <!-- button 2 -->
     <div class="tabContent">
         <?php
-        $room_index = $subContentCount + 1;
+        $roomIndex = $subContentCount + 1;
         $count = 0;
         $auditoriumsToPrint = array();
         $auditoriumNames = array();
