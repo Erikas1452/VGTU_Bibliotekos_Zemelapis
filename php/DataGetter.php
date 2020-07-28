@@ -13,6 +13,8 @@ class DataGetter
 
     private $shelvesBlocks;
 
+    private $stid;
+
 
 
     public function __construct()
@@ -56,6 +58,25 @@ class DataGetter
 
     public function getThemes()
     {
+
+        oci_free_statement($this->stid);
+        $this->stid = oci_parse($this->connection,"begin :json := gauti_visus_kng_pavad_fnc(); end;");
+        oci_bind_by_name($this->stid, ':json', $res,1000000);
+        if(oci_execute($this->stid))
+        {
+            $obj = json_decode($res);
+            $index=0;
+            foreach ($obj->{"bookNames"} as $name)
+            {
+                $theme = array($row[0],$row[1]);
+                $this->themes[$index] = $theme;
+                $index++;
+            }
+        }
+        else{
+            echo "Error";
+        }
+
         $querry = 'SELECT PAVAD_LT_BKT, UDK_BKT  FROM bibl_kng_temos ORDER BY PAVAD_LT_BKT';
         $results=oci_parse($this->connection,$querry);
         oci_execute($results);

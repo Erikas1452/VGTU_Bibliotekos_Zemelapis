@@ -25,3 +25,31 @@ if(oci_execute($stid))
 else{
     echo "Error";
 }
+
+oci_free_statement($stid);
+$stid = oci_parse($connection,"begin :a := get_clob(); end;");
+oci_bind_by_name($stid, ':a', $res,6000000);
+if(oci_execute($stid))
+{
+    echo $res;
+    $obj = json_decode($res);
+    echo '<br>';
+    print $obj->{'JS'};
+}
+else{
+    echo "Error";
+}
+
+oci_free_statement($stid);
+$stid = oci_parse($connection,"begin :a := gauti_visus_kng_pavad_fnc(); end;");
+oci_bind_by_name($stid, ':a', $res,1000000);
+if(oci_execute($stid))
+{
+    echo $res;
+    //$obj = json_decode($res);
+    //foreach ($obj->{"bookNames"} as $name) echo $name.'<br>';
+}
+else{
+    echo $res;
+    echo "Error";
+}

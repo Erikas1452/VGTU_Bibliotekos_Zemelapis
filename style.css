@@ -1,3 +1,14 @@
+
+body
+{
+    height: auto;
+    padding-top: 100px;
+    min-height: 100%;
+    position: relative;
+    padding-bottom: 255px;
+    font-family: 'Open Sans';
+}
+
 input[type=submit]
 {
     margin: 0;
@@ -33,6 +44,11 @@ input[type=submit]:hover
     background-color: #00B1FF;
 }
 
+.tabButtons
+{
+    padding: 10px;
+}
+
 .tabButtons button
 {
     cursor: pointer;
@@ -51,25 +67,46 @@ input[type=submit]:hover
     border-bottom: 3px solid #269BF0;
 }
 
-.tabContent
+.mapContainer .tabContent
 {
     display:none;
+
+}
+.mapContainer .tabContent .table
+{
+    float: right;
+    padding: 10px;
 }
 
-.tabContent .subTabContent
+.mapContainer .tabContent .table table
+{
+    background: rgb(237,245,252);
+}
+
+.mapContainer .tabContent .subTabContent
 {
     display:none;
+    margin-left: 120px;
 }
 
-.tabContent .subTabButtons button
+.mapContainer .tabContent .subTabButtons
 {
+    padding-top: 10px;
+    width: 100px;
+    float: left;
+}
+
+.mapContainer .tabContent .subTabButtons button
+{
+    padding: 10px;
+    display: list-item;
     cursor: pointer;
     border: none;
     outline: none;
     background-color: transparent;
 }
 
-.tabContent .subTabButtons button:hover
+.mapContainer .tabContent .subTabButtons button:hover
 {
     cursor: pointer;
     border: none;
@@ -79,3 +116,13 @@ input[type=submit]:hover
     border-bottom: 3px solid #269BF0;
 }
 
+.mainContainer
+{
+    background: rgb(245,249,252);
+}
+.wrapper
+{
+    max-width: 940px;
+    width: 100%;
+    margin: 1px auto -1px auto;
+}

@@ -25,8 +25,8 @@ class Display
                 foreach ($themes as $theme)
                 {
                     echo'<tr>';
-                    echo'<td>'.$theme[1].'</td>';
                     echo'<td>'.$theme[0].'</td>';
+                    echo'<td>'.$theme[1].'</td>';
                     echo'</tr>';
                 }
         echo '</table>';
