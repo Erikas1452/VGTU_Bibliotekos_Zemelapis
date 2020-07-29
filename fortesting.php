@@ -68,7 +68,7 @@ $roomIndex = sizeof($floors);
                 //Filling Search-Bar
                 foreach ($themes as $item)
                 {
-                    echo '<option value="'.$item[0].'">'.$item[0].'</option>';
+                    echo '<option value="'.$item[1].'">'.$item[1].'</option>';
                 }
                 ?>
             </datalist>
@@ -98,7 +98,7 @@ $roomIndex = sizeof($floors);
 
                 $data->getValueFromSelection("Search", "DropDown1");
                 $searchFor = $data->returnSelectedValue(); //returns selected value
-
+                echo $searchFor;
 
                 //Drawing maps of floors
                 for ($i = 0; $i < sizeof($floors); $i++) {

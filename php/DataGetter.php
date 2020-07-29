@@ -13,10 +13,6 @@ class DataGetter
 
     private $shelvesBlocks;
 
-    private $stid;
-
-
-
     public function __construct()
     {
         $this->shelvesBlocks = array();
@@ -26,20 +22,14 @@ class DataGetter
     {
         $db = "(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST=alma-ora12-test.vgtu.lt)(PORT = 1521))(CONNECT_DATA = (SERVER = DEDICATED) (SERVICE_NAME = alma)))";
         $this->connection = oci_connect('biblioteka', 'wGko4GV86srQ', $db);
+        if(!$this->connection){
+            oci_error();
+            oci_close($this->connection);
+        }
     }
 
     public function getShelvesBlocks()
     {
-//        $querry = 'CREATE VIEW lentynu_sarasas AS SELECT pavad_bpt as patalpa, vt_a_zem_blb, vt_p_zem_lent FROM bibl_lentynos JOIN bibl_lent_blokai ON id_blb_lent=id_blb JOIN bibl_patalpos ON id_bpt_blb=id_bpt JOIN bibl_lent_temos ON id_lent=id_lent_lekt JOIN bibl_kng_temos ON id_bkt_lekt=id_bkt;';
-//        $results=oci_parse($this->connection,$querry);
-//        oci_execute($results);
-//
-//        $index = 0;
-//        while($row=oci_fetch_array($results))
-//        {
-//            echo $row[1]." ".$row[0];
-//        }
-
         $shelves[0] = new Shelf(64,432, 120,453, "201 Auditorija", array("x++","PHP"));
         $shelves[1] = new Shelf(122,432,179,453, "201 Auditorija", array("C++ pradmenys"));
         $this->shelvesBlocks[0]=new ShelvesBlock(87,1590,151,1691,"2 Aukstas",$shelves);
@@ -59,46 +49,33 @@ class DataGetter
     public function getThemes()
     {
 
-        oci_free_statement($this->stid);
-        $this->stid = oci_parse($this->connection,"begin :json := gauti_visus_kng_pavad_fnc(); end;");
-        oci_bind_by_name($this->stid, ':json', $res,1000000);
-        if(oci_execute($this->stid))
+        $stmt = oci_parse($this->connection,"begin :json := gauti_visus_kng_pavad_fnc(:lang); end;");
+        $lang = "lt";
+        oci_bind_by_name($stmt,':lang', $lang, 50000);
+        $res = oci_new_descriptor($this->connection);
+        oci_bind_by_name($stmt, ':json', $res, -1,OCI_B_CLOB);
+
+
+        if(oci_execute($stmt))
         {
-            $obj = json_decode($res);
-            $index=0;
-            foreach ($obj->{"bookNames"} as $name)
-            {
-                $theme = array($row[0],$row[1]);
-                $this->themes[$index] = $theme;
-                $index++;
+            $obj = json_decode($res->load(),true);
+            $size = 0;
+            foreach ($obj as $themes) {
+                foreach ($themes as $theme) {
+                    $index = 0;
+                    $tempTheme = array();
+                    foreach ($theme as $value) {
+                        $tempTheme[$index] = $value;
+                        $index++;
+                    }
+                    $this->themes[$size] = $tempTheme;
+                    $size++;
+                }
             }
         }
-        else{
-            echo "Error";
+        else {
+            echo "ERROR";
         }
-
-        $querry = 'SELECT PAVAD_LT_BKT, UDK_BKT  FROM bibl_kng_temos ORDER BY PAVAD_LT_BKT';
-        $results=oci_parse($this->connection,$querry);
-        oci_execute($results);
-
-        $index = 0;
-        while($row=oci_fetch_array($results))
-        {
-            $theme = array($row[0],$row[1]);
-            $this->themes[$index] = $theme;
-            $index++;
-        }
-
-//        $theme1 = array("Matematika", "001");
-//        $theme2 = array ("Diskrecioji", "002");
-//        $theme3 = array("Transporto Logistika", "003");
-//        $theme4 = array("Istorija", "004");
-//        $theme5 = array("Mechanika", "005");
-//        $this->themes[0] = $theme1;
-//        $this->themes[1] = $theme2;
-//        $this->themes[2] = $theme3;
-//        $this->themes[3] = $theme4;
-//        $this->themes[4] = $theme5;
     }
 
     public function returnThemes()

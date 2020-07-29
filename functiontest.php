@@ -1,4 +1,5 @@
 <?php
+
 $db = "(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST=alma-ora12-test.vgtu.lt)(PORT = 1521))(CONNECT_DATA = (SERVER = DEDICATED) (SERVICE_NAME = alma)))";
 $connection = oci_connect('biblioteka', 'wGko4GV86srQ', $db);
 
@@ -14,6 +15,10 @@ else{
     echo "Error";
 }
 
+echo '<br>';
+echo '<br>';
+echo '<br>';
+
 oci_free_statement($stid);
 
 $stid = oci_parse($connection,"begin :a := return_integer(); end;");
@@ -25,6 +30,10 @@ if(oci_execute($stid))
 else{
     echo "Error";
 }
+
+echo '<br>';
+echo '<br>';
+echo '<br>';
 
 oci_free_statement($stid);
 $stid = oci_parse($connection,"begin :a := get_clob(); end;");
@@ -40,16 +49,56 @@ else{
     echo "Error";
 }
 
+echo '<br>';
+echo '<br>';
+echo '<br>';
+
 oci_free_statement($stid);
-$stid = oci_parse($connection,"begin :a := gauti_visus_kng_pavad_fnc(); end;");
-oci_bind_by_name($stid, ':a', $res,1000000);
+$stid = oci_parse($connection,"begin :a := gauti_visus_kng_pavad_fnc(:lang); end;");
+$lang = "lt";
+oci_bind_by_name($stid,':lang', $lang, 50000);
+$res = oci_new_descriptor($connection);
+oci_bind_by_name($stid, ':a', $res, -1,OCI_B_CLOB);
 if(oci_execute($stid))
 {
-    echo $res;
-    //$obj = json_decode($res);
-    //foreach ($obj->{"bookNames"} as $name) echo $name.'<br>';
+    echo $res->load();
+    $obj = json_decode($res->load(),true);
+    $books = $obj["themes"];
+    echo sizeof($books);
+    foreach ($books as $theme)
+    {
+        echo sizeof($theme);
+        echo $theme["udk"].' '.$theme["name"].'<br>';
+    }
+    echo $obj[0]->{"bookNames"};
+
 }
 else{
-    echo $res;
     echo "Error";
 }
+
+echo '<br>';
+echo '<br>';
+echo '<br>';
+
+oci_free_statement($stid);
+$stid = oci_parse($connection,"begin :a := why_oracle_fnc(); end;");
+oci_bind_by_name($stid, ':a', $res, -1,OCI_B_CLOB);
+if(oci_execute($stid))
+{
+    echo $res->load();
+    $obj = json_decode($res->load());
+    $array = $obj->{"bookNames"};
+    echo sizeof($array);
+    foreach ($array  as $theme)
+    {
+        echo $theme->{"1"};
+    }
+}
+else{
+    echo "Error";
+}
+
+echo '<br>';
+echo '<br>';
+echo '<br>';
