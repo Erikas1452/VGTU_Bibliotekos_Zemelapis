@@ -1,10 +1,10 @@
-const floorImages=document.querySelectorAll(".tabContent .floorImage");
+let floorImages=document.querySelectorAll(".tabContent .floorImage");
 
-const mainTabButtons=document.querySelectorAll(".tabButtons button");
-const mainTabContents=document.querySelectorAll(".tabContent");
+let mainTabButtons=document.querySelectorAll(".tabButtons button");
+let mainTabContents=document.querySelectorAll(".tabContent");
 
-const subTabButtons=document.querySelectorAll(".tabContent .subTabButtons button");
-const subTabContents=document.querySelectorAll(".tabContent .subTabContent");
+let subTabButtons=document.querySelectorAll(".tabContent .subTabButtons button");
+let subTabContents=document.querySelectorAll(".tabContent .subTabContent");
 
 function showContent(contentIndex)
 {

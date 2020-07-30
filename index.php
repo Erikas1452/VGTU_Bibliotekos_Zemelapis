@@ -10,31 +10,15 @@ $handler = new EventHandler();
 //Data
 $data->connect();
 $data->getThemes();
-$data->getShelvesBlocks();
+
 $themes = $data->returnThemes();
-$secondFloorBlocks = $data->returnBlocks();
 $searchFor = null;
 
-//Floors
-$firstFloor = Map::withName("images/VGTUB_1a.png", "1 Aukštas");
-$secondFloor = Map::withName("images/VGTUB_2a.png", "2 Aukštas");
+$floors = array("1 aukstas","2 aukstas");
 
-$floors = array($firstFloor,$secondFloor);
+$contents = array("auditorija1","auditorija2");
 
-//Auditoriums
-$auditorium101 = Map::withName("images/VGTU_2a_101.png","101 Auditorija");
-$auditorium211 = Map::withName("images/VGTUB_2a_211.png","211 Auditorija");
-$auditorium217 = Map::withName("images/VGTUB_2a_217.png","217 Auditorija");
-
-$auditoriums = array($auditorium101,$auditorium211,$auditorium217);
-
-//Interactive Map data
-
-//Sub tabs count
-$subContentCount = 0;
-
-$libraryIndex = 0;
-$roomIndex = sizeof($floors);
+$roomIndex = 0;
 ?>
 
     <!DOCTYPE html>
@@ -44,121 +28,85 @@ $roomIndex = sizeof($floors);
         <title>VGTU Library Map</title>
         <!-- (ADD LATER)References to styles -->
         <link href ="style.css" rel="stylesheet">
-        <script src="script.js" defer></script>
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"> </script>
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+        <script>
+            $(document).ready(function () {
+                $("#btn").click(function (event) {
+                        $("#TEST").load("test.php");
+                });
+            });
+        </script>
+
+        <script>
+            $( function() {
+                $( "#tabButtons" ).tabs({
+                    beforeLoad: function( event, ui ) {
+                        ui.jqXHR.fail(function() {
+                            ui.panel.html(
+                                "Couldn't load this tab. We'll try to fix this as soon as possible. " +
+                                "If this wouldn't be a demo." );
+                        });
+                    }
+                });
+            } );
+        </script>
+
+        <script>
+            $(document).ready(function () {
+                $("#btn").click(function (event) {
+                    $("#test").load("test2.php");
+                    $("#tabButtons").tabs();
+                });
+            });
+        </script>
+
     </head>
 
+    <div class="wrapper">
     <body>
-
     <div>
         <h2>ATVIROJO FONDO ŽEMĖLAPIS</h2>
     </div>
-
+    <div class="mainContainer">
     <div>
         <form method="POST">
-
             <label for="DropDown1">Tema:</label> <br>
-            <input list="DropDown1" name="DropDown1" />
+            <input type="text" list="DropDown1" name="DropDown1" />
 
             <datalist id="DropDown1">
                 <?php
                 //Filling Search-Bar
                 foreach ($themes as $item)
                 {
-                    echo '<option value="'.$item[0].'">'.$item[0].'</option>';
+                    echo '<option value="'.$item[1].'">'.$item[1].'</option>';
                 }
                 ?>
             </datalist>
-
-            <?php
-
-            if(!isset($_POST["Search"]))
-            {
-                $handler->displayButton("Ieškoti","Search");
-                echo "NULL";
-                foreach ($floors as $floor)
-                {
-                    $floor->changeStatus(true);
-                    $floor->generateBase64Uri();
-                }
-                foreach ($auditoriums as $auditorium)
-                {
-                    $auditorium->changeStatus(true);
-                    $auditorium->generateBase64Uri();
-                }
-            }
-            else {
-
-                $data->getValueFromSelection("Search", "DropDown1");
-                $searchFor = $data->returnSelectedValue(); //returns selected value
-
-
-                //Drawing maps of floors
-                for ($i = 0; $i < sizeof($floors); $i++) {
-                    $floors[$i]->fillMapByTheme($secondFloorBlocks, $searchFor);
-                    $floors[$i]->generateBase64Uri();
-                }
-                //Drawing maps of Rooms
-                foreach ($secondFloorBlocks as $block) {
-                    $shelves = $block->returnShelves();
-                    for ($i = 0; $i < sizeof($auditoriums); $i++) {
-                        $auditoriums[$i]->fillMapByTheme($shelves, $searchFor);
-                    }
-                }
-                foreach ($auditoriums as $auditorium) $auditorium->generateBase64Uri();
-            }
-            ?>
+            <input type="button" name="Search" value="Ieškoti" id="btn"/>
         </form>
 
         <br>
 
-        <div class="tabButtons">
-            <button onclick="showContent(0); showSubContent(<?php echo $libraryIndex ?>)">Biblioteka</button>
-            <button onclick="showContent(1); showSubContent(<?php echo $roomIndex ?>)">Auditorija</button>
-        </div>
-        <!-- button 1 -->
-        <div class="tabContent">
-            <?php
-            $libraryIndex = $subContentCount;
-            $mapsToPrint = array();
-            $mapNames = array();
-            $count = 0;
-            foreach($floors as $floor)
-            {
-                if($floor->returnStatus())
+        <div id="tabButtons" class="tabButtons">
+            <ul>
+                <?php
+                $index = 0;
+                foreach ($floors as $floor)
                 {
-                    $mapsToPrint[$count] = $floor;
-                    $mapNames[$count] = $floor->returnName();
-                    $count++;
+                    echo '<li id="'.$index.'"><a href="#tabcontent-'.$index.'">'.$floor.'</a></li>';
+                    $index++;
                 }
-            }
-            $handler->displayTabs($mapNames,$subContentCount);
-            $handler->fillContentWithMaps($mapsToPrint,$handler);
-            ?>
+                ?>
+            </ul>
+            <div id = test>
+
+            </div>
         </div>
-        <!-- button 2 -->
-        <div class="tabContent">
-            <?php
-            $room_index = $subContentCount + 1;
-            $count = 0;
-            $auditoriumsToPrint = array();
-            $auditoriumNames = array();
-            foreach ($auditoriums as $auditorium)
-            {
-                if($auditorium->returnStatus())
-                {
-                    $auditoriumsToPrint[$count] = $auditorium;
-                    $auditoriumNames[$count] = $auditorium->returnName();
-                    $count++;
-                }
-            }
-            $handler->displayTabs($auditoriumNames,$subContentCount);
-            $handler->fillContentWithMaps($auditoriumsToPrint,$handler);
-            ?>
-        </div>
+    </div>
     </div>
     </body>
     </html>
-
-<?php
-
-?>
+</div>

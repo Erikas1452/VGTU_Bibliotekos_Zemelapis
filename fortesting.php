@@ -61,7 +61,7 @@ $roomIndex = sizeof($floors);
     <div class="mainContainer">
         <form method="POST">
             <label for="DropDown1">Tema:</label> <br>
-            <input list="DropDown1" name="DropDown1" />
+            <input type="text" list="DropDown1" name="DropDown1" />
 
             <datalist id="DropDown1">
                 <?php

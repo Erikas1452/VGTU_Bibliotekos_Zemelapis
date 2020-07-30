@@ -57,7 +57,7 @@ class Display
 
     public function displayButton($text, $name)
     {
-        echo '<input type="submit"'.'name="'.$name.'" value="'.$text.'"/>';
+        echo '<input type="button"'.'name="'.$name.'" value="'.$text.'"/>';
     }
 
     public function displayImage($source,$width,$height)
