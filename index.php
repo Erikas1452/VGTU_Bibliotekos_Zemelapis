@@ -18,7 +18,7 @@ $floors = array("1 aukstas","2 aukstas");
 
 $contents = array("auditorija1","auditorija2");
 
-$roomIndex = 0;
+$subContentCount = 0;
 ?>
 
     <!DOCTYPE html>
@@ -28,39 +28,15 @@ $roomIndex = 0;
         <title>VGTU Library Map</title>
         <!-- (ADD LATER)References to styles -->
         <link href ="style.css" rel="stylesheet">
+        <script src="script.js" defer></script>
         <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"> </script>
-        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
         <script>
-            $(document).ready(function () {
-                $("#btn").click(function (event) {
-                        $("#TEST").load("test.php");
-                });
-            });
-        </script>
-
-        <script>
-            $( function() {
-                $( "#tabButtons" ).tabs({
-                    beforeLoad: function( event, ui ) {
-                        ui.jqXHR.fail(function() {
-                            ui.panel.html(
-                                "Couldn't load this tab. We'll try to fix this as soon as possible. " +
-                                "If this wouldn't be a demo." );
-                        });
-                    }
-                });
-            } );
-        </script>
-
-        <script>
-            $(document).ready(function () {
-                $("#btn").click(function (event) {
+            function loadTab() {
+                $("#1").click(function(event){
                     $("#test").load("test2.php");
-                    $("#tabButtons").tabs();
-                });
-            });
+                })
+            }
         </script>
 
     </head>
@@ -91,20 +67,29 @@ $roomIndex = 0;
         <br>
 
         <div id="tabButtons" class="tabButtons">
-            <ul>
-                <?php
-                $index = 0;
-                foreach ($floors as $floor)
-                {
-                    echo '<li id="'.$index.'"><a href="#tabcontent-'.$index.'">'.$floor.'</a></li>';
-                    $index++;
-                }
-                ?>
-            </ul>
-            <div id = test>
-
-            </div>
+            <?php
+            $floors = array("1 aukstas", "2 aukstas");
+            $index=0;
+            foreach($floors as $floor)
+            {
+                echo '<button id="tab-'.$index.'" onclick="loadTab('.$index.')">'.$floor.'</button>';
+                $index++;
+            }
+            ?>
         </div>
+        <div id="mapContainer" class="mapContainer">
+        <?php
+        $index=0;
+        foreach($floors as $floor)
+        {
+            echo'<div id="tabContent-'.$index.'" class="tabContent">';
+            echo'</div>';
+            $index++;
+        }
+        ?>
+        </div>
+
+    </div>
     </div>
     </div>
     </body>

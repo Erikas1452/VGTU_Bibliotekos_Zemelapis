@@ -1,10 +1,41 @@
-let floorImages=document.querySelectorAll(".tabContent .floorImage");
+let floorImages;
 
-let mainTabButtons=document.querySelectorAll(".tabButtons button");
-let mainTabContents=document.querySelectorAll(".tabContent");
+let mainTabButtons;
+let mainTabContents;
 
-let subTabButtons=document.querySelectorAll(".tabContent .subTabButtons button");
-let subTabContents=document.querySelectorAll(".tabContent .subTabContent");
+let subTabButtons;
+let subTabContents;
+
+function loadTab(tabID) {
+    $(document).ready(function(){
+        $("#tabContent-".concat(tabID)).load("loadMainTab.php",{
+            map: tabID
+        });
+        refreshData();
+        showContent(tabID);
+    });
+}
+
+function loadSubTab(tabID) {
+    $(document).ready(function(){
+        $("#subTabContent-".concat(tabID)).load("loadSubTab.php",{
+            map: tabID
+        });
+        refreshData();
+        showSubContent(tabID);
+    });
+}
+
+function refreshData()
+{
+    floorImages=document.querySelectorAll(".tabContent .floorImage");
+
+    mainTabButtons=document.querySelectorAll(".tabButtons button");
+    mainTabContents=document.querySelectorAll(".tabContent");
+
+    subTabButtons=document.querySelectorAll(".tabContent .subTabButtons button");
+    subTabContents=document.querySelectorAll(".tabContent .subTabContent");
+}
 
 function showContent(contentIndex)
 {
@@ -12,7 +43,6 @@ function showContent(contentIndex)
     resetSubTabButtons();
     hideSubContent();
 
-    floorImages[contentIndex].style.display="block";
     mainTabButtons[contentIndex].style.borderBottom="3px solid #269BF0";
     mainTabButtons[contentIndex].style.color="#269BF0";
     hideMainTabButtons();

@@ -5,97 +5,143 @@ $connection = oci_connect('biblioteka', 'wGko4GV86srQ', $db);
 
 if(!$connection) echo "Failed to connect";
 
-$stid = oci_parse($connection,"begin :a := return_string(); end;");
-oci_bind_by_name($stid, ':a', $myString, 40);
-if(oci_execute($stid))
-{
-    echo $myString;
-}
-else{
-    echo "Error";
-}
+//$stid = oci_parse($connection,"begin :a := return_string(); end;");
+//oci_bind_by_name($stid, ':a', $myString, 40);
+//if(oci_execute($stid))
+//{
+//    echo $myString;
+//}
+//else{
+//    echo "Error";
+//}
+//
+//echo '<br>';
+//echo '<br>';
+//echo '<br>';
+//
+//oci_free_statement($stid);
+//
+//$stid = oci_parse($connection,"begin :a := return_integer(); end;");
+//oci_bind_by_name($stid, ':a', $myInteger, 40);
+//if(oci_execute($stid))
+//{
+//    echo $myInteger;
+//}
+//else{
+//    echo "Error";
+//}
+//
+//echo '<br>';
+//echo '<br>';
+//echo '<br>';
+//
+//oci_free_statement($stid);
+//$stid = oci_parse($connection,"begin :a := get_clob(); end;");
+//oci_bind_by_name($stid, ':a', $res,6000000);
+//if(oci_execute($stid))
+//{
+//    echo $res;
+//    $obj = json_decode($res);
+//    echo '<br>';
+//    print $obj->{'JS'};
+//}
+//else{
+//    echo "Error";
+//}
+//
+//echo '<br>';
+//echo '<br>';
+//echo '<br>';
+//
+//oci_free_statement($stid);
+//$stid = oci_parse($connection,"begin :a := gauti_visus_kng_pavad_fnc(:lang); end;");
+//$lang = "lt";
+//oci_bind_by_name($stid,':lang', $lang, 50000);
+//$res = oci_new_descriptor($connection);
+//oci_bind_by_name($stid, ':a', $res, -1,OCI_B_CLOB);
+//if(oci_execute($stid))
+//{
+//    echo $res->load();
+//    $obj = json_decode($res->load(),true);
+//    $books = $obj["themes"];
+//    echo sizeof($books);
+//    foreach ($books as $theme)
+//    {
+//        echo sizeof($theme);
+//        echo $theme["udk"].' '.$theme["name"].'<br>';
+//    }
+//    echo $obj[0]->{"bookNames"};
+//
+//}
+//else{
+//    echo "Error";
+//}
+//
+//echo '<br>';
+//echo '<br>';
+//echo '<br>';
+//
+//oci_free_statement($stid);
+//$stid = oci_parse($connection,"begin :a := why_oracle_fnc(); end;");
+//oci_bind_by_name($stid, ':a', $res, -1,OCI_B_CLOB);
+//if(oci_execute($stid))
+//{
+//    echo $res->load();
+//    $obj = json_decode($res->load());
+//    $array = $obj->{"bookNames"};
+//    echo sizeof($array);
+//    foreach ($array  as $theme)
+//    {
+//        echo $theme->{"1"};
+//    }
+//}
+//else{
+//    echo "Error";
+//}
+//echo "<br>";
+//echo "IMAGE IMAGE IMAGE";
+//$res = oci_new_descriptor($connection);;
+//oci_free_statement($stid);
+//$stid = oci_parse($connection,"begin :a := test_get_blob_png_fnc(); end;");
+//oci_bind_by_name($stid, ':a', $res, -1,OCI_B_CLOB);
+//if(oci_execute($stid))
+//{
+//    echo $res->load();
+//    $obj = json_decode($res->load(),true);
+//    $img = $obj["blob"];
+//    echo'<br>';
+//    echo $img;
+//}
+//else{
+//    echo $res;
+//    echo "Error";
+//}
+//
+//$source = "data:image/png;base64,".$img;
+//$width =600;
+//$height=575;
+//echo'<img src="'.$source.'"'.' width="'.$width.'" '. 'height="'.$height.' alt="Failed to load image">';
+//
+//echo '<br>';
+//echo '<br>';
+//echo '<br>';
 
-echo '<br>';
-echo '<br>';
-echo '<br>';
-
+echo "<br>";
+echo "IMAGE IMAGE IMAGE";
+$res = oci_new_descriptor($connection);;
 oci_free_statement($stid);
-
-$stid = oci_parse($connection,"begin :a := return_integer(); end;");
-oci_bind_by_name($stid, ':a', $myInteger, 40);
-if(oci_execute($stid))
-{
-    echo $myInteger;
-}
-else{
-    echo "Error";
-}
-
-echo '<br>';
-echo '<br>';
-echo '<br>';
-
-oci_free_statement($stid);
-$stid = oci_parse($connection,"begin :a := get_clob(); end;");
-oci_bind_by_name($stid, ':a', $res,6000000);
-if(oci_execute($stid))
-{
-    echo $res;
-    $obj = json_decode($res);
-    echo '<br>';
-    print $obj->{'JS'};
-}
-else{
-    echo "Error";
-}
-
-echo '<br>';
-echo '<br>';
-echo '<br>';
-
-oci_free_statement($stid);
-$stid = oci_parse($connection,"begin :a := gauti_visus_kng_pavad_fnc(:lang); end;");
-$lang = "lt";
-oci_bind_by_name($stid,':lang', $lang, 50000);
-$res = oci_new_descriptor($connection);
+$stid = oci_parse($connection,"begin :a := get_floors_fnc(); end;");
 oci_bind_by_name($stid, ':a', $res, -1,OCI_B_CLOB);
 if(oci_execute($stid))
 {
     echo $res->load();
     $obj = json_decode($res->load(),true);
-    $books = $obj["themes"];
-    echo sizeof($books);
-    foreach ($books as $theme)
-    {
-        echo sizeof($theme);
-        echo $theme["udk"].' '.$theme["name"].'<br>';
-    }
-    echo $obj[0]->{"bookNames"};
-
+    $img = $obj["blob"];
+    echo'<br>';
+    echo $img;
 }
-else{
-    echo "Error";
-}
-
-echo '<br>';
-echo '<br>';
-echo '<br>';
-
-oci_free_statement($stid);
-$stid = oci_parse($connection,"begin :a := why_oracle_fnc(); end;");
-oci_bind_by_name($stid, ':a', $res, -1,OCI_B_CLOB);
-if(oci_execute($stid))
-{
-    echo $res->load();
-    $obj = json_decode($res->load());
-    $array = $obj->{"bookNames"};
-    echo sizeof($array);
-    foreach ($array  as $theme)
-    {
-        echo $theme->{"1"};
-    }
-}
-else{
+else {
+    echo $res;
     echo "Error";
 }
 

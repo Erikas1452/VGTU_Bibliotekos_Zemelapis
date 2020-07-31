@@ -21,18 +21,17 @@ class Map
     {
         $this->found=false;
         $this->img = imagecreatefrompng($image);
+        imagealphablending($this->img, false);
+        imagesavealpha($this->img, true);
+
         $this->blue = imagecolorallocate($this->img, 38, 155, 240);
-        $this->gray = imagecolorallocate($this->img, 211, 211, 211);
-        $this->white = imagecolorallocate($this->img, 255, 255, 255);
-        $this->black = imagecolorallocate($this->img, 0, 0, 0);
 
         $temp = getimagesize($image);
 
         $this->originalWidth = $temp[0];
         $this->originalLength = $temp[1];
 
-        imagealphablending($this->img, false);
-        imagesavealpha($this->img, true);
+
     }
 
     public static function withName($image,$name)
@@ -67,6 +66,11 @@ class Map
                 }
             }
         }
+    }
+
+    public function drawRectangle($coordinates)
+    {
+        imagefilledrectangle($this->img, $coordinates[0], $coordinates[1], $coordinates[2], $coordinates[3], $this->blue);
     }
 
     public function changeStatus($boolean)
