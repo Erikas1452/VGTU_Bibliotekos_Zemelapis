@@ -12,10 +12,12 @@ class DataGetter
     private $selectedVal;
 
     private $shelvesBlocks;
+    private $floors;
 
     public function __construct()
     {
         $this->shelvesBlocks = array();
+        $this->floors = array();
     }
 
     public function connect()
@@ -43,6 +45,50 @@ class DataGetter
         if (isset($_POST[$button]))
         {
             $this->selectedVal = $_POST[$value_to_get];
+        }
+    }
+
+    public function getMap($id)
+    {
+        $res = oci_new_descriptor($this->connection);
+        $stmt = oci_parse($this->connection,"begin :a := get_floor_fnc(:b); end;");
+        oci_bind_by_name($stmt, ':a', $res, -1,OCI_B_CLOB);
+        oci_bind_by_name($stmt, ':b', $id, 50000);
+        if(oci_execute($stmt))
+        {
+            $obj = json_decode($res->load(),true);
+            foreach ($obj as $floor)
+            {
+                return $floor["mapClob"];
+            }
+        }
+        else {
+            echo "Error";
+        }
+    }
+
+    public function getFloorTabs()
+    {
+        $stmt = oci_parse($this->connection,"begin :a := get_all_floors_fnc(); end;");
+        $res = oci_new_descriptor($this->connection);
+        oci_bind_by_name($stmt, ':a', $res, -1,OCI_B_CLOB);
+
+
+        $index = 0;
+        if(oci_execute($stmt))
+        {
+            $obj = json_decode($res->load(),true);
+
+            foreach ($obj as $floor => $value)
+            {
+                echo $value["id"];
+                $temp = array($floor,$value["id"]);
+                $this->floors[$index] = $temp;
+                $index++;
+            }
+        }
+        else {
+            echo "Error";
         }
     }
 
@@ -91,6 +137,11 @@ class DataGetter
     public function returnBlocks()
     {
         return $this->shelvesBlocks;
+    }
+
+    public function returnFloorNames()
+    {
+        return $this->floors;
     }
 }
 ?>

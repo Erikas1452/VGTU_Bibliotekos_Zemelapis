@@ -1,23 +1,26 @@
 <?php
 include "php/Map.php";
+include "php/DataGetter.php";
 
 if(isset($_POST['map']))
 {
     $mapId = $_POST['map'];
 }
 
-if($mapId == 0)
-{
-    $contents = array("auditorija101", "auditorija102");
-    $floor = Map::withName("images/VGTUB_1a.png", "1 Aukštas");
-    $floor->generateBase64Uri();
-}
-else if($mapId == 1)
-{
-    $contents = array("auditorija201", "auditorija202", "auditorija203");
-    $floor = Map::withName("images/VGTUB_2a.png", "1 Aukštas");
-    $floor->generateBase64Uri();
-}
+$data = new DataGetter();
+$data->connect();
+//$map =new Map($data->getMap($mapId)) ;
+//$map->generateBase64Uri();
+
+$img = $data->getMap($mapId);
+$source = "data:image/png;base64,".$img;
+$width =600;
+$height=575;
+
+
+
+$contents = array("auditorija101", "auditorija102");
+
 
 echo'<div class="subTabButtons">';
     $index = 0;
@@ -31,7 +34,7 @@ echo'</div>';
 echo'<div class="floorImage">';
 $width = 600;
 $height = 576;
-echo'<img src="'.$floor->returnBase64().'"'.' width="'.$width.'" '. 'height="'.$height.' alt="Failed to load image">';
+echo'<input name="test" type="image" src="'.$source.'" width="'.$width.'" height="'.$height.'" alt="Failed to load image">';
 echo'</div>';
 
 $index = 0;

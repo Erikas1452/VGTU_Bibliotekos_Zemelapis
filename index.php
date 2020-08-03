@@ -10,11 +10,14 @@ $handler = new EventHandler();
 //Data
 $data->connect();
 $data->getThemes();
+$data->getFloorTabs();
 
 $themes = $data->returnThemes();
 $searchFor = null;
 
-$floors = array("1 aukstas","2 aukstas");
+$floors = $data->returnFloorNames();
+echo '<br>';
+echo $floors[0][1]." <---Result";
 
 $contents = array("auditorija1","auditorija2");
 
@@ -30,14 +33,6 @@ $subContentCount = 0;
         <link href ="style.css" rel="stylesheet">
         <script src="script.js" defer></script>
         <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"> </script>
-
-        <script>
-            function loadTab() {
-                $("#1").click(function(event){
-                    $("#test").load("test2.php");
-                })
-            }
-        </script>
 
     </head>
 
@@ -68,26 +63,20 @@ $subContentCount = 0;
 
         <div id="tabButtons" class="tabButtons">
             <?php
-            $floors = array("1 aukstas", "2 aukstas");
-            $index=0;
+            $index = 0;
             foreach($floors as $floor)
             {
-                echo '<button id="tab-'.$index.'" onclick="loadTab('.$index.')">'.$floor.'</button>';
+                echo '<button id="tab-'.$floor[1].'" onclick="loadTab('.$floor[1].','.$index.')">'.$floor[0].'</button>';
                 $index++;
             }
             ?>
         </div>
         <div id="mapContainer" class="mapContainer">
-        <?php
-        $index=0;
-        foreach($floors as $floor)
-        {
-            echo'<div id="tabContent-'.$index.'" class="tabContent">';
-            echo'</div>';
-            $index++;
-        }
-        ?>
+            <div id="tabContent" class="tabContent">
+
+            </div>
         </div>
+
 
     </div>
     </div>

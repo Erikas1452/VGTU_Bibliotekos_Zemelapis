@@ -6,10 +6,10 @@ let mainTabContents;
 let subTabButtons;
 let subTabContents;
 
-function loadTab(tabID) {
+function loadTab(mapID,tabID) {
     $(document).ready(function(){
-        $("#tabContent-".concat(tabID)).load("loadMainTab.php",{
-            map: tabID
+        $("#tabContent").load("loadMainTab.php",{
+            map: mapID
         });
         refreshData();
         showContent(tabID);
@@ -46,7 +46,7 @@ function showContent(contentIndex)
     mainTabButtons[contentIndex].style.borderBottom="3px solid #269BF0";
     mainTabButtons[contentIndex].style.color="#269BF0";
     hideMainTabButtons();
-    mainTabContents[contentIndex].style.display="block";
+    mainTabContents[0].style.display="block";
 }
 
 function showSubContent(subContentIndex)

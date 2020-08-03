@@ -17,20 +17,22 @@ class Map
 
     private $base64Uri;
 
-    function __construct($image)
+    function __construct($Base64)
     {
         $this->found=false;
-        $this->img = imagecreatefrompng($image);
+
+        $data = base64_decode($Base64);
+
+        $this->img = imagecreatefromstring($data);
         imagealphablending($this->img, false);
         imagesavealpha($this->img, true);
 
         $this->blue = imagecolorallocate($this->img, 38, 155, 240);
 
-        $temp = getimagesize($image);
+        $temp = getimagesize($this->img);
 
         $this->originalWidth = $temp[0];
         $this->originalLength = $temp[1];
-
 
     }
 

@@ -80,7 +80,7 @@ if(!$connection) echo "Failed to connect";
 //echo '<br>';
 //echo '<br>';
 //echo '<br>';
-//
+
 //oci_free_statement($stid);
 //$stid = oci_parse($connection,"begin :a := why_oracle_fnc(); end;");
 //oci_bind_by_name($stid, ':a', $res, -1,OCI_B_CLOB);
@@ -113,7 +113,6 @@ if(!$connection) echo "Failed to connect";
 //    echo $img;
 //}
 //else{
-//    echo $res;
 //    echo "Error";
 //}
 //
@@ -126,25 +125,72 @@ if(!$connection) echo "Failed to connect";
 //echo '<br>';
 //echo '<br>';
 
+//echo "<br>";
+//echo "IMAGE IMAGE IMAGE";
+//$res = oci_new_descriptor($connection);;
+//oci_free_statement($stid);
+//$stid = oci_parse($connection,"begin :a := get_all_floors_fnc(); end;");
+//oci_bind_by_name($stid, ':a', $res, -1,OCI_B_CLOB);
+//if(oci_execute($stid))
+//{
+//    echo $res->load();
+//    $obj = json_decode($res->load(),true);
+//    echo sizeof($obj);
+//    $img = $obj["floor1"]["mapClob"];
+//    echo sizeof($img);
+//    echo'<br>';
+//    echo $img;
+//}
+//else {
+//    echo "Error";
+//}
+//
+//echo '<br>';
+//echo '<br>';
+//echo '<br>';
+
 echo "<br>";
-echo "IMAGE IMAGE IMAGE";
 $res = oci_new_descriptor($connection);;
 oci_free_statement($stid);
-$stid = oci_parse($connection,"begin :a := get_floors_fnc(); end;");
+$id = 27;
+//oci_bind_by_name($stid, ':b', $id,50000);
+echo "2";
+$stid = oci_parse($connection,"begin :a := get_floor_fnc(:b); end;");
+echo "2";
 oci_bind_by_name($stid, ':a', $res, -1,OCI_B_CLOB);
+oci_bind_by_name($stid, ':b', $id, 50000);
+echo "2";
+
 if(oci_execute($stid))
 {
+    echo "SUCESS";
     echo $res->load();
     $obj = json_decode($res->load(),true);
-    $img = $obj["blob"];
+    echo sizeof($obj);
+    echo sizeof($img);
     echo'<br>';
     echo $img;
 }
 else {
-    echo $res;
     echo "Error";
 }
 
 echo '<br>';
 echo '<br>';
 echo '<br>';
+
+$data = base64_decode($obj["floor444"]["mapClob"]);
+
+$img = imagecreatefromstring($data);
+imagealphablending($img, false);
+imagesavealpha($img, true);
+
+ob_start();
+imagepng($img);
+$contents = ob_get_contents();
+ob_end_clean();
+$source = "data:image/png;base64," . base64_encode($contents);
+
+$width =600;
+$height=575;
+echo'<img src="'.$source.'"'.' width="'.$width.'" '. 'height="'.$height.' alt="Failed to load image">';
