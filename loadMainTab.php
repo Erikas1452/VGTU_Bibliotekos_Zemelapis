@@ -9,41 +9,29 @@ if(isset($_POST['map']))
 
 $data = new DataGetter();
 $data->connect();
-//$map =new Map($data->getMap($mapId)) ;
-//$map->generateBase64Uri();
 
-$img = $data->getMap($mapId);
+$floorInfo = $data->getFloor($mapId);
+$img = $floorInfo[0];
+$rooms = $floorInfo[1];
+
 $source = "data:image/png;base64,".$img;
 $width =600;
 $height=575;
 
-
-
-$contents = array("auditorija101", "auditorija102");
-
-
 echo'<div class="subTabButtons">';
-    $index = 0;
-    foreach($contents as $content)
+    $index=0;
+    foreach ($rooms as $room)
     {
-        echo '<button id="subTab-'.$index.'" onclick="loadSubTab('.$index.')">'.$content.'</button>';
+        echo '<button id="subTab-'.$index.'" onclick="loadSubTab('.$room["ID_BPT"].','.$index.')">'.$room["PAVAD_BPT"].'</button>';
         $index++;
     }
 echo'</div>';
 
 echo'<div class="floorImage">';
-$width = 600;
-$height = 576;
-echo'<input name="test" type="image" src="'.$source.'" width="'.$width.'" height="'.$height.'" alt="Failed to load image">';
+echo'<img id="myMap" src="'.$source.'" width="'.$width.'" height="'.$height.'" alt="Failed to load image"></image>';
+echo '<canvas id="floorCanvas" width="'.$width.'" height="'.$height.'"></canvas>';
 echo'</div>';
 
-$index = 0;
-foreach($contents as $content)
-{
-    echo'<div id="subTabContent-'.$index.'" class="subTabContent">';
+echo'<div id="subTabContent" class="subTabContent">';
 
-    echo'</div>';
-    $index++;
-}
-
-?>
+echo'</div>';

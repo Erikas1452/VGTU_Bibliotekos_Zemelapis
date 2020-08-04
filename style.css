@@ -118,7 +118,6 @@ input[type=button]:hover
 .mapContainer .tabContent .subTabContent
 {
     display:none;
-    margin-left: 120px;
 }
 
 .mapContainer .tabContent .subTabButtons
@@ -126,6 +125,11 @@ input[type=button]:hover
     padding-top: 10px;
     width: 100px;
     float: left;
+}
+
+.floorImage img
+{
+    padding-left: 40px;
 }
 
 .mapContainer .tabContent .subTabButtons button

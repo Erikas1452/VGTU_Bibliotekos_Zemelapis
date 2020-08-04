@@ -149,21 +149,119 @@ if(!$connection) echo "Failed to connect";
 //echo '<br>';
 //echo '<br>';
 
+//echo "<br>";
+//$res = oci_new_descriptor($connection);;
+//oci_free_statement($stid);
+//$id = 1;
+////oci_bind_by_name($stid, ':b', $id,50000);
+//echo "2";
+//$stid = oci_parse($connection,"begin :a := get_floor_fnc(:b); end;");
+//echo "2";
+//oci_bind_by_name($stid, ':a', $res, -1,OCI_B_CLOB);
+//oci_bind_by_name($stid, ':b', $id, 50000);
+//echo "2";
+//
+//if(oci_execute($stid))
+//{
+//    echo "SUCESS";
+//    echo $res->load();
+//    $obj = json_decode($res->load(),true);
+//    echo sizeof($obj);
+//    echo sizeof($img);
+//    echo'<br>';
+//    echo $img;
+//}
+//else {
+//    echo "Error";
+//}
+//
+//echo '<br>';
+//echo '<br>';
+//echo '<br>';
+
+//echo "<br>";
+//$res = oci_new_descriptor($connection);;
+//oci_free_statement($stid);
+//$id = 1;
+//echo "2";
+//$stid = oci_parse($connection,"begin :a := get_room_fnc(:b); end;");
+//echo "2";
+//oci_bind_by_name($stid, ':a', $res, -1,OCI_B_CLOB);
+//oci_bind_by_name($stid, ':b', $id, 50000);
+//echo "2";
+//
+//if(oci_execute($stid))
+//{
+//    echo "SUCESS";
+//    echo $res->load();
+//    $obj = json_decode($res->load(),true);
+//    echo sizeof($obj);
+//    echo sizeof($img);
+//    echo'<br>';
+//    echo $img;
+//}
+//else {
+//    echo "Error";
+//}
+//
+//echo '<br>';
+//echo '<br>';
+//echo '<br>';
+//
+//$data = base64_decode($obj["floor1"]["mapClob"]);
+//
+//$img = imagecreatefromstring($data);
+//imagealphablending($img, false);
+//imagesavealpha($img, true);
+//
+//ob_start();
+//imagepng($img);
+//$contents = ob_get_contents();
+//ob_end_clean();
+//$source = "data:image/png;base64," . base64_encode($contents);
+//
+//$width =600;
+//$height=575;
+//echo'<img src="'.$source.'"'.' width="'.$width.'" '. 'height="'.$height.' alt="Failed to load image">';
+//
+//echo "<br>";
+//$res = oci_new_descriptor($connection);;
+//oci_free_statement($stid);
+//$id = 1;
+////oci_bind_by_name($stid, ':b', $id,50000);
+//echo "2";
+//$stid = oci_parse($connection,"begin :a := get_floor_fnc(:b); end;");
+//echo "2";
+//oci_bind_by_name($stid, ':a', $res, -1,OCI_B_CLOB);
+//oci_bind_by_name($stid, ':b', $id, 50000);
+//echo "2";
+//
+//if(oci_execute($stid))
+//{
+//    echo "SUCESS";
+//    echo $res->load();
+//    $obj = json_decode($res->load(),true);
+//    echo sizeof($obj);
+//    echo sizeof($img);
+//    echo'<br>';
+//    echo $obj["mapClob"];
+//}
+//else {
+//    echo "Error";
+//}
+//
+//echo '<br>';
+//echo '<br>';
+//echo '<br>';
+
 echo "<br>";
+echo "IMAGE IMAGE IMAGE";
 $res = oci_new_descriptor($connection);;
 oci_free_statement($stid);
-$id = 27;
-//oci_bind_by_name($stid, ':b', $id,50000);
-echo "2";
-$stid = oci_parse($connection,"begin :a := get_floor_fnc(:b); end;");
-echo "2";
+$stid = oci_parse($connection,"begin :a := get_all_floors_fnc(); end;");
 oci_bind_by_name($stid, ':a', $res, -1,OCI_B_CLOB);
-oci_bind_by_name($stid, ':b', $id, 50000);
-echo "2";
-
 if(oci_execute($stid))
 {
-    echo "SUCESS";
     echo $res->load();
     $obj = json_decode($res->load(),true);
     echo sizeof($obj);
@@ -178,19 +276,3 @@ else {
 echo '<br>';
 echo '<br>';
 echo '<br>';
-
-$data = base64_decode($obj["floor444"]["mapClob"]);
-
-$img = imagecreatefromstring($data);
-imagealphablending($img, false);
-imagesavealpha($img, true);
-
-ob_start();
-imagepng($img);
-$contents = ob_get_contents();
-ob_end_clean();
-$source = "data:image/png;base64," . base64_encode($contents);
-
-$width =600;
-$height=575;
-echo'<img src="'.$source.'"'.' width="'.$width.'" '. 'height="'.$height.' alt="Failed to load image">';

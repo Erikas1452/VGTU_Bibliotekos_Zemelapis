@@ -16,10 +16,10 @@ function loadTab(mapID,tabID) {
     });
 }
 
-function loadSubTab(tabID) {
+function loadSubTab(mapID,tabID) {
     $(document).ready(function(){
-        $("#subTabContent-".concat(tabID)).load("loadSubTab.php",{
-            map: tabID
+        $("#subTabContent").load("loadSubTab.php",{
+            map: mapID
         });
         refreshData();
         showSubContent(tabID);
@@ -57,7 +57,7 @@ function showSubContent(subContentIndex)
     subTabButtons[subContentIndex].style.color="#269BF0";
     subTabButtons[subContentIndex].style.borderBottom="3px solid #269BF0";
     hideSubContent();
-    subTabContents[subContentIndex].style.display="block";
+    subTabContents[0].style.display="block";
 }
 
 function resetSubTabButtons()
