@@ -13,7 +13,7 @@ class Map
     private $found;
 
     private $originalWidth;
-    private $originalLength;
+    private $originalHeight;
 
     private $base64Uri;
 
@@ -32,7 +32,7 @@ class Map
         $temp = getimagesize($this->img);
 
         $this->originalWidth = $temp[0];
-        $this->originalLength = $temp[1];
+        $this->originalHeight = $temp[1];
 
     }
 
@@ -133,9 +133,9 @@ class Map
         return $this->originalWidth;
     }
 
-    public function returnLength()
+    public function returnHeight()
     {
-        return $this->originalLength;
+        return $this->originalHeight;
     }
 }
 ?>

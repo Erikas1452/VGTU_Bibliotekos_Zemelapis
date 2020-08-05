@@ -6,25 +6,90 @@ let mainTabContents;
 let subTabButtons;
 let subTabContents;
 
+let imgSource;
+let imgWidth;
+let imgHeight;
+
+let canvas;
+let ctx;
+
 function loadTab(mapID,tabID) {
-    $(document).ready(function(){
-        $("#tabContent").load("loadMainTab.php",{
-            map: mapID
-        });
+    $("#tabContent").load("loadMainTab.php",{
+        map: mapID
+    },function () {
         refreshData();
+        getFloorImage(mapID);
         showContent(tabID);
     });
 }
 
 function loadSubTab(mapID,tabID) {
-    $(document).ready(function(){
-        $("#subTabContent").load("loadSubTab.php",{
-            map: mapID
-        });
+    $("#subTabContent").load("loadSubTab.php",{
+        map: mapID
+    },function () {
         refreshData();
+        getRoomImage(mapID);
         showSubContent(tabID);
     });
 }
+
+function getRoomImage(mapID)
+{
+    $.post("./fetchMap.php",{
+        map: mapID
+    },function (data,status) {
+        let temp = JSON.parse(data);
+        imgSource=temp[0];
+        alert("new source");
+        imgWidth=temp[1];
+        imgHeight=temp[2];
+        loadImage();
+    });
+}
+
+function getFloorImage(mapID)
+{
+    $.post("./fetchFloorMap.php",{
+        map: mapID
+    },function (data,status) {
+        let temp = JSON.parse(data);
+        imgSource=temp[0];
+        alert("new source");
+        imgWidth=temp[1];
+        imgHeight=temp[2];
+
+        loadFloorImage();
+    });
+}
+
+function loadFloorImage()
+{
+    canvas = document.getElementById("floorCanvas");
+    ctx = canvas.getContext('2d');
+    image = new Image();
+    image.onload = function () {
+        alert("Drawing image");
+        drawImageOnCanvas();
+    };
+    image.src = imgSource;
+}
+
+function loadImage()
+{
+    canvas = document.getElementById("roomCanvas");
+    ctx = canvas.getContext('2d');
+    image = new Image();
+    image.src = imgSource;
+    image.onload = function () {
+    alert("Drawing image");
+    drawImageOnCanvas();
+};
+}
+
+function drawImageOnCanvas() {
+
+     ctx.drawImage(image,0,0,600,575);
+ }
 
 function refreshData()
 {
@@ -47,6 +112,7 @@ function showContent(contentIndex)
     mainTabButtons[contentIndex].style.color="#269BF0";
     hideMainTabButtons();
     mainTabContents[0].style.display="block";
+    floorImages[0].style.display="block";
 }
 
 function showSubContent(subContentIndex)
@@ -58,6 +124,7 @@ function showSubContent(subContentIndex)
     subTabButtons[subContentIndex].style.borderBottom="3px solid #269BF0";
     hideSubContent();
     subTabContents[0].style.display="block";
+    floorImages[1].style.display="block";
 }
 
 function resetSubTabButtons()

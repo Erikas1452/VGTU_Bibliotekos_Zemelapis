@@ -22,13 +22,12 @@ echo'<div class="subTabButtons">';
     $index=0;
     foreach ($rooms as $room)
     {
-        echo '<button id="subTab-'.$index.'" onclick="loadSubTab('.$room["ID_BPT"].','.$index.')">'.$room["PAVAD_BPT"].'</button>';
+        echo '<button id="subTab-'.$index.'" onclick="loadSubTab('.$room["id"].','.$index.');">'.$room["name"].'</button>';
         $index++;
     }
 echo'</div>';
 
 echo'<div class="floorImage">';
-echo'<img id="myMap" src="'.$source.'" width="'.$width.'" height="'.$height.'" alt="Failed to load image"></image>';
 echo '<canvas id="floorCanvas" width="'.$width.'" height="'.$height.'"></canvas>';
 echo'</div>';
 

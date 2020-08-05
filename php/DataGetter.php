@@ -47,7 +47,7 @@ class DataGetter
         if(oci_execute($stmt))
         {
             $obj = json_decode($res->load(),true);
-            return array($obj["mapClob"],$obj["patalpos"],obj);
+            return array($obj["mapClob"],$obj["patalpos"]);
         }
         else {
             echo "Error";
