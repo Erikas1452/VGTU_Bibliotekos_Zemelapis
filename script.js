@@ -13,6 +13,32 @@ let imgHeight;
 let canvas;
 let ctx;
 
+function getMousePosition(canvas, event) {
+    let rect = canvas.getBoundingClientRect();
+    let x = event.clientX - rect.left;
+    let y = event.clientY - rect.top;
+    console.log("Coordinate x: " + x, "Coordinate y: " + y);
+    drawRectangle(x,y,20,20);
+}
+
+function drawRectangle(x1,y1,x2,y2)
+{
+    ctx.clearRect(0,0,1000,1000);
+    drawImageOnCanvas();
+    ctx.fillStyle = "#269BF0";
+    ctx.fillRect(x1,y1,x2,y2);
+}
+
+function enableDrawing()
+{
+    canvas.addEventListener("mousedown", function(e)
+    {
+        getMousePosition(canvas, e);
+    });
+}
+
+
+
 function loadTab(mapID,tabID) {
     $("#tabContent").load("loadMainTab.php",{
         map: mapID
@@ -40,10 +66,10 @@ function getRoomImage(mapID)
     },function (data,status) {
         let temp = JSON.parse(data);
         imgSource=temp[0];
-        alert("new source");
         imgWidth=temp[1];
         imgHeight=temp[2];
         loadImage();
+        enableDrawing();
     });
 }
 
@@ -54,10 +80,8 @@ function getFloorImage(mapID)
     },function (data,status) {
         let temp = JSON.parse(data);
         imgSource=temp[0];
-        alert("new source");
         imgWidth=temp[1];
         imgHeight=temp[2];
-
         loadFloorImage();
     });
 }
@@ -68,7 +92,6 @@ function loadFloorImage()
     ctx = canvas.getContext('2d');
     image = new Image();
     image.onload = function () {
-        alert("Drawing image");
         drawImageOnCanvas();
     };
     image.src = imgSource;
@@ -81,9 +104,8 @@ function loadImage()
     image = new Image();
     image.src = imgSource;
     image.onload = function () {
-    alert("Drawing image");
-    drawImageOnCanvas();
-};
+        drawImageOnCanvas();
+    };
 }
 
 function drawImageOnCanvas() {
