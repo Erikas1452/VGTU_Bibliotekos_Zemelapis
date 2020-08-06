@@ -12,12 +12,22 @@ $data->connect();
 
 $img = $data->getRoom($mapId);
 
-$width = 600;
-$height = 575;
-
 echo'<div class="floorImage">';
 echo'<button onclick="drawAllShelves('.$mapId.')"> MARK ALL </button>';
-echo'<canvas name="'.$mapId.'" id="roomCanvas"></canvas>';
+echo'<canvas name="'.$mapId.'" id="roomCanvas"></canvas>';;
+echo'<div class="tableContents">';
+    echo '<table>';
+
+        echo'<tr>';
+            echo'<th>Vieta lentynoje</th>';
+            echo'<th>Tema</th>';
+        echo'</tr>';
+            echo'<tr>';
+                echo'<td>TEST CODE</td>';
+                echo'<td>TEST THEME</td>';
+            echo'</tr>';
+    echo '</table>';
+    echo'</div>';
 echo'</div>';
 
 ?>

@@ -14,7 +14,28 @@ let canvas;
 let ctx;
 let scale;
 
-let preferedWidth = 580;
+let preferedWidth = 550;
+
+let tableContents;
+
+function getShelfThemes(shelfID) {
+    $.post("./fetchShelfThemes.php",{
+        shelfID: shelfID
+    },function (data,status) {
+        data = JSON.parse(data);
+        tableContents=data;
+        console.log(data);
+        loadTable(data);
+    })
+}
+
+function loadTable(data) {
+    $(".tableContents").load("./fillTable.php",{
+        contents: tableContents
+    },function () {
+
+    });
+}
 
 function drawAllShelves(mapID)
 {
@@ -37,11 +58,10 @@ function getShelf(mapID,x,y) {
         y: y
     },function(data,status){
         data = JSON.parse(data);
-        console.log(mapID,x,y);
         console.log(data);
-        console.log(scale);
         clearCanvas();
         drawRectangle(data["x1"]/scale[0],data["y1"]/scale[1],data['width']/scale[0],data['height']/scale[1]);
+        getShelfThemes(data["id"]);
     });
 }
 
@@ -179,7 +199,7 @@ function showContent(contentIndex)
     mainTabButtons[contentIndex].style.color="#269BF0";
     hideMainTabButtons();
     mainTabContents[0].style.display="block";
-    floorImages[0].style.display="block";
+    floorImages[0].style.display="-webkit-box";
 }
 
 function showSubContent(subContentIndex)
@@ -191,7 +211,7 @@ function showSubContent(subContentIndex)
     subTabButtons[subContentIndex].style.borderBottom="3px solid #269BF0";
     hideSubContent();
     subTabContents[0].style.display="block";
-    floorImages[1].style.display="block";
+    floorImages[1].style.display="-webkit-box";
 }
 
 function resetSubTabButtons()

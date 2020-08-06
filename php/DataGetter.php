@@ -60,9 +60,11 @@ class DataGetter
     public function getFloor($id)
     {
         $res = oci_new_descriptor($this->connection);
-        $stmt = oci_parse($this->connection,"begin :a := get_floor_fnc(:b); end;");
+        $lang = "lt";
+        $stmt = oci_parse($this->connection,"begin :a := get_floor_fnc(:b, :lang); end;");
         oci_bind_by_name($stmt, ':a', $res, -1,OCI_B_CLOB);
         oci_bind_by_name($stmt, ':b', $id, 50000);
+        oci_bind_by_name($stmt, ':lang', $lang, 50000);
         if(oci_execute($stmt))
         {
             $obj = json_decode($res->load(),true);
@@ -101,10 +103,12 @@ class DataGetter
 
     public function getRoom($id)
     {
-        $res = oci_new_descriptor($this->connection);;
-        $stmt = oci_parse($this->connection,"begin :a := get_room_fnc(:b); end;");
+        $res = oci_new_descriptor($this->connection);
+        $lang = "en";
+        $stmt = oci_parse($this->connection,"begin :a := get_room_fnc(:b, :lang); end;");
         oci_bind_by_name($stmt, ':a', $res, -1,OCI_B_CLOB);
         oci_bind_by_name($stmt, ':b', $id, 50000);
+        oci_bind_by_name($stmt, ':lang', $lang, 50000);
 
         if(oci_execute($stmt))
         {
@@ -113,6 +117,24 @@ class DataGetter
         }
         else {
             echo "Error while getting room map";
+        }
+    }
+
+    public function getShelfThemes($shelfID)
+    {
+        $res = oci_new_descriptor($this->connection);
+        $lang = "lt";
+        $stmt = oci_parse($this->connection,"begin :res := get_all_shelf_topics_fnc(:id, :lang); end;");
+        oci_bind_by_name($stmt, ':res', $res, -1,OCI_B_CLOB);
+        oci_bind_by_name($stmt, ':id', $shelfID, 50000);
+        oci_bind_by_name($stmt, ':lang', $lang, 50000);
+
+        if(oci_execute($stmt))
+        {
+            return $res->load();
+        }
+        else {
+            echo "Error";
         }
     }
 

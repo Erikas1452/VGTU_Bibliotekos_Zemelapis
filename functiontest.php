@@ -309,11 +309,29 @@ if(!$connection) echo "Failed to connect";
 //
 //echo"DONE";
 
+//$res = oci_new_descriptor($connection);
+//$mapID = 6;
+//$stmt = oci_parse($connection,"begin :res := get_all_room_shelf_coords_fnc(:id); end;");
+//oci_bind_by_name($stmt, ':res', $res, -1,OCI_B_CLOB);
+//oci_bind_by_name($stmt, ':id', $mapID, 50000);
+//
+//if(oci_execute($stmt))
+//{
+//    echo"3";
+//    echo $res->load();
+//}
+//else {
+//    echo "4";
+//    echo "Error";
+//}
+//
+//echo"DONE";
+
 $res = oci_new_descriptor($connection);
-$mapID = 6;
-$stmt = oci_parse($connection,"begin :res := get_all_room_shelf_coords_fnc(:id); end;");
+$tableID = 561;
+$stmt = oci_parse($connection,"begin :res := get_all_shelf_topics_fnc(:id); end;");
 oci_bind_by_name($stmt, ':res', $res, -1,OCI_B_CLOB);
-oci_bind_by_name($stmt, ':id', $mapID, 50000);
+oci_bind_by_name($stmt, ':id', $tableID, 50000);
 
 if(oci_execute($stmt))
 {

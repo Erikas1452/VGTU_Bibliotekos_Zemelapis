@@ -13,8 +13,6 @@ $data->connect();
 $floorInfo = $data->getFloor($mapId);
 $rooms = $floorInfo[1];
 
-$width =600;
-$height=575;
 
 echo'<div class="subTabButtons">';
     $index=0;
@@ -26,9 +24,26 @@ echo'<div class="subTabButtons">';
 echo'</div>';
 
 echo'<div class="floorImage">';
-echo '<canvas id="floorCanvas" width="'.$width.'" height="'.$height.'"></canvas>';
+    echo '<canvas id="floorCanvas"></canvas>';
+echo'<div class="tableContents">';
+    echo '<table>';
+
+        echo'<tr>';
+        echo'<th>Vieta lentynoje</th>';
+        echo'<th>Tema</th>';
+        echo'</tr>';
+
+
+        echo'<tr>';
+        echo'<td>TEST CODE</td>';
+        echo'<td>TEST THEME</td>';
+        echo'</tr>';
+
+    echo '</table>';
+echo'</div>';
 echo'</div>';
 
 echo'<div id="subTabContent" class="subTabContent">';
 
 echo'</div>';
+

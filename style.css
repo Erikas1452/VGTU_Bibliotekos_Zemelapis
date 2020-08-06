@@ -127,6 +127,11 @@ input[type=button]:hover
     float: left;
 }
 
+.floorImage
+ {
+     display: -webkit-box;
+ }
+
 .floorImage canvas
 {
     cursor:pointer;
