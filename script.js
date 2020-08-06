@@ -12,32 +12,73 @@ let imgHeight;
 
 let canvas;
 let ctx;
+let scale;
 
-function getMousePosition(canvas, event) {
-    let rect = canvas.getBoundingClientRect();
-    let x = event.clientX - rect.left;
-    let y = event.clientY - rect.top;
-    console.log("Coordinate x: " + x, "Coordinate y: " + y);
-    drawRectangle(x,y,20,20);
-}
+let preferedWidth = 580;
 
-function drawRectangle(x1,y1,x2,y2)
+function drawAllShelves(mapID)
 {
-    ctx.clearRect(0,0,1000,1000);
-    drawImageOnCanvas();
-    ctx.fillStyle = "#269BF0";
-    ctx.fillRect(x1,y1,x2,y2);
-}
-
-function enableDrawing()
-{
-    canvas.addEventListener("mousedown", function(e)
+    $.post("./fetchAllCoords.php",
     {
-        getMousePosition(canvas, e);
+        map: mapID
+    },function (data, status) {
+        data = JSON.parse(data);
+        data["coords"].forEach(function(element){
+            getScale();
+            drawRectangle(element["x1"]/scale[0],element["y1"]/scale[1],element['width']/scale[0],element['height']/scale[1]);
+        });
     });
 }
 
+function getShelf(mapID,x,y) {
+    $.post("./fetchShelf.php",{
+        map: mapID,
+        x: x,
+        y: y
+    },function(data,status){
+        data = JSON.parse(data);
+        console.log(mapID,x,y);
+        console.log(data);
+        console.log(scale);
+        clearCanvas();
+        drawRectangle(data["x1"]/scale[0],data["y1"]/scale[1],data['width']/scale[0],data['height']/scale[1]);
+    });
+}
 
+function getScale() {
+    scale = [imgWidth/canvas.width,imgHeight/canvas.height];
+}
+
+function getMousePosition(canvas, event) {
+    let rect = canvas.getBoundingClientRect();
+    x = event.clientX - rect.left;
+    y = event.clientY - rect.top;
+    return [x,y];
+}
+
+function clearCanvas()
+{
+    ctx.clearRect(0,0,1000,1000);
+    drawImageOnCanvas();
+}
+
+function drawRectangle(x1,y1,width,height)
+{
+
+    ctx.fillStyle = "#269BF0";
+    ctx.fillRect(x1,y1,width,height);
+}
+
+function enableClicking()
+{
+    canvas.addEventListener("mousedown", function(e)
+    {
+        let coordinates=getMousePosition(canvas, e);
+        let ID = document.getElementById("roomCanvas").getAttribute("name");
+        getScale();
+        getShelf(ID,coordinates[0]*scale[0],coordinates[1]*scale[1]);
+    });
+}
 
 function loadTab(mapID,tabID) {
     $("#tabContent").load("loadMainTab.php",{
@@ -66,10 +107,8 @@ function getRoomImage(mapID)
     },function (data,status) {
         let temp = JSON.parse(data);
         imgSource=temp[0];
-        imgWidth=temp[1];
-        imgHeight=temp[2];
         loadImage();
-        enableDrawing();
+        enableClicking();
     });
 }
 
@@ -80,8 +119,6 @@ function getFloorImage(mapID)
     },function (data,status) {
         let temp = JSON.parse(data);
         imgSource=temp[0];
-        imgWidth=temp[1];
-        imgHeight=temp[2];
         loadFloorImage();
     });
 }
@@ -92,6 +129,9 @@ function loadFloorImage()
     ctx = canvas.getContext('2d');
     image = new Image();
     image.onload = function () {
+        imgWidth = image.naturalWidth;
+        imgHeight = image.naturalHeight;
+        console.log(imgWidth,imgHeight);
         drawImageOnCanvas();
     };
     image.src = imgSource;
@@ -104,13 +144,18 @@ function loadImage()
     image = new Image();
     image.src = imgSource;
     image.onload = function () {
+        imgWidth = image.naturalWidth;
+        imgHeight = image.naturalHeight;
+        console.log(imgWidth,imgHeight);
         drawImageOnCanvas();
     };
 }
 
 function drawImageOnCanvas() {
-
-     ctx.drawImage(image,0,0,600,575);
+    let tempScale = preferedWidth/image.naturalWidth;
+    canvas.width = image.naturalWidth * tempScale;
+    canvas.height = image.naturalHeight * tempScale;
+    ctx.drawImage(image,0,0,canvas.width,canvas.height);
  }
 
 function refreshData()

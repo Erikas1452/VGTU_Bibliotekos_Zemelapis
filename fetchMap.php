@@ -14,8 +14,6 @@ $img = $data->getRoom($mapId);
 
 $source = "data:image/png;base64,".$img;
 
-$map = new Map($img);
-
-$response = array($source,$img->returnWidth,$img->returnHeight);
+$response = array($source);
 
 echo json_encode($response);

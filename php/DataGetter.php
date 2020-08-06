@@ -38,6 +38,25 @@ class DataGetter
         }
     }
 
+    public function getShelf($mapID,$x,$y)
+    {
+        $newX = round($x,0);
+        $newY = round($y, 0);
+        $res = oci_new_descriptor($this->connection);
+        $stmt = oci_parse($this->connection,"begin :res := get_coords_fnc(:id, :x, :y); end;");
+        oci_bind_by_name($stmt, ':res', $res, -1,OCI_B_CLOB);
+        oci_bind_by_name($stmt, ':id', $mapID, 50000);
+        oci_bind_by_name($stmt, ':x', $newX, 50000);
+        oci_bind_by_name($stmt, ':y', $newY, 50000);
+        if(oci_execute($stmt))
+        {
+            return $res->load();
+        }
+        else {
+            echo "Error";
+        }
+    }
+
     public function getFloor($id)
     {
         $res = oci_new_descriptor($this->connection);
@@ -50,7 +69,7 @@ class DataGetter
             return array($obj["mapClob"],$obj["patalpos"]);
         }
         else {
-            echo "Error";
+            echo "Error while getting floor";
         }
     }
 
@@ -76,7 +95,7 @@ class DataGetter
             }
         }
         else {
-            echo "Error";
+            echo "Error while getting tab names";
         }
     }
 
@@ -93,7 +112,7 @@ class DataGetter
             return $obj["mapClob"];
         }
         else {
-            echo "Error";
+            echo "Error while getting room map";
         }
     }
 
@@ -125,7 +144,7 @@ class DataGetter
             }
         }
         else {
-            echo "ERROR";
+            echo "Error while getting all themes";
         }
     }
 

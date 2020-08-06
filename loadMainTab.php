@@ -11,10 +11,8 @@ $data = new DataGetter();
 $data->connect();
 
 $floorInfo = $data->getFloor($mapId);
-$img = $floorInfo[0];
 $rooms = $floorInfo[1];
 
-$source = "data:image/png;base64,".$img;
 $width =600;
 $height=575;
 

@@ -16,7 +16,8 @@ $width = 600;
 $height = 575;
 
 echo'<div class="floorImage">';
-echo'<canvas id="roomCanvas" width="'.$width.'" height="'.$height.'"></canvas>';
+echo'<button onclick="drawAllShelves('.$mapId.')"> MARK ALL </button>';
+echo'<canvas name="'.$mapId.'" id="roomCanvas"></canvas>';
 echo'</div>';
 
 ?>

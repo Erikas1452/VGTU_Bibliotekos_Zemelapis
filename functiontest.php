@@ -254,25 +254,75 @@ if(!$connection) echo "Failed to connect";
 //echo '<br>';
 //echo '<br>';
 
-echo "<br>";
-echo "IMAGE IMAGE IMAGE";
-$res = oci_new_descriptor($connection);;
-oci_free_statement($stid);
-$stid = oci_parse($connection,"begin :a := get_all_floors_fnc(); end;");
-oci_bind_by_name($stid, ':a', $res, -1,OCI_B_CLOB);
-if(oci_execute($stid))
+//echo "<br>";
+//echo "IMAGE IMAGE IMAGE";
+//$res = oci_new_descriptor($connection);;
+//oci_free_statement($stid);
+//$stid = oci_parse($connection,"begin :a := get_all_floors_fnc(); end;");
+//oci_bind_by_name($stid, ':a', $res, -1,OCI_B_CLOB);
+//if(oci_execute($stid))
+//{
+//    echo $res->load();
+//    $obj = json_decode($res->load(),true);
+//    echo sizeof($obj);
+//    echo sizeof($img);
+//    echo'<br>';
+//    echo $img;
+//}
+//else {
+//    echo "Error";
+//}
+//
+//echo '<br>';
+//echo '<br>';
+//echo '<br>';
+
+
+//$res = oci_new_descriptor($connection);
+//$mapID = 9;
+//$x=2140.454;
+//$y=790.5445;
+//$x = round($x,0);
+//$y = round($y, 0);
+//echo $x." ".$y;
+//echo'<br>';
+//echo"1";
+//$stmt = oci_parse($connection,"begin :res := get_coords_fnc(:id, :x, :y); end;");
+//echo"1";
+//oci_bind_by_name($stmt, ':res', $res, -1,OCI_B_CLOB);
+//echo"1";
+//oci_bind_by_name($stmt, ':id', $mapID, 50000);
+//echo"1";
+//oci_bind_by_name($stmt, ':x', $x, 50000);
+//echo"1";
+//oci_bind_by_name($stmt, ':y', $y, 50000);
+//echo"1";
+//if(oci_execute($stmt))
+//{
+//    echo"3";
+//    echo $res->load();
+//}
+//else {
+//    echo "4";
+//    echo "Error";
+//}
+//
+//echo"DONE";
+
+$res = oci_new_descriptor($connection);
+$mapID = 6;
+$stmt = oci_parse($connection,"begin :res := get_all_room_shelf_coords_fnc(:id); end;");
+oci_bind_by_name($stmt, ':res', $res, -1,OCI_B_CLOB);
+oci_bind_by_name($stmt, ':id', $mapID, 50000);
+
+if(oci_execute($stmt))
 {
+    echo"3";
     echo $res->load();
-    $obj = json_decode($res->load(),true);
-    echo sizeof($obj);
-    echo sizeof($img);
-    echo'<br>';
-    echo $img;
 }
 else {
+    echo "4";
     echo "Error";
 }
 
-echo '<br>';
-echo '<br>';
-echo '<br>';
+echo"DONE";
