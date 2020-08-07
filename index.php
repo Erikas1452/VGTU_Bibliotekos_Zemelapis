@@ -17,7 +17,7 @@ $searchFor = null;
 
 $floors = $data->returnFloorNames();
 
-$subContentCount = 0;
+$searchStatus = false;
 ?>
 
     <!DOCTYPE html>
@@ -42,7 +42,7 @@ $subContentCount = 0;
     <div>
         <form method="POST">
             <label for="DropDown1">Tema:</label> <br>
-            <input type="text" list="DropDown1" name="DropDown1" />
+            <input type="text" list="DropDown1" name="dropDown1" />
             <datalist id="DropDown1">
                 <?php
                 //Filling Search-Bar
@@ -52,7 +52,7 @@ $subContentCount = 0;
                 }
                 ?>
             </datalist>
-            <input type="button" name="Search" value="Ieškoti" id="btn"/>
+            <input type="submit" name="Search" value="Ieškoti" id="btn"/>
         </form>
 
         <br>
@@ -62,13 +62,29 @@ $subContentCount = 0;
             //creating tabs
             if(isset($_POST["Search"]))
             {
-                echo "1";
+                foreach ($themes as $theme)
+                {
+                    if($_POST["dropDown1"] == $theme[1])
+                    {
+                        $searchStatus = true;
+                        $searchFor = $theme[0];
+                    }
+                }
+
             }
-            $index = 0;
-            foreach($floors as $floor)
+
+            if($searchStatus == true)
             {
-                echo '<button id="tab-'.$floor[1].'" onclick="loadTab('.$floor[1].','.$index.')">'.$floor[0].'</button>';
-                $index++;
+                echo "Some other function";
+            }
+            else
+            {
+                $index = 0;
+                foreach($floors as $floor)
+                {
+                    echo '<button id="tab-'.$floor[1].'" onclick="loadTab('.$floor[1].','.$index.')">'.$floor[0].'</button>';
+                    $index++;
+                }
             }
             ?>
         </div>

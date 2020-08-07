@@ -8,7 +8,7 @@ body
     font-family: 'Open Sans';
 }
 
-input[type=button]
+input[type=submit]
 {
     margin: 0;
     margin-left: 2%;
