@@ -14,7 +14,8 @@ let canvas;
 let ctx;
 let scale;
 
-let preferedWidth = 550;
+let preferedWidth = 600;
+let preferedHeight = 450;
 
 let tableContents;
 
@@ -172,9 +173,13 @@ function loadImage()
 }
 
 function drawImageOnCanvas() {
-    let tempScale = preferedWidth/image.naturalWidth;
-    canvas.width = image.naturalWidth * tempScale;
-    canvas.height = image.naturalHeight * tempScale;
+
+    let ratio = preferedHeight/image.naturalHeight;
+    if(image.naturalWidth*ratio > preferedWidth) ratio = preferedWidth/image.naturalWidth;
+    else if (image.naturalWidth*ratio < preferedWidth/2) ratio = preferedWidth/image.naturalWidth;
+    if (image.naturalHeight*ratio > preferedHeight) ratio = (preferedWidth/1.35)/image.naturalWidth;
+    canvas.width = image.naturalWidth * ratio;
+    canvas.height = image.naturalHeight * ratio;
     ctx.drawImage(image,0,0,canvas.width,canvas.height);
  }
 

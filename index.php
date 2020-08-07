@@ -60,6 +60,10 @@ $subContentCount = 0;
         <div id="tabButtons" class="tabButtons">
             <?php
             //creating tabs
+            if(isset($_POST["Search"]))
+            {
+                echo "1";
+            }
             $index = 0;
             foreach($floors as $floor)
             {
