@@ -10,12 +10,9 @@ $handler = new EventHandler();
 //Data
 $data->connect();
 $data->getThemes();
-$data->getFloorTabs();
 
 $themes = $data->returnThemes();
 $searchFor = null;
-
-$floors = $data->returnFloorNames();
 
 $searchStatus = false;
 ?>
@@ -27,12 +24,13 @@ $searchStatus = false;
         <title>VGTU Library Map</title>
         <!-- (ADD LATER)References to styles -->
         <link href ="style.css" rel="stylesheet">
-        <script src="script.js" defer></script>
-        <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"> </script>
     </head>
 
     <div class="wrapper">
     <body>
+
+    <script src="script.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"> </script>
 
     <div>
         <h2>ATVIROJO FONDO ŽEMĖLAPIS</h2>
@@ -75,10 +73,27 @@ $searchStatus = false;
 
             if($searchStatus == true)
             {
-                echo "Some other function";
+                $data->getFloorTabsByTopic($searchFor);
+                $floors = $data->returnFloorNames();
+
+                $singleQuote = "'";
+                echo $singleQuote;
+
+                $searchFor = $singleQuote.$searchFor.$singleQuote;
+
+                $index = 0;
+                foreach($floors as $floor)
+                {
+                    echo $searchFor;
+                    echo '<button id="tab-'.$floor[1].'" onclick="loadTab('.$floor[1].','.$index.'), getShelves('.$searchFor.');">'.$floor[0].'</button>';
+                    $index++;
+                }
             }
+
             else
             {
+                $data->getFloorTabs();
+                $floors = $data->returnFloorNames();
                 $index = 0;
                 foreach($floors as $floor)
                 {

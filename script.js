@@ -19,6 +19,20 @@ let preferedHeight = 450;
 
 let tableContents;
 
+let searchCache;
+
+
+$
+
+function getShelves(topic)
+{
+    $.post("./fetchShelves.php",{
+        topic: topic
+    },function (data,status) {
+        searchCache = JSON.parse(data);
+    });
+}
+
 function getShelfThemes(shelfID) {
     $.post("./fetchShelfThemes.php",{
         shelfID: shelfID
@@ -27,7 +41,7 @@ function getShelfThemes(shelfID) {
         tableContents=data;
         console.log(data);
         loadTable(data);
-    })
+    });
 }
 
 function loadTable(data) {
@@ -38,19 +52,19 @@ function loadTable(data) {
     });
 }
 
-function drawAllShelves(mapID)
-{
-    $.post("./fetchAllCoords.php",
-    {
-        map: mapID
-    },function (data, status) {
-        data = JSON.parse(data);
-        data["coords"].forEach(function(element){
-            getScale();
-            drawRectangle(element["x1"]/scale[0],element["y1"]/scale[1],element['width']/scale[0],element['height']/scale[1]);
-        });
-    });
-}
+// function drawAllShelves(mapID)
+// {
+//     $.post("./fetchAllCoords.php",
+//     {
+//         map: mapID
+//     },function (data, status) {
+//         data = JSON.parse(data);
+//         data["coords"].forEach(function(element){
+//             getScale();
+//             drawRectangle(element["x1"]/scale[0],element["y1"]/scale[1],element['width']/scale[0],element['height']/scale[1]);
+//         });
+//     });
+// }
 
 function getShelf(mapID,x,y) {
     $.post("./fetchShelf.php",{
@@ -85,7 +99,6 @@ function clearCanvas()
 
 function drawRectangle(x1,y1,width,height)
 {
-
     ctx.fillStyle = "#269BF0";
     ctx.fillRect(x1,y1,width,height);
 }
@@ -121,6 +134,22 @@ function loadSubTab(mapID,tabID) {
     });
 }
 
+function drawAllShelves(id)
+{
+    console.log(searchCache["shelves"]);
+    let shelves = searchCache["shelves"];
+    getScale();
+    shelves.forEach(function (node)
+    {
+        if(node["roomId"] == id)
+        {
+            console.log("drawing");
+            console.log(node["x1"],node["y1"],node["width"],node["height"]);
+            drawRectangle(node["x1"]/scale[0],node["y1"]/scale[1],node["width"]/scale[0],node["height"]/scale[1]);
+        }
+    });
+}
+
 function getRoomImage(mapID)
 {
     $.post("./fetchMap.php",{
@@ -128,7 +157,7 @@ function getRoomImage(mapID)
     },function (data,status) {
         let temp = JSON.parse(data);
         imgSource=temp[0];
-        loadImage();
+        loadImage(mapID);
         enableClicking();
     });
 }
@@ -158,7 +187,7 @@ function loadFloorImage()
     image.src = imgSource;
 }
 
-function loadImage()
+function loadImage(mapID)
 {
     canvas = document.getElementById("roomCanvas");
     ctx = canvas.getContext('2d');
@@ -168,11 +197,11 @@ function loadImage()
         imgWidth = image.naturalWidth;
         imgHeight = image.naturalHeight;
         console.log(imgWidth,imgHeight);
-        drawImageOnCanvas();
+        drawImageOnCanvas(mapID);
     };
 }
 
-function drawImageOnCanvas() {
+function drawImageOnCanvas(mapID) {
 
     let ratio = preferedHeight/image.naturalHeight;
     if(image.naturalWidth*ratio > preferedWidth) ratio = preferedWidth/image.naturalWidth;
@@ -181,6 +210,7 @@ function drawImageOnCanvas() {
     canvas.width = image.naturalWidth * ratio;
     canvas.height = image.naturalHeight * ratio;
     ctx.drawImage(image,0,0,canvas.width,canvas.height);
+    drawAllShelves(mapID);
  }
 
 function refreshData()

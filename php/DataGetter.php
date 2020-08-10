@@ -65,6 +65,7 @@ class DataGetter
         oci_bind_by_name($stmt, ':a', $res, -1,OCI_B_CLOB);
         oci_bind_by_name($stmt, ':b', $id, 50000);
         oci_bind_by_name($stmt, ':lang', $lang, 50000);
+
         if(oci_execute($stmt))
         {
             $obj = json_decode($res->load(),true);
@@ -77,10 +78,11 @@ class DataGetter
 
     public function getFloorTabs()
     {
-        $stmt = oci_parse($this->connection,"begin :a := get_all_floors_fnc(); end;");
         $res = oci_new_descriptor($this->connection);
+        $lang = "lt";
+        $stmt = oci_parse($this->connection,"begin :a := get_all_floors_fnc(:lang); end;");
+        oci_bind_by_name($stmt, ':lang', $lang, 50000);
         oci_bind_by_name($stmt, ':a', $res, -1,OCI_B_CLOB);
-
 
         $index = 0;
         if(oci_execute($stmt))
@@ -90,7 +92,7 @@ class DataGetter
             foreach ($obj as $floor)
             {
                 foreach ($floor as $data) {
-                    $temp = array($data["floor"], $data["id"]);
+                    $temp = array($data["name"], $data["id"]);
                     $this->floors[$index] = $temp;
                     $index++;
                 }
@@ -98,6 +100,59 @@ class DataGetter
         }
         else {
             echo "Error while getting tab names";
+        }
+    }
+
+    public function getFloorTabsByTopic($topic)
+    {
+        $res = oci_new_descriptor($this->connection);
+        $lang = "lt";
+        $stmt = oci_parse($this->connection,"begin :res := get_all_topic_locations_fnc(:id, :lang); end;");
+
+        oci_bind_by_name($stmt, ':res', $res, -1,OCI_B_CLOB);
+        oci_bind_by_name($stmt, ':id', $topic, 50000);
+        oci_bind_by_name($stmt, ':lang', $lang, 50000);
+
+        $index = 0;
+        $tempTabs = array();
+
+        if(oci_execute($stmt))
+        {
+            $obj = json_decode($res->load(),true);
+            $obj = $obj["shelves"];
+            foreach ($obj as $shelf) {
+                if(!in_array($shelf["name"],$tempTabs))
+                {
+                    $tempTabs[$index] = $shelf["name"];
+
+                    $temp = array($shelf["name"],$shelf["floorId"]);
+                    $this->floors[$index] = $temp;
+
+                    $index++;
+                }
+            }
+        }
+        else {
+            echo "Error while getting tab by topic";
+        }
+    }
+
+    public function getShelves($topic)
+    {
+        $res = oci_new_descriptor($this->connection);
+        $lang = "lt";
+        $stmt = oci_parse($this->connection,"begin :res := get_all_topic_locations_fnc(:id, :lang); end;");
+
+        oci_bind_by_name($stmt, ':res', $res, -1,OCI_B_CLOB);
+        oci_bind_by_name($stmt, ':id', $topic, 50000);
+        oci_bind_by_name($stmt, ':lang', $lang, 50000);
+        if(oci_execute($stmt))
+        {
+            return $res->load();
+        }
+        else
+        {
+            echo "Error while getting all shelves";
         }
     }
 
