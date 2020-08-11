@@ -8,7 +8,7 @@ if (isset($_POST["contents"]))
 
 echo '<table>';
     echo'<tr>';
-        echo'<th>Vieta lentynoje</th>';
+        echo'<th>UDK</th>';
         echo'<th>Tema</th>';
     echo'</tr>';
     foreach ($contents as $themes)

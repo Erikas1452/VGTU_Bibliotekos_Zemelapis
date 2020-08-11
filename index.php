@@ -12,8 +12,8 @@ $data->connect();
 $data->getThemes();
 
 $themes = $data->returnThemes();
-$searchFor = null;
 
+$searchFor = null;
 $searchStatus = false;
 ?>
 
@@ -85,7 +85,7 @@ $searchStatus = false;
                 foreach($floors as $floor)
                 {
                     echo $searchFor;
-                    echo '<button id="tab-'.$floor[1].'" onclick="loadTab('.$floor[1].','.$index.'), getShelves('.$searchFor.');">'.$floor[0].'</button>';
+                    echo '<button id="tab-'.$floor[1].'"onclick="getShelves('.$searchFor.'), loadTab('.$floor[1].','.$index.');">'.$floor[0].'</button>';
                     $index++;
                 }
             }

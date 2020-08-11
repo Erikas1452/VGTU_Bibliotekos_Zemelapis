@@ -2,24 +2,42 @@
 include "php/Map.php";
 include "php/DataGetter.php";
 
-if(isset($_POST['map']))
-{
-    $mapId = $_POST['map'];
-}
-
 $data = new DataGetter();
 $data->connect();
+
+$mapId = $_POST['map'];
+
+if(isset($_POST['rooms']))
+{
+    $subtabs = $_POST['rooms'];
+}
+
 
 $floorInfo = $data->getFloor($mapId);
 $rooms = $floorInfo[1];
 
 
+
 echo'<div class="subTabButtons">';
     $index=0;
-    foreach ($rooms as $room)
+    if(isset($subtabs))
     {
-        echo '<button id="subTab-'.$index.'" onclick="loadSubTab('.$room["id"].','.$index.');">'.$room["name"].'</button>';
-        $index++;
+        foreach ($rooms as $room)
+        {
+            if(in_array($room["id"],$subtabs))
+            {
+                echo '<button id="subTab-' . $index . '" onclick="loadSubTab(' . $room["id"] . ',' . $index . ');">' . $room["name"] . '</button>';
+                $index++;
+            }
+        }
+    }
+    else
+    {
+        foreach ($rooms as $room)
+        {
+            echo '<button id="subTab-'.$index.'" onclick="loadSubTab('.$room["id"].','.$index.');">'.$room["name"].'</button>';
+            $index++;
+        }
     }
 echo'</div>';
 

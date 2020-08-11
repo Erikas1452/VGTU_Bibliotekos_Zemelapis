@@ -21,26 +21,107 @@ let tableContents;
 
 let searchCache;
 
+let idType = null;
 
-$
+let rooms = new Set();
 
+function selectUniqueRooms()
+{
+    let shelves = searchCache["shelves"];
+    shelves.forEach(function(shelf)
+    {
+        if(!rooms.has(shelf["roomId"]))
+        {
+            rooms.add(shelf["roomId"]);
+        }
+    });
+}
+
+// --------------Loading Data----------- //
+
+//  ||------------Shelves------------||
 function getShelves(topic)
 {
     $.post("./fetchShelves.php",{
         topic: topic
     },function (data,status) {
+        console.log(data);
         searchCache = JSON.parse(data);
     });
 }
 
 function getShelfThemes(shelfID) {
-    $.post("./fetchShelfThemes.php",{
+    $.post("./fetchShelfThemes.php", {
         shelfID: shelfID
-    },function (data,status) {
+    }, function (data, status) {
         data = JSON.parse(data);
-        tableContents=data;
+        tableContents = data;
         console.log(data);
+
         loadTable(data);
+    });
+}
+
+//  ||------------Maps-------------||
+
+function getRoomImage(mapID)
+{
+    $.post("./fetchMap.php",{
+        map: mapID
+    },function (data,status) {
+        let temp = JSON.parse(data);
+        imgSource=temp[0];
+        loadImage(mapID);
+        enableClicking();
+    });
+}
+
+function getFloorImage(mapID)
+{
+    $.post("./fetchFloorMap.php",{
+        map: mapID
+    },function (data,status) {
+        let temp = JSON.parse(data);
+        imgSource=temp[0];
+        loadFloorImage(mapID);
+    });
+}
+
+function loadFloorImage(mapID)
+{
+    idType = 'floorId';
+    canvas = document.getElementById("floorCanvas");
+    ctx = canvas.getContext('2d');
+    image = new Image();
+    image.onload = function () {
+        saveOriginalWidth();
+        prepareCanvas();
+        drawImageOnCanvas(mapID);
+    };
+    image.src = imgSource;
+}
+
+     //Loading Tabs
+
+function loadTab(mapID,tabID) {
+    if(searchCache)selectUniqueRooms();
+    $("#tabContent").load("loadMainTab.php",{
+        map: mapID,
+        rooms: Array.from(rooms)
+    },function () {
+        refreshData();
+        getFloorImage(mapID);
+        showContent(tabID);
+    });
+}
+
+function loadSubTab(mapID,tabID) {
+    $("#subTabContent").load("loadSubTab.php",{
+        map: mapID
+    },function () {
+        refreshData();
+        getRoomImage(mapID);
+        showSubContent(tabID);
     });
 }
 
@@ -51,6 +132,9 @@ function loadTable(data) {
 
     });
 }
+
+
+//Test for drawing out all coordinates provided from database for specified map
 
 // function drawAllShelves(mapID)
 // {
@@ -72,24 +156,78 @@ function getShelf(mapID,x,y) {
         x: x,
         y: y
     },function(data,status){
-        data = JSON.parse(data);
-        console.log(data);
-        clearCanvas();
-        drawRectangle(data["x1"]/scale[0],data["y1"]/scale[1],data['width']/scale[0],data['height']/scale[1]);
-        getShelfThemes(data["id"]);
+        if(JSON.parse(data))
+        {
+            data = JSON.parse(data);
+            console.log(data);
+
+            //Marking selected Shelf
+            clearCanvas();
+            drawRectangle(data["x1"] / scale[0], data["y1"] / scale[1], data['width'] / scale[0], data['height'] / scale[1]);
+
+            //Getting themes that are in selected shelf
+            getShelfThemes(data["id"]);
+        }
     });
 }
 
-function getScale() {
-    scale = [imgWidth/canvas.width,imgHeight/canvas.height];
-}
+// --------------Calculations----------- //
 
-function getMousePosition(canvas, event) {
+function getMousePosition(canvas, event)
+{
     let rect = canvas.getBoundingClientRect();
     x = event.clientX - rect.left;
     y = event.clientY - rect.top;
-    return [x,y];
+    return [x, y];
 }
+
+function getScale()
+{
+    scale = [imgWidth/canvas.width,imgHeight/canvas.height];
+}
+
+function saveOriginalWidth()
+{
+    imgWidth = image.naturalWidth;
+    imgHeight = image.naturalHeight;
+    console.log(imgWidth, imgHeight);
+}
+
+function findRatio()
+{
+    let ratio = preferedHeight/image.naturalHeight;
+    if(image.naturalWidth*ratio > preferedWidth) ratio = preferedWidth/image.naturalWidth;
+    else if (image.naturalWidth*ratio < preferedWidth/2) ratio = preferedWidth/image.naturalWidth;
+    if (image.naturalHeight*ratio > preferedHeight) ratio = (preferedWidth/1.35)/image.naturalWidth;
+
+    return ratio;
+}
+
+function setCanvasSize(ratio)
+{
+    canvas.width = image.naturalWidth * ratio;
+    canvas.height = image.naturalHeight * ratio;
+}
+
+// --------------Interactiveness---------- //
+
+function enableClicking()
+{
+    //on click actions
+    canvas.addEventListener("mousedown", function(e)
+    {
+        //Get coordinates and map ID that is being clicked on
+        let coordinates=getMousePosition(canvas, e);
+        let ID = document.getElementById("roomCanvas").getAttribute("name");
+
+        getScale();
+
+        //Requesting info about shelf contents
+        getShelf(ID,coordinates[0]*scale[0],coordinates[1]*scale[1]);
+    });
+}
+
+// --------------Drawing----------- //
 
 function clearCanvas()
 {
@@ -103,115 +241,59 @@ function drawRectangle(x1,y1,width,height)
     ctx.fillRect(x1,y1,width,height);
 }
 
-function enableClicking()
-{
-    canvas.addEventListener("mousedown", function(e)
-    {
-        let coordinates=getMousePosition(canvas, e);
-        let ID = document.getElementById("roomCanvas").getAttribute("name");
-        getScale();
-        getShelf(ID,coordinates[0]*scale[0],coordinates[1]*scale[1]);
-    });
-}
-
-function loadTab(mapID,tabID) {
-    $("#tabContent").load("loadMainTab.php",{
-        map: mapID
-    },function () {
-        refreshData();
-        getFloorImage(mapID);
-        showContent(tabID);
-    });
-}
-
-function loadSubTab(mapID,tabID) {
-    $("#subTabContent").load("loadSubTab.php",{
-        map: mapID
-    },function () {
-        refreshData();
-        getRoomImage(mapID);
-        showSubContent(tabID);
-    });
-}
-
 function drawAllShelves(id)
 {
     console.log(searchCache["shelves"]);
     let shelves = searchCache["shelves"];
+
     getScale();
+
     shelves.forEach(function (node)
     {
-        if(node["roomId"] == id)
+        if(idType == "roomId")
         {
-            console.log("drawing");
-            console.log(node["x1"],node["y1"],node["width"],node["height"]);
-            drawRectangle(node["x1"]/scale[0],node["y1"]/scale[1],node["width"]/scale[0],node["height"]/scale[1]);
+            if(node["roomId"] == id)
+            {
+                drawRectangle(node["roomX1"]/scale[0],node["roomY1"]/scale[1],node["roomWidth"]/scale[0],node["roomHeight"]/scale[1]);
+            }
+        }
+        else if (idType == "floorId")
+        {
+            if(node["floorId"] == id)
+            {
+                drawRectangle(node["floorX1"]/scale[0],node["floorY1"]/scale[1],node["floorWidth"]/scale[0],node["floorHeight"]/scale[1]);
+            }
         }
     });
 }
 
-function getRoomImage(mapID)
-{
-    $.post("./fetchMap.php",{
-        map: mapID
-    },function (data,status) {
-        let temp = JSON.parse(data);
-        imgSource=temp[0];
-        loadImage(mapID);
-        enableClicking();
-    });
-}
-
-function getFloorImage(mapID)
-{
-    $.post("./fetchFloorMap.php",{
-        map: mapID
-    },function (data,status) {
-        let temp = JSON.parse(data);
-        imgSource=temp[0];
-        loadFloorImage();
-    });
-}
-
-function loadFloorImage()
-{
-    canvas = document.getElementById("floorCanvas");
-    ctx = canvas.getContext('2d');
-    image = new Image();
-    image.onload = function () {
-        imgWidth = image.naturalWidth;
-        imgHeight = image.naturalHeight;
-        console.log(imgWidth,imgHeight);
-        drawImageOnCanvas();
-    };
-    image.src = imgSource;
-}
-
 function loadImage(mapID)
 {
+    idType = 'roomId';
     canvas = document.getElementById("roomCanvas");
     ctx = canvas.getContext('2d');
     image = new Image();
     image.src = imgSource;
     image.onload = function () {
-        imgWidth = image.naturalWidth;
-        imgHeight = image.naturalHeight;
-        console.log(imgWidth,imgHeight);
+        saveOriginalWidth();
+        prepareCanvas();
         drawImageOnCanvas(mapID);
     };
 }
 
-function drawImageOnCanvas(mapID) {
+function prepareCanvas()
+{
+    let ratio = findRatio();
+    setCanvasSize(ratio);
+}
 
-    let ratio = preferedHeight/image.naturalHeight;
-    if(image.naturalWidth*ratio > preferedWidth) ratio = preferedWidth/image.naturalWidth;
-    else if (image.naturalWidth*ratio < preferedWidth/2) ratio = preferedWidth/image.naturalWidth;
-    if (image.naturalHeight*ratio > preferedHeight) ratio = (preferedWidth/1.35)/image.naturalWidth;
-    canvas.width = image.naturalWidth * ratio;
-    canvas.height = image.naturalHeight * ratio;
+function drawImageOnCanvas(mapID)
+{
     ctx.drawImage(image,0,0,canvas.width,canvas.height);
-    drawAllShelves(mapID);
+    if(searchCache) drawAllShelves(mapID); //If there was a search for some specific topic draw shelves on top of map
  }
+
+// --------------Working with tabs (changing styles etc.)----------- //
 
 function refreshData()
 {
@@ -226,13 +308,18 @@ function refreshData()
 
 function showContent(contentIndex)
 {
+    //reseting styles
     resetMainTabButtons();
     resetSubTabButtons();
     hideSubContent();
 
+    //Changing style of selected tab
     mainTabButtons[contentIndex].style.borderBottom="3px solid #269BF0";
     mainTabButtons[contentIndex].style.color="#269BF0";
-    hideMainTabButtons();
+
+    hideMainTabContents();
+
+    //displaying maintab image div
     mainTabContents[0].style.display="block";
     floorImages[0].style.display="-webkit-box";
 }
@@ -241,10 +328,15 @@ function showSubContent(subContentIndex)
 {
     hidefloorImages();
     resetSubTabButtons();
+
+    //Changing style of selected tab
     subTabButtons[subContentIndex].style.backgroundColor="transparent";
     subTabButtons[subContentIndex].style.color="#269BF0";
     subTabButtons[subContentIndex].style.borderBottom="3px solid #269BF0";
+
     hideSubContent();
+
+    //displaying subtab image div
     subTabContents[0].style.display="block";
     floorImages[1].style.display="-webkit-box";
 }
@@ -264,7 +356,7 @@ function resetMainTabButtons()
         node.style.color="";
     });
 }
-function hideMainTabButtons()
+function hideMainTabContents()
 {
     mainTabContents.forEach(function(node){
         node.style.display="none";
