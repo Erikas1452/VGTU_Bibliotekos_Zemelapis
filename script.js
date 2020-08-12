@@ -32,6 +32,14 @@ let rooms = new Set();
 //map type which is used to search for specified theme (floor and room maps can have same id)
 let idType = null;
 
+$(document).ready(function () {
+    simulateClick(document.querySelectorAll(".tabButtons button")[0].id);
+});
+
+function simulateClick(element)
+{
+    $("#".concat(element)).click();
+}
 
 //Sorting provided data
 function selectUniqueRooms()
@@ -59,6 +67,7 @@ function getShelves(topic)
         //caching data
         searchCache = JSON.parse(data);
         searchTopic = topic;
+        selectUniqueRooms();
     });
 }
 
@@ -163,8 +172,8 @@ function loadRoomImage(mapID)
 
      //Loading Tabs
 
-function loadTab(mapID,tabID) {
-    if(searchCache)selectUniqueRooms();
+function loadMainTab(mapID,tabID)
+{
     $("#tabContent").load("loadMainTab.php",{
         map: mapID,
         rooms: Array.from(rooms)
@@ -173,6 +182,15 @@ function loadTab(mapID,tabID) {
         getFloorImage(mapID);
         showContent(tabID);
     });
+}
+
+function loadCache(mapID,tabID,topic) {
+    $.ajax({
+        url:getShelves(topic),
+        success:function(){
+            loadMainTab(mapID,tabID);
+        }
+    })
 }
 
 function loadSubTab(mapID,tabID) {

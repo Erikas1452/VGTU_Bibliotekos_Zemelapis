@@ -39,6 +39,15 @@ input[type=submit]
     color: #fff;
 }
 
+h2{
+    color: #183D5B;
+}
+
+label
+{
+    color: #183D5B;
+}
+
 input[type=button]:hover
 {
     background-color: #00B1FF;
