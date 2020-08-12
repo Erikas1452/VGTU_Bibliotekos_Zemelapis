@@ -1,5 +1,5 @@
 <?php
-include "php/Map.php";
+
 include "php/DataGetter.php";
 
 $data = new DataGetter();

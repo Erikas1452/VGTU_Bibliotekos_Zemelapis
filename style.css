@@ -160,7 +160,8 @@ input[type=button]:hover
 .mainContainer
 {
     background: rgb(245,249,252);
-    width: 1050px;
+    width: auto;
+    min-width: 1050px;
 }
 
 .mainContainer input[type=text]
@@ -212,4 +213,9 @@ input[type=button]:hover
     text-align: left;
     padding-right: 30px;
     padding: 10px;
+}
+
+.marked
+{
+    color: #269BF0;
 }

@@ -1,6 +1,5 @@
 <?php
 include "php/DataGetter.php";
-include "php/Map.php";
 
 if(isset($_POST['map']))
 {

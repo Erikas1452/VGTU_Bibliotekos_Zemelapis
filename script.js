@@ -1,3 +1,5 @@
+//Tabs
+
 let floorImages;
 
 let mainTabButtons;
@@ -6,6 +8,7 @@ let mainTabContents;
 let subTabButtons;
 let subTabContents;
 
+//Image/Canvas
 let imgSource;
 let imgWidth;
 let imgHeight;
@@ -17,14 +20,20 @@ let scale;
 let preferedWidth = 600;
 let preferedHeight = 450;
 
+//Themes of Shelf
 let tableContents;
 
+//Cache for search bar
 let searchCache;
-
-let idType = null;
+let searchTopic;
 
 let rooms = new Set();
 
+//map type which is used to search for specified theme (floor and room maps can have same id)
+let idType = null;
+
+
+//Sorting provided data
 function selectUniqueRooms()
 {
     let shelves = searchCache["shelves"];
@@ -40,16 +49,20 @@ function selectUniqueRooms()
 // --------------Loading Data----------- //
 
 //  ||------------Shelves------------||
+
+//getting all shelves to mark and caching it for further use
 function getShelves(topic)
 {
     $.post("./fetchShelves.php",{
         topic: topic
     },function (data,status) {
-        console.log(data);
+        //caching data
         searchCache = JSON.parse(data);
+        searchTopic = topic;
     });
 }
 
+//getting data about shelf
 function getShelfThemes(shelfID) {
     $.post("./fetchShelfThemes.php", {
         shelfID: shelfID
@@ -58,7 +71,30 @@ function getShelfThemes(shelfID) {
         tableContents = data;
         console.log(data);
 
+        //loading shelf to web
         loadTable(data);
+    });
+}
+
+//getting shelf and colouring it on click
+function getShelf(mapID,x,y) {
+    $.post("./fetchShelf.php",{
+        map: mapID,
+        x: x,
+        y: y
+    },function(data,status){
+        if(JSON.parse(data))
+        {
+            data = JSON.parse(data);
+            console.log(data);
+
+            //Marking selected Shelf
+            clearCanvas();
+            drawRectangle(data["x1"] / scale[0], data["y1"] / scale[1], data['width'] / scale[0], data['height'] / scale[1]);
+
+            //Getting themes that are in selected shelf
+            getShelfThemes(data["id"]);
+        }
     });
 }
 
@@ -71,7 +107,7 @@ function getRoomImage(mapID)
     },function (data,status) {
         let temp = JSON.parse(data);
         imgSource=temp[0];
-        loadImage(mapID);
+        loadRoomImage(mapID);
         enableClicking();
     });
 }
@@ -90,15 +126,39 @@ function getFloorImage(mapID)
 function loadFloorImage(mapID)
 {
     idType = 'floorId';
+
     canvas = document.getElementById("floorCanvas");
     ctx = canvas.getContext('2d');
+
     image = new Image();
+
+    image.src = imgSource;
+
+    //on load display map on web
     image.onload = function () {
         saveOriginalWidth();
         prepareCanvas();
         drawImageOnCanvas(mapID);
     };
+}
+
+function loadRoomImage(mapID)
+{
+    idType = 'roomId';
+
+    canvas = document.getElementById("roomCanvas");
+    ctx = canvas.getContext('2d');
+
+    image = new Image();
+
     image.src = imgSource;
+
+    //on load display map on web
+    image.onload = function () {
+        saveOriginalWidth();
+        prepareCanvas();
+        drawImageOnCanvas(mapID);
+    };
 }
 
      //Loading Tabs
@@ -125,15 +185,17 @@ function loadSubTab(mapID,tabID) {
     });
 }
 
+    //Loading table of shelf content
 function loadTable(data) {
     $(".tableContents").load("./fillTable.php",{
-        contents: tableContents
+        contents: tableContents,
+        udk: searchTopic
     },function () {
 
     });
 }
 
-
+// ----TESTING---- //
 //Test for drawing out all coordinates provided from database for specified map
 
 // function drawAllShelves(mapID)
@@ -149,27 +211,7 @@ function loadTable(data) {
 //         });
 //     });
 // }
-
-function getShelf(mapID,x,y) {
-    $.post("./fetchShelf.php",{
-        map: mapID,
-        x: x,
-        y: y
-    },function(data,status){
-        if(JSON.parse(data))
-        {
-            data = JSON.parse(data);
-            console.log(data);
-
-            //Marking selected Shelf
-            clearCanvas();
-            drawRectangle(data["x1"] / scale[0], data["y1"] / scale[1], data['width'] / scale[0], data['height'] / scale[1]);
-
-            //Getting themes that are in selected shelf
-            getShelfThemes(data["id"]);
-        }
-    });
-}
+// ----TESTING---- //
 
 // --------------Calculations----------- //
 
@@ -267,20 +309,6 @@ function drawAllShelves(id)
     });
 }
 
-function loadImage(mapID)
-{
-    idType = 'roomId';
-    canvas = document.getElementById("roomCanvas");
-    ctx = canvas.getContext('2d');
-    image = new Image();
-    image.src = imgSource;
-    image.onload = function () {
-        saveOriginalWidth();
-        prepareCanvas();
-        drawImageOnCanvas(mapID);
-    };
-}
-
 function prepareCanvas()
 {
     let ratio = findRatio();
@@ -295,6 +323,7 @@ function drawImageOnCanvas(mapID)
 
 // --------------Working with tabs (changing styles etc.)----------- //
 
+//used for updating tabs after loading new content to web
 function refreshData()
 {
     floorImages=document.querySelectorAll(".tabContent .floorImage");

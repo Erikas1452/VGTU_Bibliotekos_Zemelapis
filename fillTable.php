@@ -4,7 +4,7 @@ if (isset($_POST["contents"]))
 {
     $contents = $_POST["contents"];
 }
-
+if (isset($_POST["udk"])) $udk = $_POST["udk"];
 
 echo '<table>';
     echo'<tr>';
@@ -14,7 +14,8 @@ echo '<table>';
     foreach ($contents as $themes)
     {
         foreach ($themes as $theme) {
-            echo '<tr>';
+            if(isset($udk) && $udk == $theme["udk"]) echo '<tr class="marked">';
+            else echo '<tr>';
             echo '<td>' .$theme["udk"] . '</td>';
             echo '<td>'.$theme["name"].'</td>';
             echo '</tr>';

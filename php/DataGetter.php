@@ -1,8 +1,5 @@
 <?php
 
-include 'ShelvesBlock.php';
-include 'Shelf.php';
-
 class DataGetter
 {
     private $database;
@@ -11,12 +8,10 @@ class DataGetter
     private $themes;
     private $selectedVal;
 
-    private $shelvesBlocks;
     private $floors;
 
     public function __construct()
     {
-        $this->shelvesBlocks = array();
         $this->floors = array();
     }
 
@@ -69,7 +64,7 @@ class DataGetter
         if(oci_execute($stmt))
         {
             $obj = json_decode($res->load(),true);
-            return array($obj["mapClob"],$obj["patalpos"]);
+            return array($obj["mapClob"],$obj["rooms"]);
         }
         else {
             echo "Error while getting floor";

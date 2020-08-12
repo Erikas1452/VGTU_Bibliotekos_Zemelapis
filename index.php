@@ -1,11 +1,7 @@
 <?php
 include 'php/DataGetter.php';
-include 'php/Display.php';
-include 'php/EventHandler.php';
-include 'php/Map.php';
 
 $data = new DataGetter();
-$handler = new EventHandler();
 
 //Data
 $data->connect();
@@ -77,14 +73,12 @@ $searchStatus = false;
                 $floors = $data->returnFloorNames();
 
                 $singleQuote = "'";
-                echo $singleQuote;
 
                 $searchFor = $singleQuote.$searchFor.$singleQuote;
 
                 $index = 0;
                 foreach($floors as $floor)
                 {
-                    echo $searchFor;
                     echo '<button id="tab-'.$floor[1].'"onclick="getShelves('.$searchFor.'), loadTab('.$floor[1].','.$index.');">'.$floor[0].'</button>';
                     $index++;
                 }
