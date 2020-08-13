@@ -16,8 +16,8 @@ echo '<table>';
         foreach ($themes as $theme) {
             if(isset($udk) && $udk == $theme["udk"]) echo '<tr class="marked">';
             else echo '<tr>';
-            echo '<td>' .$theme["udk"] . '</td>';
-            echo '<td>'.$theme["name"].'</td>';
+            echo '<td class="udk">' .$theme["udk"] . '</td>';
+            echo '<td class="theme">'.$theme["name"].'</td>';
             echo '</tr>';
         }
     }

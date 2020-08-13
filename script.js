@@ -17,8 +17,8 @@ let canvas;
 let ctx;
 let scale;
 
-let preferedWidth = 600;
-let preferedHeight = 450;
+let preferedWidth = 900;
+let preferedHeight = 800;
 
 //Themes of Shelf
 let tableContents;
@@ -269,29 +269,11 @@ function setCanvasSize(ratio)
     canvas.height = image.naturalHeight * ratio;
 }
 
-// --------------Interactiveness---------- //
-
-function enableClicking()
-{
-    //on click actions
-    canvas.addEventListener("mousedown", function(e)
-    {
-        //Get coordinates and map ID that is being clicked on
-        let coordinates=getMousePosition(canvas, e);
-        let ID = document.getElementById("roomCanvas").getAttribute("name");
-
-        getScale();
-
-        //Requesting info about shelf contents
-        getShelf(ID,coordinates[0]*scale[0],coordinates[1]*scale[1]);
-    });
-}
-
 // --------------Drawing----------- //
 
 function clearCanvas()
 {
-    ctx.clearRect(0,0,1000,1000);
+    ctx.clearRect(0,0,canvas.width,canvas.height);
     drawImageOnCanvas();
 }
 
@@ -368,7 +350,7 @@ function showContent(contentIndex)
 
     //displaying maintab image div
     mainTabContents[0].style.display="block";
-    floorImages[0].style.display="-webkit-box";
+    floorImages[0].style.display="block";
 }
 
 function showSubContent(subContentIndex)
@@ -385,7 +367,7 @@ function showSubContent(subContentIndex)
 
     //displaying subtab image div
     subTabContents[0].style.display="block";
-    floorImages[1].style.display="-webkit-box";
+    floorImages[1].style.display="block";
 }
 
 function resetSubTabButtons()
@@ -427,4 +409,23 @@ function hideContent(content)
     content.forEach(function(node){
         node.style.display="none";
     });
+}
+
+
+// --------------Interactiveness---------- //
+
+function enableClicking()
+{
+    //on click actions
+    canvas.addEventListener("mousedown", selectShelf);
+}
+
+function selectShelf(event)
+{
+    let coordinates=getMousePosition(canvas, event);
+    let ID = document.getElementById("roomCanvas").getAttribute("name");
+
+    getScale();
+    //Requesting info about shelf contents
+    getShelf(ID,coordinates[0]*scale[0],coordinates[1]*scale[1]);
 }
