@@ -459,10 +459,6 @@ function setup() {
     widthCanvas = canvas.width;
     heightCanvas = canvas.height;
 
-    canvas.addEventListener("mousedown", handleMouseDown, false); // click and hold to pan
-    canvas.addEventListener("mouseup", handleMouseUp, false);
-
-    canvas.addEventListener("mousemove", handleMouseMove, false);
     canvas.addEventListener("mousewheel", handleMouseWheel, false); // mousewheel duplicates dblclick function
     canvas.addEventListener("DOMMouseScroll", handleMouseWheel, false); // for Firefox
 
@@ -473,60 +469,46 @@ function draw() {
     ctx.setTransform(1,0,0,1,0,0);
     ctx.scale(widthCanvas/widthView, heightCanvas/heightView);
     ctx.translate(-xleftView,-ytopView);
+
     ctx.clearRect(0,0,1,1);
-    ctx.fillStyle="white";
-    ctx.rect(0,0,1,1);
     ctx.drawImage(image,0,0, 1,1);
-    ctx.fillStyle="green";
-    ctx.beginPath();
-    ctx.arc(widthView/2+xleftView,heightView/2+ytopView,0.05,0,360,false);
-    ctx.fill();
-}
-
-function handleMouseDown(event) {
-    mouseDown = true;
-}
-
-function handleMouseUp(event) {
-    mouseDown = false;
-}
-
-function handleMouseMove(event) {
-
-    temp = getMousePosition(canvas,event);
-    let X = temp[0];
-    let Y = temp[1];
-    console.log(temp);
-    if (mouseDown) {
-        let dx = (X - lastX) / widthCanvas * widthView;
-        let dy = (Y - lastY)/ heightCanvas * heightView;
-        xleftView -= dx;
-        ytopView -= dy;
-    }
-    lastX = X;
-    lastY = Y;
-
-    draw();
 }
 
 function handleMouseWheel(event) {
-    let x = widthView/2 + xleftView;  // View coordinates
-    let y = heightView/2 + ytopView;
-
+    temp = getMousePosition(canvas,event);
+    let X = temp[0];
+    let Y = temp[1];
+    let x = X/widthCanvas * widthView + xleftView;
+    let y = Y/heightCanvas * heightView + ytopView;
     let zoomScale = (event.wheelDelta < 0 || event.detail > 0) ? 1.1 : 0.9;
     widthView *= zoomScale;
     heightView *= zoomScale;
-
-    if (widthView > widthViewOriginal || heightView > heightViewOriginal) {
+    if ((widthView > widthViewOriginal || heightView > heightViewOriginal) || (widthView < 0.4 || heightView < 0.4)) {
         widthView = widthViewOriginal;
         heightView = heightViewOriginal;
         x = widthView/2;
         y = heightView/2;
     }
-
-    // zoomScale about center of view, rather than mouse position. This is different than dblclick behavior.
     xleftView = x - widthView/2;
     ytopView = y - heightView/2;
 
+    ctx.clearRect(0,0,1,1);
     draw();
 }
+
+//
+// let scale = event.shiftKey == 1 ? 1.5 : 0.5; // shrink (1.5) if shift key pressed
+// widthView *= zoomScale;
+// heightView *= zoomScale;
+//
+// if (widthView > widthViewOriginal || heightView > heightViewOriginal) {
+//     widthView = widthViewOriginal;
+//     heightView = heightViewOriginal;
+//     x = widthView/2;
+//     y = heightView/2;
+// }
+//
+// xleftView = x - widthView/2;
+// ytopView = y - heightView/2;
+//
+// draw();
