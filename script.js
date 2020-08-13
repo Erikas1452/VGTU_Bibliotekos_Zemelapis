@@ -148,7 +148,6 @@ function loadFloorImage(mapID)
         saveOriginalWidth();
         prepareCanvas();
         drawImageOnCanvas(mapID);
-        setup();
     };
 }
 
@@ -439,103 +438,4 @@ function lockScroll()
 function unlockScroll()
 {
     document.body.style.overflow = '';
-}
-
-// View parameters
-let xleftView = 0;
-let ytopView = 0;
-let widthViewOriginal = 1.0;           //actual width and height of zoomed and panned display
-let heightViewOriginal = 1.0;
-let widthView = widthViewOriginal;           //actual width and height of zoomed and panned display
-let heightView = heightViewOriginal;
-
-let mouseDown = false;
-let lastX = 0;
-let lastY = 0;
-
-function setup() {
-
-    widthCanvas = canvas.width;
-    heightCanvas = canvas.height;
-
-    canvas.addEventListener("mousedown", handleMouseDown, false); // click and hold to pan
-    canvas.addEventListener("mousemove", handleMouseMove, false);
-    canvas.addEventListener("mouseup", handleMouseUp, false);
-    canvas.addEventListener("mousewheel", handleMouseWheel, false); // mousewheel duplicates dblclick function
-    canvas.addEventListener("DOMMouseScroll", handleMouseWheel, false); // for Firefox
-
-    ctx.clearRect(0,0,1,1);
-    draw();
-}
-
-function draw() {
-    ctx.setTransform(1,0,0,1,0,0);
-    ctx.scale(widthCanvas/widthView, heightCanvas/heightView);
-    ctx.translate(-xleftView,-ytopView);
-
-    ctx.clearRect(0,0,1,1);
-    ctx.drawImage(image,0,0, 1,1);
-    if(searchCache) drawAllShelves(idType);
-}
-
-function handleMouseDown(event) {
-    mouseDown = true;
-}
-
-function handleMouseUp(event) {
-    mouseDown = false;
-}
-
-function handleMouseMove(event) {
-
-    temp = getMousePosition(canvas,event);
-    let X = temp[0];
-    let Y = temp[1];
-
-    if (mouseDown) {
-        let dx = (X - lastX) / widthCanvas * widthView;
-        let dy = (Y - lastY)/ heightCanvas * heightView;
-        xleftView -= dx;
-        ytopView -= dy;
-    }
-
-    if (xleftView > 0.85 || xleftView < -0.85 || ytopView > 0.85 || ytopView < -0.85) {
-        widthView = widthViewOriginal;
-        heightView = heightViewOriginal;
-        let x = widthView/2 + xleftView;
-        let y = heightView/2 + ytopView;
-        x = widthView/2;
-        y = heightView/2;
-        xleftView = x - widthView/2;
-        ytopView = y - heightView/2;
-    }
-
-    lastX = X;
-    lastY = Y;
-
-    ctx.clearRect(0,0,1,1);
-    draw();
-}
-
-function handleMouseWheel(event) {
-    let x = widthView/2 + xleftView;
-    let y = heightView/2 + ytopView;
-
-    let scale = (event.wheelDelta < 0 || event.detail > 0) ? 1.1 : 0.9;
-    widthView *= scale;
-    heightView *= scale;
-
-    if (widthView > widthViewOriginal || heightView > heightViewOriginal) {
-        widthView = widthViewOriginal;
-        heightView = heightViewOriginal;
-        x = widthView/2;
-        y = heightView/2;
-    }
-
-    // scale about center of view, rather than mouse position. This is different than dblclick behavior.
-    xleftView = x - widthView/2;
-    ytopView = y - heightView/2;
-
-    ctx.clearRect(0,0,1,1);
-    draw();
 }
