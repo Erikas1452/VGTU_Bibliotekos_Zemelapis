@@ -24,6 +24,7 @@ function setup() {
 
     canvas.addEventListener("mousedown", handleMouseDown, false); // click and hold to pan
     canvas.addEventListener("mouseup", handleMouseUp, false);
+
     canvas.addEventListener("mousemove", handleMouseMove, false);
     canvas.addEventListener("mousewheel", handleMouseWheel, false); // mousewheel duplicates dblclick function
     canvas.addEventListener("DOMMouseScroll", handleMouseWheel, false); // for Firefox
@@ -46,29 +47,6 @@ function draw() {
     ctx.beginPath();
     ctx.arc(widthView/2+xleftView,heightView/2+ytopView,0.05,0,360,false);
     ctx.fill();
-}
-
-function handleDblClick(event) {
-    let X = event.clientX - this.offsetLeft - this.clientLeft + this.scrollLeft; //Canvas coordinates
-    let Y = event.clientY - this.offsetTop - this.clientTop + this.scrollTop;
-    let x = X/widthCanvas * widthView + xleftView;  // View coordinates
-    let y = Y/heightCanvas * heightView + ytopView;
-
-    let scale = event.shiftKey == 1 ? 1.5 : 0.5; // shrink (1.5) if shift key pressed
-    widthView *= scale;
-    heightView *= scale;
-
-    if (widthView > widthViewOriginal || heightView > heightViewOriginal) {
-        widthView = widthViewOriginal;
-        heightView = heightViewOriginal;
-        x = widthView/2;
-        y = heightView/2;
-    }
-
-    xleftView = x - widthView/2;
-    ytopView = y - heightView/2;
-
-    draw();
 }
 
 let mouseDown = false;

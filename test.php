@@ -9,10 +9,10 @@
             float: left;}
         width: 200;
         eight: 200;}
-    </style>
-    </head>
+             </style>
+       </head>
 
-    <body>
+   <body>
      <canvas id="canvas" width="200" height="200"></canvas>
 
      <div>

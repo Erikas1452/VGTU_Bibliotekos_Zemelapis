@@ -38,7 +38,7 @@ class DataGetter
         $newX = round($x,0);
         $newY = round($y, 0);
         $res = oci_new_descriptor($this->connection);
-        $stmt = oci_parse($this->connection,"begin :res := bibl_json_pck.get_coords_fnc(:id, :x, :y); end;");
+        $stmt = oci_parse($this->connection,"begin :res := bibl_json_pck.get_room_shelf_coords_fnc(:id, :x, :y); end;");
         oci_bind_by_name($stmt, ':res', $res, -1,OCI_B_CLOB);
         oci_bind_by_name($stmt, ':id', $mapID, 50000);
         oci_bind_by_name($stmt, ':x', $newX, 50000);

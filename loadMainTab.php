@@ -38,7 +38,7 @@ echo'<div class="subTabButtons">';
 echo'</div>';
 
 echo'<div class="floorImage">';
-    echo '<canvas id="floorCanvas"></canvas>';
+    echo '<canvas onmouseenter="lockScroll()" onmouseleave="unlockScroll()" id="floorCanvas"></canvas>';
         echo'<div class="tableContents">';
 
         echo'</div>';

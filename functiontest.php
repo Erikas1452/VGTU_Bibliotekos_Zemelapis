@@ -379,6 +379,22 @@ if(!$connection) echo "Failed to connect";
 //    echo "Error";
 //}
 
+//$res = oci_new_descriptor($connection);
+//$lang = "lt";
+//$id = 1;
+//$stmt = oci_parse($connection,"begin :a := get_floor_fnc(:b, :lang); end;");
+//oci_bind_by_name($stmt, ':a', $res, -1,OCI_B_CLOB);
+//oci_bind_by_name($stmt, ':b', $id, 50000);
+//oci_bind_by_name($stmt, ':lang', $lang, 50000);
+//
+//if(oci_execute($stmt))
+//{
+//    echo $res->load();
+//}
+//else echo "Error";
+//
+//echo"DONE";
+
 $res = oci_new_descriptor($connection);
 $lang = "lt";
 $id = 1;
