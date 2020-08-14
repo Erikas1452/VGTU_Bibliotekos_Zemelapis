@@ -25,6 +25,44 @@ class DataGetter
         }
     }
 
+    private function formatSQL(array $params): string
+    {
+        $sql = '';
+
+        for ($i = 0; $i < \count($params); $i++) {
+            if ($i == 0) {
+                $sql .= ':' . array_keys($params)[$i];
+            } else {
+                $sql .= ', :' . array_keys($params)[$i];
+            }
+        }
+
+        $sql .= '); end;';
+
+        return $sql;
+    }
+
+    public function call(string $name, array $params = []): ?array
+    {
+        $connect = $this->connection;
+
+        $sql = 'BEGIN :r := ' . $name . '(';
+        $sql .= $this->formatSQL($params);
+
+        $stmt = oci_parse($connect, $sql);
+
+        foreach ($params as $key => $value) {
+            oci_bind_by_name($stmt, ':' . $key, $params[$key], 50000);
+        }
+
+        $r = oci_new_descriptor($connect);
+        oci_bind_by_name($stmt, ':r', $r, -1, OCI_B_CLOB);
+
+        if(oci_execute($stmt)) return $r ? json_decode($r->load(), true) : $r;
+        else return "Error";
+
+    }
+
     public function getValueFromSelection($button,$value_to_get)
     {
         if (isset($_POST[$button]))
@@ -35,209 +73,140 @@ class DataGetter
 
     public function getShelf($mapID,$x,$y)
     {
-        $newX = round($x,0);
-        $newY = round($y, 0);
-        $res = oci_new_descriptor($this->connection);
-        $stmt = oci_parse($this->connection,"begin :res := bibl_json_pck.get_room_shelf_coords_fnc(:id, :x, :y); end;");
-        oci_bind_by_name($stmt, ':res', $res, -1,OCI_B_CLOB);
-        oci_bind_by_name($stmt, ':id', $mapID, 50000);
-        oci_bind_by_name($stmt, ':x', $newX, 50000);
-        oci_bind_by_name($stmt, ':y', $newY, 50000);
-        if(oci_execute($stmt))
-        {
-            return $res->load();
-        }
-        else {
-            echo "Error";
-        }
+        $params['id'] = $mapID;
+        $params['x'] = round($x,0);
+        $params['y'] = round($y,0);
+
+        $stmt = 'bibl_json_pck.get_room_shelf_coords_fnc';
+
+        return json_encode($this->call($stmt,$params));
     }
 
     public function getFloor($id)
     {
-        $res = oci_new_descriptor($this->connection);
-        $lang = "lt";
-        $stmt = oci_parse($this->connection,"begin :a := bibl_json_pck.get_floor_fnc(:b, :lang); end;");
-        oci_bind_by_name($stmt, ':a', $res, -1,OCI_B_CLOB);
-        oci_bind_by_name($stmt, ':b', $id, 50000);
-        oci_bind_by_name($stmt, ':lang', $lang, 50000);
 
-        if(oci_execute($stmt))
-        {
-            $obj = json_decode($res->load(),true);
-            return array($obj["mapClob"],$obj["rooms"]);
-        }
-        else {
-            echo "Error while getting floor";
-        }
+        $params['id'] = $id;
+        $params['p_kalba_i'] = "lt";
+
+        $stmt = 'bibl_json_pck.get_floor_fnc';
+
+        $obj = $this->call($stmt,$params);
+        return array($obj["mapClob"],$obj["rooms"]);
     }
 
     public function getFloorTabs()
     {
-        $res = oci_new_descriptor($this->connection);
-        $lang = "lt";
-        $stmt = oci_parse($this->connection,"begin :a := bibl_json_pck.get_all_floors_fnc(:lang); end;");
-        oci_bind_by_name($stmt, ':lang', $lang, 50000);
-        oci_bind_by_name($stmt, ':a', $res, -1,OCI_B_CLOB);
+        $params['p_kalba_i'] = "lt";
+        $stmt = 'bibl_json_pck.get_all_floors_fnc';
+
+        $obj = $this->call($stmt,$params);
 
         $index = 0;
-        if(oci_execute($stmt))
-        {
-            $obj = json_decode($res->load(),true);
 
-            foreach ($obj as $floor)
-            {
-                foreach ($floor as $data) {
-                    $temp = array($data["name"], $data["id"]);
-                    $this->floors[$index] = $temp;
-                    $index++;
-                }
+        foreach ($obj as $floor)
+        {
+            foreach ($floor as $data) {
+                $temp = array($data["name"], $data["id"]);
+                $this->floors[$index] = $temp;
+                $index++;
             }
-        }
-        else {
-            echo "Error while getting tab names";
         }
     }
 
     public function getRoomClick($mapID,$x,$y)
     {
-        $newX = round($x,0);
-        $newY = round($y, 0);
-        $res = oci_new_descriptor($this->connection);
+        $params['id'] = $mapID;
+        $params['x'] = round($x,0);
+        $params['y'] = round($y,0);
 
-        $stmt = oci_parse($this->connection,"begin :res :=bibl_json_pck.get_room_coords_fnc(:id, :x, :y); end;");
-        oci_bind_by_name($stmt, ':res', $res, -1,OCI_B_CLOB);
-        oci_bind_by_name($stmt, ':id', $mapID, 50000);
-        oci_bind_by_name($stmt, ':x', $newX, 50000);
-        oci_bind_by_name($stmt, ':y', $newY, 50000);
+        $stmt = "bibl_json_pck.get_room_coords_fnc";
 
-        if(oci_execute($stmt))
-        {;
-            return $res->load();
-        }
-        else {
-            return "Error";
-        }
+        return json_encode($this->call($stmt,$params));
+
     }
 
     public function getFloorTabsByTopic($topic)
     {
-        $res = oci_new_descriptor($this->connection);
-        $lang = "lt";
-        $stmt = oci_parse($this->connection,"begin :res := bibl_json_pck.get_all_topic_locations_fnc(:id, :lang); end;");
+        $params['udk'] = $topic;
+        $params['p_kalba_i'] = "lt";
 
-        oci_bind_by_name($stmt, ':res', $res, -1,OCI_B_CLOB);
-        oci_bind_by_name($stmt, ':id', $topic, 50000);
-        oci_bind_by_name($stmt, ':lang', $lang, 50000);
+        $stmt = 'bibl_json_pck.get_all_topic_locations_fnc';
+
 
         $index = 0;
         $tempTabs = array();
 
-        if(oci_execute($stmt))
-        {
-            $obj = json_decode($res->load(),true);
-            $obj = $obj["shelves"];
-            foreach ($obj as $shelf) {
-                if(!in_array($shelf["name"],$tempTabs))
-                {
-                    $tempTabs[$index] = $shelf["name"];
+        $obj = $this->call($stmt,$params);
 
-                    $temp = array($shelf["name"],$shelf["floorId"]);
-                    $this->floors[$index] = $temp;
+        $obj = $obj["shelves"];
+        foreach ($obj as $shelf) {
+            if(!in_array($shelf["name"],$tempTabs))
+            {
+                $tempTabs[$index] = $shelf["name"];
 
-                    $index++;
-                }
+                $temp = array($shelf["name"],$shelf["floorId"]);
+                $this->floors[$index] = $temp;
+
+                $index++;
             }
-        }
-        else {
-            echo "Error while getting tab by topic";
         }
     }
 
     public function getShelves($topic)
     {
-        $res = oci_new_descriptor($this->connection);
-        $lang = "lt";
-        $stmt = oci_parse($this->connection,"begin :res := bibl_json_pck.get_all_topic_locations_fnc(:id, :lang); end;");
+        $params['id'] = $topic;
+        $params['p_kalba_i'] = "lt";
 
-        oci_bind_by_name($stmt, ':res', $res, -1,OCI_B_CLOB);
-        oci_bind_by_name($stmt, ':id', $topic, 50000);
-        oci_bind_by_name($stmt, ':lang', $lang, 50000);
-        if(oci_execute($stmt))
-        {
-            return $res->load();
-        }
-        else
-        {
-            echo "Error while getting all shelves";
-        }
+        $stmt = 'bibl_json_pck.get_all_topic_locations_fnc';
+
+        return json_encode($this->call($stmt,$params));
+
     }
 
     public function getRoom($id)
     {
-        $res = oci_new_descriptor($this->connection);
-        $lang = "en";
-        $stmt = oci_parse($this->connection,"begin :a := bibl_json_pck.get_room_fnc(:b, :lang); end;");
-        oci_bind_by_name($stmt, ':a', $res, -1,OCI_B_CLOB);
-        oci_bind_by_name($stmt, ':b', $id, 50000);
-        oci_bind_by_name($stmt, ':lang', $lang, 50000);
 
-        if(oci_execute($stmt))
-        {
-            $obj = json_decode($res->load(),true);
-            return $obj["mapClob"];
-        }
-        else {
-            echo "Error while getting room map";
-        }
+        $params['id'] = $id;
+        $params['p_kalba_i'] = "lt";
+
+        $stmt ='bibl_json_pck.get_room_fnc';
+
+        $obj = $this->call($stmt,$params);
+        return  $obj["mapClob"];
+
     }
 
     public function getShelfThemes($shelfID)
     {
-        $res = oci_new_descriptor($this->connection);
-        $lang = "lt";
-        $stmt = oci_parse($this->connection,"begin :res := bibl_json_pck.get_all_shelf_topics_fnc(:id, :lang); end;");
-        oci_bind_by_name($stmt, ':res', $res, -1,OCI_B_CLOB);
-        oci_bind_by_name($stmt, ':id', $shelfID, 50000);
-        oci_bind_by_name($stmt, ':lang', $lang, 50000);
+        $params['id'] = $shelfID;
+        $params['p_kalba_i'] = "lt";
 
-        if(oci_execute($stmt))
-        {
-            return $res->load();
-        }
-        else {
-            echo "Error";
-        }
+        $stmt ='bibl_json_pck.get_all_shelf_topics_fnc';
+
+        return json_encode($this->call($stmt,$params));
+
     }
 
     public function getThemes()
     {
+        $params['p_kalba_i'] = "lt";
 
-        $stmt = oci_parse($this->connection,"begin :json := bibl_json_pck.gauti_visus_kng_pavad_fnc(:lang); end;");
-        $lang = "lt";
-        oci_bind_by_name($stmt,':lang', $lang, 50000);
-        $res = oci_new_descriptor($this->connection);
-        oci_bind_by_name($stmt, ':json', $res, -1,OCI_B_CLOB);
+        $stmt ='bibl_json_pck.gauti_visus_kng_pavad_fnc';
 
+        $obj = $this->call($stmt,$params);
 
-        if(oci_execute($stmt))
-        {
-            $obj = json_decode($res->load(),true);
-            $size = 0;
-            foreach ($obj as $themes) {
-                foreach ($themes as $theme) {
-                    $index = 0;
-                    $tempTheme = array();
-                    foreach ($theme as $value) {
-                        $tempTheme[$index] = $value;
-                        $index++;
-                    }
-                    $this->themes[$size] = $tempTheme;
-                    $size++;
+        $size = 0;
+        foreach ($obj as $themes) {
+            foreach ($themes as $theme) {
+                $index = 0;
+                $tempTheme = array();
+                foreach ($theme as $value) {
+                    $tempTheme[$index] = $value;
+                    $index++;
                 }
+                $this->themes[$size] = $tempTheme;
+                $size++;
             }
-        }
-        else {
-            echo "Error while getting all themes";
         }
     }
 
@@ -250,7 +219,6 @@ class DataGetter
     {
         return $this->selectedVal;
     }
-
 
     public function returnFloorNames()
     {
