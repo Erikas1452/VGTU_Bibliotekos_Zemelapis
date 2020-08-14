@@ -5,7 +5,6 @@ let floorImages;
 let mainTabButtons;
 let mainTabContents;
 
-let subTabButtons;
 let subTabContents;
 
 //Image/Canvas
@@ -17,7 +16,7 @@ let canvas;
 let ctx;
 let scale;
 
-let preferedWidth = 900;
+let preferedWidth = 850;
 let preferedHeight = 800;
 
 //Themes of Shelf
@@ -92,17 +91,53 @@ function getShelf(mapID,x,y) {
         x: x,
         y: y
     },function(data,status){
-        if(JSON.parse(data))
+        if(data != "Error")
         {
             data = JSON.parse(data);
-            console.log(data);
 
-            //Marking selected Shelf
-            clearCanvas();
-            drawRectangle(data["x1"] / scale[0], data["y1"] / scale[1], data['width'] / scale[0], data['height'] / scale[1]);
-
+            if(!isMarked(mapID,x,y))
+            {
+                clearCanvas();
+                if(searchCache)drawAllShelves(mapID);
+                drawRectangle(data["x1"] / scale[0], data["y1"] / scale[1], data['width'] / scale[0], data['height'] / scale[1])
+            }
+            else
+            {
+                clearCanvas()
+                if(searchCache)drawAllShelves(mapID);
+            }
             //Getting themes that are in selected shelf
             getShelfThemes(data["id"]);
+        }
+    });
+}
+
+function isMarked(mapID,x,y)
+{
+    if(searchCache) return false;
+    let res = false;
+
+    if(searchCache)
+    {
+        let shelves = searchCache["shelves"];
+        shelves.forEach(function (shelf) {
+            if((mapID == shelf["roomId"]) && (x >= shelf["roomX1"] && x <= shelf["roomWidth"] + shelf["roomX1"]) && (y >= shelf["roomY1"] && y <= shelf["roomHeight"] + shelf["roomY1"])) res = true;
+        });
+    }
+
+    return res;
+}
+
+function getRoom(mapID,x,y) {
+    $.post("./fetchRoomID.php",{
+        map: mapID,
+        x: x,
+        y: y
+    },function(data,status){
+        if(data != "Error")
+        {
+            data = JSON.parse(data);
+            loadSubTab(data["id"],0);
         }
     });
 }
@@ -117,7 +152,7 @@ function getRoomImage(mapID)
         let temp = JSON.parse(data);
         imgSource=temp[0];
         loadRoomImage(mapID);
-        enableClicking();
+        enableClicking(selectShelf);
     });
 }
 
@@ -129,6 +164,7 @@ function getFloorImage(mapID)
         let temp = JSON.parse(data);
         imgSource=temp[0];
         loadFloorImage(mapID);
+        enableClicking(selectRoom);
     });
 }
 
@@ -199,7 +235,7 @@ function loadSubTab(mapID,tabID) {
     },function () {
         refreshData();
         getRoomImage(mapID);
-        showSubContent(tabID);
+        showSubContent();
     });
 }
 
@@ -236,9 +272,9 @@ function loadTable(data) {
 function getMousePosition(canvas, event)
 {
     let rect = canvas.getBoundingClientRect();
-    x = event.clientX - rect.left;
-    y = event.clientY - rect.top;
-    return [x, y];
+    let x = event.clientX - rect.left;
+    let y = event.clientY - rect.top;
+    return [Math.round(x), Math.round(y)];
 }
 
 function getScale()
@@ -330,7 +366,6 @@ function refreshData()
     mainTabButtons=document.querySelectorAll(".tabButtons button");
     mainTabContents=document.querySelectorAll(".tabContent");
 
-    subTabButtons=document.querySelectorAll(".tabContent .subTabButtons button");
     subTabContents=document.querySelectorAll(".tabContent .subTabContent");
 }
 
@@ -338,7 +373,6 @@ function showContent(contentIndex)
 {
     //reseting styles
     resetMainTabButtons();
-    resetSubTabButtons();
     hideSubContent();
 
     //Changing style of selected tab
@@ -352,16 +386,9 @@ function showContent(contentIndex)
     floorImages[0].style.display="block";
 }
 
-function showSubContent(subContentIndex)
+function showSubContent()
 {
     hidefloorImages();
-    resetSubTabButtons();
-
-    //Changing style of selected tab
-    subTabButtons[subContentIndex].style.backgroundColor="transparent";
-    subTabButtons[subContentIndex].style.color="#269BF0";
-    subTabButtons[subContentIndex].style.borderBottom="3px solid #269BF0";
-
     hideSubContent();
 
     //displaying subtab image div
@@ -369,14 +396,6 @@ function showSubContent(subContentIndex)
     floorImages[1].style.display="block";
 }
 
-function resetSubTabButtons()
-{
-    subTabButtons.forEach(function(node){
-        node.style.backgroundColor="";
-        node.style.color="";
-        node.style.borderBottom="";
-    });
-}
 function resetMainTabButtons()
 {
     mainTabButtons.forEach(function(node){
@@ -413,20 +432,28 @@ function hideContent(content)
 
 // --------------Interactiveness---------- //
 
-function enableClicking()
+function enableClicking(fnc)
 {
     //on click actions
-    canvas.addEventListener("mousedown", selectShelf);
+    canvas.addEventListener("mousedown", fnc);
 }
 
 function selectShelf(event)
 {
     let coordinates=getMousePosition(canvas, event);
     let ID = document.getElementById("roomCanvas").getAttribute("name");
-
     getScale();
     //Requesting info about shelf contents
+    console.log(coordinates);
     getShelf(ID,coordinates[0]*scale[0],coordinates[1]*scale[1]);
+}
+
+function selectRoom(event)
+{
+    let coordinates=getMousePosition(canvas, event);
+    let ID = document.getElementById("floorCanvas").getAttribute("name");
+    getScale();
+    getRoom(ID,coordinates[0]*scale[0],coordinates[1]*scale[1]);
 }
 
 //Zoom

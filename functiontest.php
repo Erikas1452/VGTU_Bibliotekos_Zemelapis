@@ -395,18 +395,51 @@ if(!$connection) echo "Failed to connect";
 //
 //echo"DONE";
 
+//$res = oci_new_descriptor($connection);
+//$lang = "lt";
+//$id = 1;
+//$stmt = oci_parse($connection,"begin :a := get_floor_fnc(:b, :lang); end;");
+//oci_bind_by_name($stmt, ':a', $res, -1,OCI_B_CLOB);
+//oci_bind_by_name($stmt, ':b', $id, 50000);
+//oci_bind_by_name($stmt, ':lang', $lang, 50000);
+//
+//if(oci_execute($stmt))
+//{
+//    echo $res->load();
+//}
+//else echo "Error";
+//
+//echo"DONE";
+
+//$res = oci_new_descriptor($connection);
+//$mapID = 2;
+//$x=869;
+//$y=1700;
+//$stmt = oci_parse($connection,"begin :res :=bibl_json_pck.get_room_coords_fnc(:id, :x, :y); end;");
+//oci_bind_by_name($stmt, ':res', $res, -1,OCI_B_CLOB);
+//oci_bind_by_name($stmt, ':id', $mapID, 50000);
+//oci_bind_by_name($stmt, ':x', $x, 50000);
+//oci_bind_by_name($stmt, ':y', $y, 50000);
+//
+//if(oci_execute($stmt))
+//{;
+//    echo $res->load();
+//}
+//else {
+//    echo "Error";
+//}
+//
+//echo"DONE";
+
 $res = oci_new_descriptor($connection);
+$stmt = oci_parse($connection,"begin :res := bibl_json_pck.gauti_visus_kng_pavad_fnc(:lang); end;");
 $lang = "lt";
-$id = 1;
-$stmt = oci_parse($connection,"begin :a := get_floor_fnc(:b, :lang); end;");
-oci_bind_by_name($stmt, ':a', $res, -1,OCI_B_CLOB);
-oci_bind_by_name($stmt, ':b', $id, 50000);
-oci_bind_by_name($stmt, ':lang', $lang, 50000);
+oci_bind_by_name($stmt,':lang', $lang, 50000);
+oci_bind_by_name($stmt, ':res', $res, -1,OCI_B_CLOB);
 
-if(oci_execute($stmt))
-{
+
+if(oci_execute($stmt)) {
     echo $res->load();
+    $obj = json_decode($res->load(), true);
 }
-else echo "Error";
-
-echo"DONE";
+else echo "error";

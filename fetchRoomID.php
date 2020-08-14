@@ -11,6 +11,6 @@ if(isset($_POST['map']))
     $y = $_POST['y'];
 }
 
-$response = $data->getShelf($mapId,$x,$y);
+$response = $data->getRoomClick($mapId, $x, $y);
 
 echo $response;

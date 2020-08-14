@@ -68,7 +68,7 @@ if(isset($_POST["Search"]))
             //creating tabs
             if($searchStatus == true)
             {
-                $data->getFloorTabsByTopic($searchFor);
+                $data->getFloorTabs();
                 $floors = $data->returnFloorNames();
 
                 $singleQuote = "'";

@@ -138,7 +138,8 @@ input[type=button]:hover
 
 .floorImage
  {
-     display: block;
+    padding: 30px;
+    display: block;
  }
 
 .floorImage canvas
@@ -171,6 +172,7 @@ input[type=button]:hover
     background: rgb(245,249,252);
     width: auto;
     min-width: 1050px;
+    min-height: 850px;
 }
 
 .mainContainer input[type=text]
@@ -206,8 +208,18 @@ input[type=button]:hover
     padding-bottom: 40px;
 }
 
-.tableContents th
+.tableContents th.udk
 {
+    min-width: 140px;
+    padding-right: 30px;
+    padding: 10px;
+    background-color: #edf5fc;
+    text-align: left;
+}
+
+.tableContents th.theme
+{
+    width: 100%;
     padding-right: 30px;
     padding: 10px;
     background-color: #edf5fc;
@@ -216,7 +228,7 @@ input[type=button]:hover
 
 .tableContents td.udk
 {
-    width: 100px;
+    min-width: 140px;
     background-color: #fcfdfe;
     text-align: left;
     padding-right: 30px;

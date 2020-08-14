@@ -18,7 +18,12 @@ echo'<div class="floorImage">';
 
 echo'<canvas name="'.$mapId.'" id="roomCanvas"></canvas>';
     echo'<div class="tableContents">';
-
+        echo '<table>';
+            echo'<tr>';
+                echo'<th class="udk">UDK</th>';
+                echo'<th class="theme">Tema</th>';
+            echo'</tr>';
+        echo '</table>';
     echo'</div>';
 echo'</div>';
 

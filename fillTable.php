@@ -8,8 +8,8 @@ if (isset($_POST["udk"])) $udk = $_POST["udk"];
 
 echo '<table>';
     echo'<tr>';
-        echo'<th>UDK</th>';
-        echo'<th>Tema</th>';
+        echo'<th class="udk">UDK</th>';
+        echo'<th class="theme">Tema</th>';
     echo'</tr>';
     foreach ($contents as $themes)
     {
