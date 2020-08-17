@@ -28,12 +28,43 @@ let searchTopic;
 
 let rooms = new Set();
 
+//Cache for tables
+let tables;
+
 //map type which is used to search for specified theme (floor and room maps can have same id)
 let idType = null;
 
+$('#besideMouse').hide();
+
 $(document).ready(function () {
     simulateClick(document.querySelectorAll(".tabButtons button")[0].id);
+    $(document).mousemove(function(e){
+        let cpos = { top: e.pageY + 10, left: e.pageX + 20 };
+        $('#besideMouse').offset(cpos);
+    });
 });
+
+function display(event)
+{
+    getScale();
+    console.log("moving");
+    temp = getMousePosition(canvas,event);
+    if(isTable(temp[0],temp[1]))
+    {
+        let data = isTable(temp[0],temp[1]);
+        let str = data;
+        console.log(str);
+        $("#besideMouse").show();
+        $("#besideMouse").html(str);
+    }
+    else disableHover();
+
+}
+function disableHover()
+{
+    $("#besideMouse").hide();
+    $("#besideMouse").html("");
+}
 
 function simulateClick(element)
 {
@@ -54,6 +85,18 @@ function selectUniqueRooms()
 }
 
 // --------------Loading Data----------- //
+
+//  ||------------Tables------------||
+
+function getTables(mapID)
+{
+    $.post("./fetchTables.php",
+        {
+            id: mapID
+        }, function (data,status) {
+            tables = JSON.parse(data);
+        });
+}
 
 //  ||------------Shelves------------||
 
@@ -112,9 +155,22 @@ function getShelf(mapID,x,y) {
     });
 }
 
+function isTable(x,y) {
+    let res = false
+    x *= scale[0];
+    y *= scale[1];
+    if(tables)
+    {
+        let temp = tables["tables"];
+        temp.forEach(function (table) {
+            if( (x >= table["x1"] && x <= table["width"] + table["x1"]) && (y >= table["y1"] && y <= table["height"] + table["y1"])) res = table["name"];
+        });
+    }
+    return res;
+}
+
 function isMarked(mapID,x,y)
 {
-    if(searchCache) return false;
     let res = false;
 
     if(searchCache)
@@ -149,11 +205,22 @@ function getRoomImage(mapID)
     $.post("./fetchMap.php",{
         map: mapID
     },function (data,status) {
+
         let temp = JSON.parse(data);
+
         imgSource=temp[0];
+
         loadRoomImage(mapID);
+
+        //enabling interactivity after loading image
+        setupTableHover();
         enableClicking(selectShelf);
     });
+}
+
+function setupTableHover()
+{
+    canvas.addEventListener("mousemove",display);
 }
 
 function getFloorImage(mapID)
@@ -161,9 +228,14 @@ function getFloorImage(mapID)
     $.post("./fetchFloorMap.php",{
         map: mapID
     },function (data,status) {
+
         let temp = JSON.parse(data);
+
         imgSource=temp[0];
+
         loadFloorImage(mapID);
+
+        //enabling interactivity after loading image
         enableClicking(selectRoom);
     });
 }
@@ -233,8 +305,10 @@ function loadSubTab(mapID,tabID) {
     $("#subTabContent").load("loadSubTab.php",{
         map: mapID
     },function () {
+
         refreshData();
         getRoomImage(mapID);
+        getTables(mapID);
         showSubContent();
     });
 }

@@ -191,7 +191,7 @@ class DataGetter
     {
         $params['p_kalba_i'] = "lt";
 
-        $stmt ='bibl_json_pck.gauti_visus_kng_pavad_fnc';
+        $stmt ='bibl_json_pck.get_all_topic_udks_names_fnc';
 
         $obj = $this->call($stmt,$params);
 
@@ -208,6 +208,16 @@ class DataGetter
                 $size++;
             }
         }
+    }
+
+    public function getTables($id)
+    {
+        $params['id'] = $id;
+        $params['p_kalba_i'] = "lt";
+
+        $stmt ='bibl_json_pck.get_room_table_coords_fnc';
+
+        return json_encode($this->call($stmt,$params));
     }
 
     public function returnThemes()

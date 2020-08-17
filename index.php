@@ -40,6 +40,8 @@ if(isset($_POST["Search"]))
     <div class="wrapper">
     <body>
 
+    <p class= "mouseText" style="z-index:10; position:fixed;" id="besideMouse"></p>
+
     <div>
         <h2>ATVIROJO FONDO ŽEMĖLAPIS</h2>
     </div>
