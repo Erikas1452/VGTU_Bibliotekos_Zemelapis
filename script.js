@@ -93,9 +93,9 @@ function selectUniqueRooms()
 
 //  ||------------Tables------------||
 
-function getTables(mapID)
+function getTables(mapID , file)
 {
-    $.post("./fetchTables.php",
+    $.post(file,
         {
             id: mapID
         }, function (data,status) {
@@ -139,10 +139,9 @@ function getShelf(mapID,x,y) {
         x: x,
         y: y
     },function(data,status){
-        if(data != "Error")
+        data = JSON.parse(data);
+        if(data)
         {
-            data = JSON.parse(data);
-
             if(!isMarked(mapID,x,y))
             {
                 clearCanvas();
@@ -195,9 +194,9 @@ function getRoom(mapID,x,y) {
         x: x,
         y: y
     },function(data,status){
-        if(data != "Error")
+        data = JSON.parse(data);
+        if(data)
         {
-            data = JSON.parse(data);
             loadSubTab(data["id"],0);
         }
     });
@@ -241,6 +240,7 @@ function getFloorImage(mapID)
         loadFloorImage(mapID);
 
         //enabling interactivity after loading image
+        setupTableHover();
         enableClicking(selectRoom);
     });
 }
@@ -291,8 +291,14 @@ function loadMainTab(mapID,tabID)
         map: mapID,
         rooms: Array.from(rooms)
     },function () {
+
+        $('#besideMouse').hide();
+
         refreshData();
+
         getFloorImage(mapID);
+        getTables(mapID,'./fetchFloorTables.php');
+
         showContent(tabID);
     });
 }
@@ -310,10 +316,13 @@ function loadSubTab(mapID,tabID) {
     $("#subTabContent").load("loadSubTab.php",{
         map: mapID
     },function () {
+        $('#besideMouse').hide();
 
         refreshData();
+
         getRoomImage(mapID);
-        getTables(mapID);
+        getTables(mapID,'./fetchRoomTables.php');
+
         showSubContent();
     });
 }

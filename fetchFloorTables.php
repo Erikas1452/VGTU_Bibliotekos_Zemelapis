@@ -7,6 +7,6 @@ $data->connect();
 
 $mapId = $_POST['id'];
 
-$response = $data->getTables($mapId);
+$response = $data->getFloorTables($mapId);
 
 echo $response;

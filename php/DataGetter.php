@@ -210,12 +210,22 @@ class DataGetter
         }
     }
 
-    public function getTables($id)
+    public function getRoomTables($id)
     {
         $params['id'] = $id;
         $params['p_kalba_i'] = "lt";
 
         $stmt ='bibl_json_pck.get_room_table_coords_fnc';
+
+        return json_encode($this->call($stmt,$params));
+    }
+
+    public function getFloorTables($id)
+    {
+        $params['id'] = $id;
+        $params['p_kalba_i'] = "lt";
+
+        $stmt ='bibl_json_pck.get_floor_table_coords_fnc';
 
         return json_encode($this->call($stmt,$params));
     }
