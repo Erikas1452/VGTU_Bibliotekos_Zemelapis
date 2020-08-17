@@ -34,8 +34,6 @@ let tables;
 //map type which is used to search for specified theme (floor and room maps can have same id)
 let idType = null;
 
-$('#besideMouse').hide();
-
 $(document).ready(function () {
     simulateClick(document.querySelectorAll(".tabButtons button")[0].id);
     $(document).mousemove(function(e){
@@ -44,22 +42,29 @@ $(document).ready(function () {
     });
 });
 
-function display(event)
+function hover(event)
 {
     getScale();
-    console.log("moving");
+
     temp = getMousePosition(canvas,event);
+    
     if(isTable(temp[0],temp[1]))
     {
         let data = isTable(temp[0],temp[1]);
         let str = data;
-        console.log(str);
-        $("#besideMouse").show();
-        $("#besideMouse").html(str);
+
+        displayHover(str);
     }
     else disableHover();
 
 }
+
+function displayHover(msg)
+{
+    $("#besideMouse").show();
+    $("#besideMouse").html(msg);
+}
+
 function disableHover()
 {
     $("#besideMouse").hide();
@@ -220,7 +225,7 @@ function getRoomImage(mapID)
 
 function setupTableHover()
 {
-    canvas.addEventListener("mousemove",display);
+    canvas.addEventListener("mousemove",hover);
 }
 
 function getFloorImage(mapID)

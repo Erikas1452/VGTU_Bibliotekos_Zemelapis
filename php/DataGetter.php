@@ -88,7 +88,7 @@ class DataGetter
         $params['id'] = $id;
         $params['p_kalba_i'] = "lt";
 
-        $stmt = 'bibl_json_pck.get_floor_fnc';
+        $stmt = 'bibl_json_pck.get_floor_map_and_rooms_fnc';
 
         $obj = $this->call($stmt,$params);
         return array($obj["mapClob"],$obj["rooms"]);
@@ -119,7 +119,7 @@ class DataGetter
         $params['x'] = round($x,0);
         $params['y'] = round($y,0);
 
-        $stmt = "bibl_json_pck.get_room_coords_fnc";
+        $stmt = "bibl_json_pck.get_room_id_by_coords_fnc";
 
         return json_encode($this->call($stmt,$params));
 
@@ -169,7 +169,7 @@ class DataGetter
         $params['id'] = $id;
         $params['p_kalba_i'] = "lt";
 
-        $stmt ='bibl_json_pck.get_room_fnc';
+        $stmt ='bibl_json_pck.get_room_map_fnc';
 
         $obj = $this->call($stmt,$params);
         return  $obj["mapClob"];
