@@ -8,6 +8,18 @@ body
     font-family: 'Open Sans';
 }
 
+.mouseText 
+{
+    color: black;
+    padding-left: 2px;
+    padding-right: 2px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    background-color: white;
+    border: solid 1px black;
+    display: none;
+}
+
 input[type=submit]
 {
     margin: 0;
@@ -203,8 +215,8 @@ input[type=button]:hover
 .tableContents
 {
     padding-top: 40px;
-    padding-left: 60px;
-    padding-right: 60px;
+    padding-left: 20px;
+    padding-right: 20px;
     padding-bottom: 40px;
 }
 
