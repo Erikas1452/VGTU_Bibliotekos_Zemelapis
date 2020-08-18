@@ -1,9 +1,9 @@
 <?php
-
-$db = "(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST=alma-ora12-test.vgtu.lt)(PORT = 1521))(CONNECT_DATA = (SERVER = DEDICATED) (SERVICE_NAME = alma)))";
-$connection = oci_connect('biblioteka', 'wGko4GV86srQ', $db);
-
-if(!$connection) echo "Failed to connect";
+//
+//$db = "(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST=alma-ora12-test.vgtu.lt)(PORT = 1521))(CONNECT_DATA = (SERVER = DEDICATED) (SERVICE_NAME = alma)))";
+//$connection = oci_connect('biblioteka', 'wGko4GV86srQ', $db);
+//
+//if(!$connection) echo "Failed to connect";
 
 //$stid = oci_parse($connection,"begin :a := return_string(); end;");
 //oci_bind_by_name($stid, ':a', $myString, 40);
@@ -460,17 +460,10 @@ if(!$connection) echo "Failed to connect";
 //else echo "error";
 
 
-$res = oci_new_descriptor($connection);
-$stmt = oci_parse($connection,"begin :res :=  bibl_json_pck.get_floor_table_coords_fnc(:id, :lang); end;");
-$lang = "lt";
-$id = 2;
-oci_bind_by_name($stmt,':lang', $lang, 50000);
-oci_bind_by_name($stmt,':id', $id, 50000);
-oci_bind_by_name($stmt, ':res', $res, -1,OCI_B_CLOB);
+include "./php/DataGetter.php";
 
+$data = new DataGetter();
+$data->connect();
 
-if(oci_execute($stmt)) {
-    echo $res->load();
-    $obj = json_decode($res->load(), true);
-}
-else echo "error";
+$obj = $data->getFloor(1);
+echo json_encode($obj);

@@ -1,5 +1,5 @@
 <?php
-include "php/DataGetter.php";
+include "DataGetter.php";
 
 if(isset($_POST['shelfID']))
 {

@@ -67,11 +67,15 @@ input[type=button]:hover
 
 .tabButtons
 {
-    padding: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 .tabButtons button
 {
+    font-family: 'Open Sans';
+    font-size: 14px;
     cursor: pointer;
     border: none;
     outline: none;
@@ -148,13 +152,24 @@ input[type=button]:hover
     float: left;
 }
 
-.floorImage
+.mapImage
  {
-    padding: 30px;
+    padding: 20px;
+    padding-top: 10px;
     display: block;
  }
 
-.floorImage canvas
+ 
+.mapImage .label
+{
+    padding-left: 5px;
+    margin: unset;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: 18px;
+}
+
+.mapImage canvas
 {
     cursor:pointer;
 }
@@ -183,8 +198,16 @@ input[type=button]:hover
 {
     background: rgb(245,249,252);
     width: auto;
-    min-width: 1050px;
-    min-height: 850px;
+    min-width: 100%;
+    min-height: 80%;
+}
+
+.mainContainer form
+{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 .mainContainer input[type=text]
@@ -214,6 +237,7 @@ input[type=button]:hover
 
 .tableContents
 {
+    font-size: 14px;
     padding-top: 40px;
     padding-left: 20px;
     padding-right: 20px;
@@ -260,3 +284,4 @@ input[type=button]:hover
 {
     color: #269BF0;
 }
+

@@ -1,5 +1,5 @@
 <?php
-include "php/DataGetter.php";
+include "DataGetter.php";
 
 $data = new DataGetter();
 $data->connect();
@@ -11,6 +11,6 @@ if(isset($_POST['map']))
     $y = $_POST['y'];
 }
 
-$response = $data->getRoomClick($mapId, $x, $y);
+$response = $data->getShelf($mapId,$x,$y);
 
 echo $response;

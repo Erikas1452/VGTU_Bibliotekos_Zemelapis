@@ -2,7 +2,6 @@
 
 class DataGetter
 {
-    private $database;
     private $connection;
 
     private $themes;
@@ -63,14 +62,6 @@ class DataGetter
 
     }
 
-    public function getValueFromSelection($button,$value_to_get)
-    {
-        if (isset($_POST[$button]))
-        {
-            $this->selectedVal = $_POST[$value_to_get];
-        }
-    }
-
     public function getShelf($mapID,$x,$y)
     {
         $params['id'] = $mapID;
@@ -91,7 +82,7 @@ class DataGetter
         $stmt = 'bibl_json_pck.get_floor_map_and_rooms_fnc';
 
         $obj = $this->call($stmt,$params);
-        return array($obj["mapClob"],$obj["rooms"]);
+        return array($obj["mapClob"],$obj["rooms"],$obj["name"]);
     }
 
     public function getFloorTabs()
@@ -172,7 +163,7 @@ class DataGetter
         $stmt ='bibl_json_pck.get_room_map_fnc';
 
         $obj = $this->call($stmt,$params);
-        return  $obj["mapClob"];
+        return  $obj;
 
     }
 
@@ -233,11 +224,6 @@ class DataGetter
     public function returnThemes()
     {
         return $this->themes;
-    }
-
-    public function returnSelectedValue()
-    {
-        return $this->selectedVal;
     }
 
     public function returnFloorNames()

@@ -1,6 +1,6 @@
 <?php
 
-include "php/DataGetter.php";
+include "DataGetter.php";
 
 if(isset($_POST['map']))
 {
@@ -10,13 +10,14 @@ if(isset($_POST['map']))
 $data = new DataGetter();
 $data->connect();
 
-$img = $data->getRoom($mapId);
+$label = $data->getRoom($mapId)["name"];
 
-echo'<div class="floorImage">';
+echo'<div class="mapImage">';
 
+echo '<p class = "label">'.$label.'</p>';
 //echo'<button onclick="drawAllShelves('.$mapId.')"> MARK ALL </button>'; For testing if all given coordinates for drawing are correct
 
-echo'<canvas name="'.$mapId.'" id="roomCanvas"></canvas>';
+echo'<canvas name="'.$mapId.'" id="imageCanvas"></canvas>';
     echo'<div class="tableContents">';
         echo '<table>';
             echo'<tr>';

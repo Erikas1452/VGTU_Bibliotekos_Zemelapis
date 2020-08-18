@@ -46,7 +46,7 @@ if(isset($_POST["Search"]))
         <h2>ATVIROJO FONDO ŽEMĖLAPIS</h2>
     </div>
 
-    <div class="mainContainer">
+    <div id="mainCont" class="mainContainer">
     <div>
         <form method="POST">
             <label for="DropDown1">Tema:</label> <br>
@@ -70,9 +70,8 @@ if(isset($_POST["Search"]))
             //creating tabs
             if($searchStatus == true)
             {
-                $data->getFloorTabs();
+                $data->getFloorTabsByTopic($searchFor);
                 $floors = $data->returnFloorNames();
-
                 $singleQuote = "'";
 
                 $searchFor = $singleQuote.$searchFor.$singleQuote;

@@ -1,5 +1,5 @@
 <?php
-include "php/DataGetter.php";
+include "DataGetter.php";
 
 $data = new DataGetter();
 $data->connect();

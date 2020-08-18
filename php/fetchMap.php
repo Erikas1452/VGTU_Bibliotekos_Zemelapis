@@ -1,5 +1,5 @@
 <?php
-include "php/DataGetter.php";
+include "DataGetter.php";
 
 if(isset($_POST['map']))
 {
@@ -9,7 +9,7 @@ if(isset($_POST['map']))
 $data = new DataGetter();
 $data->connect();
 
-$img = $data->getFloor($mapId)[0];
+$img = $data->getRoom($mapId)["mapClob"];
 
 $source = "data:image/png;base64,".$img;
 

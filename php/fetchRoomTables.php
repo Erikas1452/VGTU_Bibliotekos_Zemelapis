@@ -1,5 +1,5 @@
 <?php
-include "php/DataGetter.php";
+include "DataGetter.php";
 
 $data = new DataGetter();
 $data->connect();
@@ -7,6 +7,6 @@ $data->connect();
 
 $mapId = $_POST['id'];
 
-$response = $data->getFloorTables($mapId);
+$response = $data->getRoomTables($mapId);
 
 echo $response;
