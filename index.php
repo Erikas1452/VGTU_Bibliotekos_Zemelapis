@@ -10,16 +10,19 @@ $data->getThemes();
 $themes = $data->returnThemes();
 
 $searchFor = null;
-$searchStatus = false;
+$themeName = "Ieškoti";
+
+$found = false;
 
 if(isset($_POST["Search"]))
 {
     foreach ($themes as $theme)
     {
-        if($_POST["dropDown1"] == $theme[1])
+        if(strtolower($_POST["dropDown1"]) == strtolower($theme[1]))
         {
-            $searchStatus = true;
+            $found = true;
             $searchFor = $theme[0];
+            $themeName = $theme[1];
         }
     }
 
@@ -50,7 +53,7 @@ if(isset($_POST["Search"]))
     <div>
         <form method="POST">
             <label for="DropDown1">Tema:</label> <br>
-            <input type="text" list="DropDown1" name="dropDown1" />
+            <input type="text" placeholder="<?php echo $themeName ?>" list="DropDown1" name="dropDown1" />
             <datalist id="DropDown1">
                 <?php
                 //Filling Search-Bar
@@ -68,18 +71,24 @@ if(isset($_POST["Search"]))
         <div id="tabButtons" class="tabButtons">
             <?php
             //creating tabs
-            if($searchStatus == true)
+            if($found == true)
             {
-                $data->getFloorTabsByTopic($searchFor);
-                $floors = $data->returnFloorNames();
-                $singleQuote = "'";
+                //Generate tabs only for maps the theme was found on
+                    $data->getFloorTabsByTopic($searchFor);
+                    $floors = $data->returnFloorNames();
+                    $singleQuote = "'";
+
+                //Generate all tabs
+                    // $data->getFloorTabs();
+                    // $floors = $data->returnFloorNames();
+                    // $singleQuote = "'";
 
                 $searchFor = $singleQuote.$searchFor.$singleQuote;
 
                 $index = 0;
                 foreach($floors as $floor)
                 {
-                    echo '<button id="tab-'.$floor[1].'"onclick="loadCache('.$floor[1].','.$index.','.$searchFor.');">'.$floor[0].'</button>';
+                    echo '<button id="tab-'.$floor[1].'"onclick="loadCacheWithMap('.$floor[1].','.$index.','.$searchFor.');">'.$floor[0].'</button>';
                     $index++;
                 }
             }

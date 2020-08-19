@@ -1,3 +1,5 @@
+let firstMarked = false; //for selecting first shelf when new canvas is being loaded to prevent recursion
+
 //Tabs
 
 let floorImages;
@@ -34,8 +36,8 @@ let idType = null;
 
 $(document).ready(function () {
 
-    preferedWidth = 940;
-    preferedHeight = 800;
+    preferedWidth = 900;
+    preferedHeight = 600;
 
     simulateClick(document.querySelectorAll(".tabButtons button")[0].id);
 
@@ -45,6 +47,7 @@ $(document).ready(function () {
 
         $('#besideMouse').offset(cpos);
     });
+
 });
 
 // --------------Getting Data (and loading it after getting it)----------- //
@@ -93,22 +96,17 @@ function getShelf(mapID,x,y) {
         x: x,
         y: y
     },function(data,status){
+        console.log(data, "data");
         data = JSON.parse(data);
         if(data)
         {
-            //Marking new selected shelf on canvas
-            if(!isMarked(mapID,x,y))
-            {
-                clearCanvas();
-                if(searchCache)drawAllShelves(mapID);
-                drawRectangle(data["x1"] / scale[0], data["y1"] / scale[1], data['width'] / scale[0], data['height'] / scale[1])
-            }
-            //Clearing canvas and redrawing old shelves from search
-            else
-            {
-                clearCanvas()
-                if(searchCache)drawAllShelves(mapID);
-            }
+            clearCanvas();
+            if(searchCache)drawAllShelves(mapID);
+
+            let borderOffset=1;
+            drawRectangle((data["x1"] / scale[0]) - borderOffset, (data["y1"] / scale[1]) - borderOffset, (data['width'] / scale[0]) + 2*borderOffset, (data['height'] / scale[1])+ 2*borderOffset,'black') // border
+            drawRectangle(data["x1"] / scale[0], data["y1"] / scale[1], data['width'] / scale[0], data['height'] / scale[1],'#269BF0')
+
             //Getting themes that are in selected shelf
             getShelfThemes(data["id"]);
         }
@@ -174,25 +172,27 @@ function isTable(x,y) {
 }
 
 //Checks if provided coordinate (on click) is shelf that was already marked
-function isMarked(mapID,x,y)
-{
-    let res = false;
+// function isMarked(mapID,x,y)
+// {
+//     let res = false;
 
-    if(searchCache)
-    {
-        let shelves = searchCache["shelves"];
-        shelves.forEach(function (shelf) {
-            if((mapID == shelf["roomId"]) && (x >= shelf["roomX1"] && x <= shelf["roomWidth"] + shelf["roomX1"]) && (y >= shelf["roomY1"] && y <= shelf["roomHeight"] + shelf["roomY1"])) res = true;
-        });
-    }
+//     if(searchCache)
+//     {
+//         let shelves = searchCache["shelves"];
+//         shelves.forEach(function (shelf) {
+//             if((mapID == shelf["roomId"]) && (x >= shelf["roomX1"] && x <= shelf["roomWidth"] + shelf["roomX1"]) && (y >= shelf["roomY1"] && y <= shelf["roomHeight"] + shelf["roomY1"])) res = true;
+//         });
+//     }
 
-    return res;
-}
+//     return res;
+// }
 
 //  ||------------Loading data-------------||
 
 function loadImage(mapID, type)
 {
+    firstMarked = false; //for selecting first shelf when new canvas is being loaded
+
     idType = type;
 
     canvas = document.getElementById("imageCanvas");
@@ -229,7 +229,7 @@ function loadMainTab(mapID,tabID)
     });
 }
 
-function loadCache(mapID,tabID,topic) {
+function loadCacheWithMap(mapID,tabID,topic) {
     $.ajax({
         url:getShelves(topic),
         success:function(){
@@ -275,7 +275,7 @@ function loadTable(data) {
 //         data = JSON.parse(data);
 //         data["coords"].forEach(function(element){
 //             getScale();
-//             drawRectangle(element["x1"]/scale[0],element["y1"]/scale[1],element['width']/scale[0],element['height']/scale[1]);
+//             drawRectangle(element["x1"]/scale[0],element["y1"]/scale[1],element['width']/scale[0],element['height']/scale[1],'#269BF0');
 //         });
 //     });
 // }
@@ -327,15 +327,17 @@ function clearCanvas()
     drawImageOnCanvas();
 }
 
-function drawRectangle(x1,y1,width,height)
+function drawRectangle(x1,y1,width,height, color)
 {
-    ctx.fillStyle = "#269BF0";
+    ctx.fillStyle = color;
     ctx.fillRect(x1,y1,width,height);
 }
 
 function drawAllShelves(id)
 {
     let shelves = searchCache["shelves"];
+
+    let selected = false;
 
     getScale();
 
@@ -345,14 +347,23 @@ function drawAllShelves(id)
         {
             if(node["roomId"] == id)
             {
-                drawRectangle(node["roomX1"]/scale[0],node["roomY1"]/scale[1],node["roomWidth"]/scale[0],node["roomHeight"]/scale[1]);
+                if(firstMarked == false)
+                {
+                    console.log(node);
+                    getShelf(id,node["roomX1"],node["roomY1"]);
+                    firstMarked = true;
+                }
+                else 
+                {
+                    drawRectangle(node["roomX1"]/scale[0],node["roomY1"]/scale[1],node["roomWidth"]/scale[0],node["roomHeight"]/scale[1],'#269BF0');
+                }
             }
         }
         else if (idType == "floorId")
         {
             if(node["floorId"] == id)
             {
-                drawRectangle(node["floorX1"]/scale[0],node["floorY1"]/scale[1],node["floorWidth"]/scale[0],node["floorHeight"]/scale[1]);
+                drawRectangle(node["floorX1"]/scale[0],node["floorY1"]/scale[1],node["floorWidth"]/scale[0],node["floorHeight"]/scale[1],'#269BF0');
             }
         }
     });
